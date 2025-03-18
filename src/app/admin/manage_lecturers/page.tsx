@@ -11,7 +11,7 @@ type TempInputData = {
 const KelolaDosen = () => {
   // const [dosenList, setDosenList] = useState([]);
   const dosenList = useDosenStore((state) => state.data)
-  // const setDosenList = useDosenStore((state) => state.setData)
+  const setDosenList = useDosenStore((state) => state.setData)
   const [tempInput, setTempInput] = useState<TempInputData>({
     nama: "",
     mata_kuliah: ""
