@@ -1,8 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
+type DosenItem = {
+  id: number;
+  nama: string;
+  mata_kuliah: string;
+}
+
 const KelolaDosen = () => {
-  const [dosenList, setDosenList] = useState([]);
+  const [dosenList, setDosenList] = useState<DosenItem[]>([]);
 
   // Fungsi untuk mengambil data dosen dari database (API)
   useEffect(() => {
@@ -91,7 +97,7 @@ const KelolaDosen = () => {
                 ) : (
                   <tr>
                     <td
-                      colSpan="3"
+                      colSpan={3}
                       className="border border-gray-300 px-6 py-3 text-center text-gray-400"
                     >
                       Tidak ada data dosen
