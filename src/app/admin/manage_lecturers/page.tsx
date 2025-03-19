@@ -19,15 +19,6 @@ const KelolaDosen = () => {
 
   const addDosen = useDosenStore((state) => state.addData)
 
-  // Fungsi untuk mengambil data dosen dari database (API)
-  useEffect(() => {
-    fetch("http://localhost:5000/api/dosen") // Sesuaikan dengan URL API backend
-      .then((response) => response.json())
-      .then((data) => setDosenList(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
-
-
   return (
     <div className="container mx-auto p-4">
       {/* Form Tambah Dosen */}
