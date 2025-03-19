@@ -49,7 +49,7 @@ const KelolaRuangan = () => {
             />
           </div>
           <button
-            // type="submit"
+            type="button"
             className="bg-[#4F959D] text-white px-4 py-2 w-full rounded-lg hover:bg-[#3C7A85] transition"
             onClick={() => addRuangan({
               'nama': tempRuanganInfo.nama, 
