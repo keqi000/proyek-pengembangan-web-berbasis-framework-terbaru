@@ -1,15 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRoomStore } from "../_store/ruangan";
 
-type RuanganItem = {
-  id: number;
+type TempRuanganInfo = {
   nama: string;
   kapasitas: string;
 }
 
 const KelolaRuangan = () => {
-  const [ruanganList, setRuanganList] = useState<RuanganItem[]>([]);
+  const ruanganList = useRoomStore((state) => state.data)
+  const addRuangan = useRoomStore((state) => state.addData)
+  // const setRuanganList = useRoomStore((state) => state.setData)
+  const [tempRuanganInfo, setTempRuanganInfo] = useState<TempRuanganInfo>({
+    nama: "", 
+    kapasitas: "0"}
+  )
 
   return (
     <div className="container mx-auto p-4">
@@ -28,6 +34,7 @@ const KelolaRuangan = () => {
               type="text"
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
               placeholder="Masukkan nama ruangan"
+              onChange={(event) => setTempRuanganInfo({...tempRuanganInfo, 'nama': event.target.value})}
             />
           </div>
           <div>
@@ -38,11 +45,16 @@ const KelolaRuangan = () => {
               type="number"
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
               placeholder="Masukkan kapasitas ruangan"
+              onChange={(event) => setTempRuanganInfo({...tempRuanganInfo, 'kapasitas': event.target.value})}
             />
           </div>
           <button
-            type="submit"
+            // type="submit"
             className="bg-[#4F959D] text-white px-4 py-2 w-full rounded-lg hover:bg-[#3C7A85] transition"
+            onClick={() => addRuangan({
+              'nama': tempRuanganInfo.nama, 
+              'kapasitas': tempRuanganInfo.kapasitas
+            })}
           >
             Tambah Ruangan
           </button>
