@@ -125,7 +125,7 @@ const KelolaDosen = () => {
                 ) : (
                   <tr>
                     <td
-                      colSpan="3"
+                      colSpan={3}
                       className="border border-gray-300 px-6 py-3 text-center text-gray-400"
                     >
                       Tidak ada data dosen
