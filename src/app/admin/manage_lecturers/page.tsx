@@ -1,14 +1,24 @@
 "use client";
-import React, { useEffect, useState } from "react";
 
-type DosenItem = {
-  id: number;
+import React, { useEffect, useState } from "react";
+import { useDosenStore } from "../_store/dosen";
+
+type TempInputData = {
   nama: string;
   mata_kuliah: string;
 }
 
 const KelolaDosen = () => {
-  const [dosenList, setDosenList] = useState<DosenItem[]>([]);
+  // const [dosenList, setDosenList] = useState([]);
+  const dosenList = useDosenStore((state) => state.data)
+  const setDosenList = useDosenStore((state) => state.setData)
+  const [tempInput, setTempInput] = useState<TempInputData>({
+    nama: "",
+    mata_kuliah: ""
+  })
+
+  const addDosen = useDosenStore((state) => state.addData)
+
   return (
     <div className="container mx-auto p-4">
       {/* Form Tambah Dosen */}
@@ -26,6 +36,11 @@ const KelolaDosen = () => {
               type="text"
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
               placeholder="Masukkan nama dosen"
+              onChange={(event) => setTempInput({
+                nama: event.target.value, 
+                mata_kuliah: tempInput?.mata_kuliah ?? ""
+              })}
+              value={tempInput.nama}
             />
           </div>
           <div>
@@ -36,11 +51,24 @@ const KelolaDosen = () => {
               type="text"
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
               placeholder="Masukkan mata kuliah"
+              value={tempInput.mata_kuliah}
+              onChange={(event) => setTempInput({
+                ...tempInput,
+                mata_kuliah: event.target.value
+              })}
             />
           </div>
           <button
-            type="submit"
+            // type="submit"
+            type="button"
             className="bg-[#4F959D] text-white px-4 py-2 w-full rounded-lg hover:bg-[#3C7A85] transition"
+            onClick={() => {
+              addDosen({
+                id: (dosenList.length + 1).toString(),
+                nama: tempInput.nama,
+                mata_kuliah: tempInput.mata_kuliah
+              })}
+            }
           >
             Tambah Dosen
           </button>
@@ -67,7 +95,7 @@ const KelolaDosen = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-black">
                 {dosenList.length > 0 ? (
                   dosenList.map((dosen, index) => (
                     <tr
