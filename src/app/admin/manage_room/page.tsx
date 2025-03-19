@@ -81,7 +81,7 @@ const KelolaRuangan = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-black">
                 {ruanganList.length > 0 ? (
                   ruanganList.map((ruangan, index) => (
                     <tr
