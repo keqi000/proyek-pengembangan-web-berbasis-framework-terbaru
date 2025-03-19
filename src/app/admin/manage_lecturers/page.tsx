@@ -1,17 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
+type DosenItem = {
+  id: number;
+  nama: string;
+  mata_kuliah: string;
+}
+
 const KelolaDosen = () => {
-  const [dosenList, setDosenList] = useState([]);
-
-  // Fungsi untuk mengambil data dosen dari database (API)
-  useEffect(() => {
-    fetch("http://localhost:5000/api/dosen") // Sesuaikan dengan URL API backend
-      .then((response) => response.json())
-      .then((data) => setDosenList(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
-
+  const [dosenList, setDosenList] = useState<DosenItem[]>([]);
   return (
     <div className="container mx-auto p-4">
       {/* Form Tambah Dosen */}
@@ -91,7 +88,7 @@ const KelolaDosen = () => {
                 ) : (
                   <tr>
                     <td
-                      colSpan="3"
+                      colSpan={3}
                       className="border border-gray-300 px-6 py-3 text-center text-gray-400"
                     >
                       Tidak ada data dosen
