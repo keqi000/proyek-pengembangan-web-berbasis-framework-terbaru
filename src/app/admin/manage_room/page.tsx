@@ -1,16 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import React, { useState } from "react";
+
+type RuanganItem = {
+  id: number;
+  nama: string;
+  kapasitas: string;
+}
 
 const KelolaRuangan = () => {
-  const [ruanganList, setRuanganList] = useState([]);
-
-  // Fungsi untuk mengambil data ruangan dari database (API)
-  useEffect(() => {
-    fetch("http://localhost:5000/api/ruangan") // Sesuaikan dengan URL API backend
-      .then((response) => response.json())
-      .then((data) => setRuanganList(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+  const [ruanganList, setRuanganList] = useState<RuanganItem[]>([]);
 
   return (
     <div className="container mx-auto p-4">
@@ -91,7 +90,7 @@ const KelolaRuangan = () => {
                 ) : (
                   <tr>
                     <td
-                      colSpan="3"
+                      colSpan={3}
                       className="border border-gray-300 px-6 py-3 text-center text-gray-400"
                     >
                       Tidak ada data ruangan

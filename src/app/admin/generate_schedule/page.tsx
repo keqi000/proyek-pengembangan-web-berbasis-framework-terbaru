@@ -1,23 +1,36 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
+// TODO: define DosenItem more accurately
+type DosenItem = {
+  nama: string;
+  mata_kuliah: string;
+  nama_ruangan: string;
+}
+
+type RuanganItem = {
+  nama_ruangan: string;
+}
+
+type JadwalItem = {
+  namaDosen: string;
+  mataKuliah: string;
+  ruangan: string;
+  waktu: string;
+}
+
+const dosenData: DosenItem[] = [{
+  nama: 'test',
+  mata_kuliah: 'tes',
+  nama_ruangan: 'ruangan tes',
+}]
+
+const jadwalData: JadwalItem[] = []
+
 const GenerateJadwal = () => {
-  const [dosenList, setDosenList] = useState([]);
-  const [ruanganList, setRuanganList] = useState([]);
-  const [jadwal, setJadwal] = useState([]);
-
-  // Fetch data dosen dan ruangan
-  useEffect(() => {
-    fetch("http://localhost:5000/api/dosen")
-      .then((response) => response.json())
-      .then((data) => setDosenList(data))
-      .catch((error) => console.error("Error fetching dosen data:", error));
-
-    fetch("http://localhost:5000/api/ruangan")
-      .then((response) => response.json())
-      .then((data) => setRuanganList(data))
-      .catch((error) => console.error("Error fetching ruangan data:", error));
-  }, []);
+  const [dosenList, setDosenList] = useState(dosenData);
+  const [ruanganList, setRuanganList] = useState<RuanganItem[]>([]);
+  const [jadwal, setJadwal] = useState<JadwalItem[]>(jadwalData);
 
   // Fungsi untuk menghasilkan jadwal otomatis
   const generateSchedule = () => {
@@ -92,7 +105,7 @@ const GenerateJadwal = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan="5"
+                    colSpan={5}
                     className="border border-gray-300 px-6 py-3 text-center"
                   >
                     Belum ada jadwal dibuat

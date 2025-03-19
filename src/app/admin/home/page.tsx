@@ -1,11 +1,16 @@
-export default function Home() {
-  // Data ringkasan (contoh)
-  const summaryData = [
-    { label: "Jumlah Dosen", value: 35 },
-    { label: "Jumlah Ruangan", value: 20 },
-    { label: "Jadwal yang Digenerate", value: 150 },
-  ];
+type SummaryItem = {
+  label: string;
+  value: number;
+}
 
+// Data ringkasan (contoh)
+const summaryData: SummaryItem[] = [
+  { label: "Jumlah Dosen", value: 35 },
+  { label: "Jumlah Ruangan", value: 20 },
+  { label: "Jadwal yang Digenerate", value: 150 },
+];
+
+export default function Home() {
   return (
     <div className=" bg-gray-100 p-6">
       <h1 className="text-2xl font-bold text-center mb-6 text-black">
