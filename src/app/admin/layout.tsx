@@ -16,7 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Konten utama yang bergeser */}
       <div
-        className={`flex-1 transition-all duration-300 ${
+        className={`flex flex-col flex-1 transition-all duration-300 ${
           isSidebarOpen ? "ml-64" : "ml-0"
         }`}
       >
@@ -33,10 +33,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </nav>
 
         {/* Konten utama */}
-        <main className="p-4 flex-grow">{children}</main>
+        <main className="flex flex-col p-4 flex-grow">{children}</main>
 
         {/* Footer selalu di bawah tanpa menyebabkan scroll berlebihan */}
-        <footer className="bg-gray-200 text-center p-3">
+        <footer className="flex flex-col bg-gray-200 text-center p-3">
           <p className="text-gray-700">
             &copy; 2025 Sistem Penjadwalan Otomatis
           </p>
