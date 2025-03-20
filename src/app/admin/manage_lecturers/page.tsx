@@ -13,8 +13,8 @@ type TempInputData = {
 const KelolaDosen = () => {
   const dosenList = useDosenStore((state) => state.data);
   const addDosen = useDosenStore((state) => state.addData);
-  const updateDosen = useDosenStore((state) => state.updateData);
-  const deleteDosen = useDosenStore((state) => state.removeData);
+  // const updateDosen = useDosenStore((state) => state.updateData);
+  const deleteDosen = useDosenStore((state) => state.deleteData);
 
   const [tempInput, setTempInput] = useState<TempInputData>({
     nama: "",
@@ -28,11 +28,12 @@ const KelolaDosen = () => {
 
   const handleSubmit = () => {
     if (tempInput.id) {
-      updateDosen({
-        id: tempInput.id,
-        nama: tempInput.nama,
-        mata_kuliah: tempInput.mata_kuliah,
-      });
+      // updateDosen({
+      //   id: tempInput.id,
+      //   nama: tempInput.nama,
+      //   mata_kuliah: tempInput.mata_kuliah,
+      // });
+      console.log("dosen diupdate")
     } else {
       addDosen({
         id: (dosenList.length + 1).toString(),
@@ -51,7 +52,8 @@ const KelolaDosen = () => {
 
   const handleConfirmEdit = () => {
     if (selectedDosen?.id) {
-      updateDosen(selectedDosen);
+      console.log("dosen di delete")
+      // updateDosen(selectedDosen);
     }
     setEditPopup(false);
   };
