@@ -1,19 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { FaFileAlt } from "react-icons/fa";
+import { useDosenStore } from "../_store/dosen";
+import { useRoomStore } from "../_store/ruangan";
 
 type SummaryItem = {
   label: string;
   value: number;
 };
-
-// Data ringkasan (contoh)
-const summaryData: SummaryItem[] = [
-  { label: "Jumlah Dosen", value: 35 },
-  { label: "Jumlah Ruangan", value: 20 },
-  { label: "Jadwal yang Digenerate", value: 150 },
-];
 
 type FileItem = {
   id: number;
@@ -39,6 +34,15 @@ const generatedFiles: FileItem[] = [
 ];
 
 export default function Home() {
+  const dosenList = useDosenStore((state) => state.data)
+  const ruanganList = useRoomStore((state) => state.data)
+
+  const summaryData: SummaryItem[] = [
+    { label: "Jumlah Dosen", value: dosenList.length },
+    { label: "Jumlah Ruangan", value: ruanganList.length },
+    { label: "Jadwal yang Digenerate", value: 150 },
+  ];
+
   return (
     <div className="bg-gray-100 p-6 min-h-screen">
       {/* Ringkasan */}
