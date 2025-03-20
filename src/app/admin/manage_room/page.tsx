@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { useRoomStore } from "../_store/ruangan";
 
 type RuanganItem = {
   id: string;
@@ -10,7 +11,10 @@ type RuanganItem = {
 };
 
 const KelolaRuangan = () => {
-  const [ruanganList, setRuanganList] = useState<RuanganItem[]>([]);
+  const ruanganList = useRoomStore((state) => state.data)
+  const addRuangan = useRoomStore((state) => state.addData)
+  const setRuanganList = useRoomStore((state) => state.setData)
+
   const [tempInput, setTempInput] = useState<RuanganItem>({
     id: "",
     nama: "",
@@ -22,20 +26,6 @@ const KelolaRuangan = () => {
     null
   );
 
-  const handleSubmit = () => {
-    if (tempInput.id) {
-      setRuanganList(
-        ruanganList.map((item) => (item.id === tempInput.id ? tempInput : item))
-      );
-    } else {
-      setRuanganList([
-        ...ruanganList,
-        { ...tempInput, id: (ruanganList.length + 1).toString() },
-      ]);
-    }
-
-    setTempInput({ id: "", nama: "", kapasitas: "" });
-  };
 
   const handleEditClick = (ruangan: RuanganItem) => {
     setSelectedRuangan(ruangan);
@@ -93,7 +83,11 @@ const KelolaRuangan = () => {
           <button
             type="button"
             className="bg-[#4F959D] text-white px-4 py-2 w-full rounded-lg hover:bg-[#3C7A85] transition"
-            onClick={handleSubmit}
+            // onClick={handleSubmit}
+            onClick={() => {
+              addRuangan({...tempInput})
+              setTempInput({nama: "", kapasitas: "", id: (ruanganList.length + 1).toString()})
+            }}
           >
             Tambah Ruangan
           </button>
