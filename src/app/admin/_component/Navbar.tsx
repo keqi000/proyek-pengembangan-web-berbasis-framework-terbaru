@@ -2,8 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Users, Building, Calendar, LogOut } from "lucide-react"; // Import ikon
+import { Home, Users, Building, Calendar, LogOut } from "lucide-react";
 import { JSX } from "react";
+
+type NavbarProps = {
+  isSidebarOpen: boolean;
+  setSidebarOpen: (isOpen: boolean) => void;
+};
 
 type LinkItemType = {
   name: string;
@@ -12,54 +17,66 @@ type LinkItemType = {
 };
 
 const linkData: LinkItemType[] = [
-  { name: "beranda", href: "/admin/home", icon: <Home size={18} /> },
+  { name: "Beranda", href: "/admin/home", icon: <Home size={18} /> },
   {
-    name: "kelola dosen",
+    name: "Kelola Dosen",
     href: "/admin/manage_lecturers",
     icon: <Users size={18} />,
   },
   {
-    name: "kelola ruangan",
+    name: "Kelola Ruangan",
     href: "/admin/manage_room",
     icon: <Building size={18} />,
   },
   {
-    name: "generate jadwal",
+    name: "Generate Jadwal",
     href: "/admin/generate_schedule",
     icon: <Calendar size={18} />,
   },
-  { name: "logout", href: "/", icon: <LogOut size={18} /> },
+  { name: "Logout", href: "/", icon: <LogOut size={18} /> },
 ];
 
-export default function NavigationBar() {
+export default function NavigationBar({
+  isSidebarOpen,
+  setSidebarOpen,
+}: NavbarProps) {
   const currentPath = usePathname();
 
   return (
-    <nav className="bg-[#4F959D] text-white shadow-md h-14 flex items-center">
-      <div className="container flex justify-between items-center px-4">
-        <h1 className="text-xl font-bold">Sistem Penjadwalan</h1>
-        <ul className="flex space-x-6 h-full">
+    <div>
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 left-0 w-64 h-full bg-white text-black shadow-[5px_0_15px_rgba(0,0,0,0.3)] border-r border-gray-300 transition-all duration-300 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-64"
+        }`}
+      >
+        {/* Tombol Tutup */}
+        <div className="flex p-3.5 justify-center bg-[#4F959D]">
+          <h1 className="text-xl font-bold text-white">Sistem Penjadwalan</h1>
+        </div>
+
+        {/* Daftar Menu */}
+        <ul className="mt-2 w-[240px] mx-auto">
+          {" "}
+          {/* Lebar maksimum sidebar lebih kecil */}
           {linkData.map((item, index) => (
-            <li
-              key={index}
-              className="relative group flex flex-col justify-center h-full py-4 px-2"
-            >
+            <li key={index}>
               <Link
                 href={item.href}
-                className={`flex items-center gap-2 capitalize transition-transform duration-200 group-hover:-translate-y-0.5 ${
+                className={`flex items-center gap-2 p-2 rounded-md transition-all  text-sm ${
                   item.href === currentPath
-                    ? "text-[#205781]"
-                    : "hover:text-[#98D2C0]"
+                    ? "bg-[#4F959D] text-white" // Warna aktif
+                    : "hover:bg-gray-200 hover:text-black"
                 }`}
               >
-                {item.icon} {/* Menampilkan ikon */}
-                {item.name}
+                {item.icon}
+                <span className="hidden sm:inline">{item.name}</span>{" "}
+                {/* Nama hanya muncul di layar besar */}
               </Link>
-              <span className="absolute left-1/2 bottom-2 w-0 h-[2px] bg-[#98D2C0] transition-all duration-300 group-hover:w-1/2 -translate-x-1/2"></span>
             </li>
           ))}
         </ul>
       </div>
-    </nav>
+    </div>
   );
 }
