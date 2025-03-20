@@ -11,9 +11,9 @@ type RuanganItem = {
 };
 
 const KelolaRuangan = () => {
-  const ruanganList = useRoomStore((state) => state.data)
-  const addRuangan = useRoomStore((state) => state.addData)
-  const setRuanganList = useRoomStore((state) => state.setData)
+  const ruanganList = useRoomStore((state) => state.data);
+  const addRuangan = useRoomStore((state) => state.addData);
+  const setRuanganList = useRoomStore((state) => state.setData);
 
   const [tempInput, setTempInput] = useState<RuanganItem>({
     id: "",
@@ -25,7 +25,6 @@ const KelolaRuangan = () => {
   const [selectedRuangan, setSelectedRuangan] = useState<RuanganItem | null>(
     null
   );
-
 
   const handleEditClick = (ruangan: RuanganItem) => {
     setSelectedRuangan(ruangan);
@@ -83,10 +82,13 @@ const KelolaRuangan = () => {
           <button
             type="button"
             className="bg-[#4F959D] text-white px-4 py-2 w-full rounded-lg hover:bg-[#3C7A85] transition"
-            // onClick={handleSubmit}
             onClick={() => {
-              addRuangan({...tempInput})
-              setTempInput({nama: "", kapasitas: "", id: (ruanganList.length + 1).toString()})
+              addRuangan({ ...tempInput });
+              setTempInput({
+                nama: "",
+                kapasitas: "",
+                id: (ruanganList.length + 1).toString(),
+              });
             }}
           >
             Tambah Ruangan
@@ -101,7 +103,7 @@ const KelolaRuangan = () => {
         </h2>
 
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300">
+          <table className="w-full border-collapse border border-gray-300 text-sm md:text-base">
             <thead className="bg-[#4F959D] text-white">
               <tr>
                 <th className="border border-gray-300 px-4 py-3 w-12">No</th>
@@ -165,8 +167,8 @@ const KelolaRuangan = () => {
 
       {/* Popup Edit */}
       {editPopup && selectedRuangan && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96">
             <h2 className="text-[#4F959D] text-lg font-semibold mb-4 text-center">
               Edit Ruangan
             </h2>
@@ -184,22 +186,6 @@ const KelolaRuangan = () => {
                     setSelectedRuangan({
                       ...selectedRuangan,
                       nama: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <label className="block text-[#4F959D] font-medium">
-                  Kapasitas
-                </label>
-                <input
-                  type="number"
-                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
-                  value={selectedRuangan.kapasitas}
-                  onChange={(e) =>
-                    setSelectedRuangan({
-                      ...selectedRuangan,
-                      kapasitas: e.target.value,
                     })
                   }
                 />

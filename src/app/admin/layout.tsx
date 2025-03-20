@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import NavigationBar from "./_component/Navbar";
+import { User } from "lucide-react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -23,12 +24,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* Navbar */}
         <nav className="bg-[#4F959D] text-white shadow-md h-14 flex items-center px-4">
           <div className="container flex justify-between items-center">
+            {/* Tombol Sidebar */}
             <button
               className="text-white focus:outline-none"
               onClick={() => setSidebarOpen(!isSidebarOpen)}
             >
               ☰
             </button>
+
+            {/* Hanya Ikon User dan Nama */}
+            <div className="flex items-center gap-2">
+              <User className="w-5 h-5 text-white" />
+              <span className="text-white font-medium">Yonatan Sihotang</span>
+            </div>
           </div>
         </nav>
 
