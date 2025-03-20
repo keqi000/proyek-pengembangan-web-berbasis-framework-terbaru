@@ -30,7 +30,7 @@ const KelolaRuangan = () => {
     } else {
       setRuanganList([
         ...ruanganList,
-        { id: (ruanganList.length + 1).toString(), ...tempInput },
+        { ...tempInput, id: (ruanganList.length + 1).toString() },
       ]);
     }
 
