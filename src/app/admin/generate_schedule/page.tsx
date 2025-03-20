@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { FaTrash } from "react-icons/fa";
+import { useDosenStore } from "../_store/dosen";
+import { useRoomStore } from "../_store/ruangan";
 
 // Tipe Data
 type DosenItem = {
@@ -34,8 +36,9 @@ const ruanganData: RuanganItem[] = [
 ];
 
 const GenerateJadwal = () => {
-  const [dosenList, setDosenList] = useState(dosenData);
-  const [ruanganList, setRuanganList] = useState(ruanganData);
+  const dosenList = useDosenStore((state) => state.data)
+  const ruanganList = useRoomStore((state) => state.data)
+
   const [jadwal, setJadwal] = useState<JadwalItem[]>([]);
 
   // Fungsi untuk menghasilkan jadwal otomatis
@@ -49,7 +52,7 @@ const GenerateJadwal = () => {
       id: index + 1,
       namaDosen: dosen.nama,
       mataKuliah: dosen.mata_kuliah,
-      ruangan: ruanganList[index % ruanganList.length].nama_ruangan,
+      ruangan: ruanganList[index % ruanganList.length].nama,
       waktu: `${8 + (index % 5)}:00 - ${9 + (index % 5)}:00`, // Jadwal sementara
     }));
 
