@@ -3,7 +3,7 @@
 import { create } from "zustand";
 
 type RuanganItem = {
-  id: number;
+  id: string;
   nama: string;
   kapasitas: string;
 }
@@ -48,7 +48,7 @@ export const useRoomStore = create<RuanganStore>((set) => ({
     return {
       ...state,
       data: [...state.data, {
-        'id': state.data.length,
+        'id': state.data.length.toString(),
         'kapasitas': data.kapasitas,
         'nama': data.nama
       }]
