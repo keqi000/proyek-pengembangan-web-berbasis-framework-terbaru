@@ -17,7 +17,6 @@ type FileItem = {
   url: string;
 };
 
-// Contoh data file yang di-generate dari halaman Generate Jadwal
 const generatedFiles: FileItem[] = [
   {
     id: 1,
@@ -46,17 +45,20 @@ export default function Home() {
   return (
     <div className="bg-gray-100 p-4 min-h-screen">
       {/* Ringkasan */}
-      <h1 className="text-2xl font-bold text-center mb-6 text-black">
+      <h1 className="text-2xl md:text-3xl font-bold text-center mb-6 text-black">
         Beranda
       </h1>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
         {summaryData.map((item, index) => (
           <div
             key={index}
-            className="bg-white p-4 md:p-6 rounded-lg shadow-md text-center"
+            className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md text-center"
           >
-            <h2 className="text-lg font-semibold text-black">{item.label}</h2>
-            <p className="text-2xl md:text-3xl font-bold text-black">
+            <h2 className="text-sm sm:text-lg font-semibold text-black">
+              {item.label}
+            </h2>
+            <p className="text-lg sm:text-2xl md:text-3xl font-bold text-black">
               {item.value}
             </p>
           </div>
@@ -64,25 +66,23 @@ export default function Home() {
       </div>
 
       {/* Tabel File Generate */}
-      <div className="mt-8 max-w-5xl mx-auto bg-white p-4 md:p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold text-black text-center mb-4">
+      <div className="mt-8 max-w-full md:max-w-5xl mx-auto bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md">
+        <h2 className="text-lg sm:text-xl font-semibold text-black text-center mb-4">
           File Generate
         </h2>
 
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300 text-sm md:text-base">
+          <table className="w-full min-w-0 border-collapse border border-gray-300 text-xs sm:text-sm md:text-base">
             <thead className="bg-[#4F959D] text-white">
               <tr>
-                <th className="border border-gray-300 px-2 md:px-4 py-2 w-12">
-                  No
-                </th>
-                <th className="border border-gray-300 px-2 md:px-6 py-2">
+                <th className="border border-gray-300 px-2 sm:px-4 py-2">No</th>
+                <th className="border border-gray-300 px-2 sm:px-6 py-2">
                   Nama File
                 </th>
-                <th className="border border-gray-300 px-2 md:px-6 py-2">
+                <th className="border border-gray-300 px-2 sm:px-6 py-2">
                   Tanggal Generate
                 </th>
-                <th className="border border-gray-300 px-2 md:px-6 py-2">
+                <th className="border border-gray-300 px-2 sm:px-6 py-2">
                   Aksi
                 </th>
               </tr>
@@ -91,25 +91,25 @@ export default function Home() {
               {generatedFiles.length > 0 ? (
                 generatedFiles.map((file, index) => (
                   <tr key={file.id} className="text-center hover:bg-gray-100">
-                    <td className="border border-gray-300 px-2 md:px-4 py-2">
+                    <td className="border border-gray-300 px-2 sm:px-4 py-2">
                       {index + 1}
                     </td>
-                    <td className="border border-gray-300 px-2 md:px-6 py-2">
+                    <td className="border border-gray-300 px-2 sm:px-6 py-2">
                       {file.name}
                     </td>
-                    <td className="border border-gray-300 px-2 md:px-6 py-2">
+                    <td className="border border-gray-300 px-2 sm:px-6 py-2">
                       {file.date}
                     </td>
-                    <td className="border border-gray-300 px-2 md:px-6 py-2">
+                    <td className="border border-gray-300 px-2 sm:px-6 py-2">
                       <a
                         href={file.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-block p-2"
+                        className="inline-block p-1 sm:p-2"
                       >
                         <FaFileAlt
                           className="text-black hover:text-gray-700 cursor-pointer"
-                          size={18}
+                          size={14} /* Ukuran lebih kecil di layar kecil */
                         />
                       </a>
                     </td>
@@ -119,7 +119,7 @@ export default function Home() {
                 <tr>
                   <td
                     colSpan={4}
-                    className="border border-gray-300 px-6 py-3 text-center text-gray-400"
+                    className="border border-gray-300 px-4 py-3 text-center text-gray-400"
                   >
                     Tidak ada file yang di-generate
                   </td>

@@ -44,63 +44,66 @@ const GenerateJadwal = () => {
   return (
     <div className="container mx-auto p-4">
       {/* Card Generate Jadwal */}
-      <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+      <div className="max-w-lg w-full mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-md">
         <h2 className="text-[#4F959D] text-lg font-semibold mb-4 text-center">
           Generate Jadwal
         </h2>
         <button
           onClick={generateSchedule}
-          className="bg-[#4F959D] text-white px-4 py-2 w-full rounded-lg hover:bg-[#3C7A85] transition"
+          className="bg-[#4F959D] text-white px-4 py-2 w-full rounded-lg hover:bg-[#3C7A85] transition duration-300 ease-in-out"
         >
           Buat Jadwal
         </button>
       </div>
 
       {/* Tabel Jadwal (Responsive) */}
-      <div className="mt-8 w-full bg-white p-6 rounded-lg shadow-md">
+      <div className="mt-6 w-full bg-white p-4 sm:p-6 rounded-lg shadow-md">
         <h2 className="text-[#4F959D] text-lg font-semibold mb-4 text-center">
           Hasil Jadwal
         </h2>
 
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300 text-sm md:text-base">
+          <table className="min-w-full border-collapse border border-gray-300 text-xs sm:text-sm md:text-base">
             <thead className="bg-[#4F959D] text-white">
               <tr>
-                <th className="border border-gray-300 px-4 py-2">No</th>
-                <th className="border border-gray-300 px-4 py-2">Nama Dosen</th>
-                <th className="border border-gray-300 px-4 py-2">
+                <th className="border border-gray-300 px-3 py-2">No</th>
+                <th className="border border-gray-300 px-3 py-2">Nama Dosen</th>
+                <th className="border border-gray-300 px-3 py-2">
                   Mata Kuliah
                 </th>
-                <th className="border border-gray-300 px-4 py-2">Ruangan</th>
-                <th className="border border-gray-300 px-4 py-2">Waktu</th>
-                <th className="border border-gray-300 px-4 py-2">Aksi</th>
+                <th className="border border-gray-300 px-3 py-2">Ruangan</th>
+                <th className="border border-gray-300 px-3 py-2">Waktu</th>
+                <th className="border border-gray-300 px-3 py-2">Aksi</th>
               </tr>
             </thead>
             <tbody className="text-black">
               {jadwal.length > 0 ? (
                 jadwal.map((item, index) => (
-                  <tr key={item.id} className="text-center hover:bg-gray-100">
-                    <td className="border border-gray-300 px-4 py-2">
+                  <tr
+                    key={item.id}
+                    className="text-center hover:bg-gray-100 transition duration-200 ease-in-out"
+                  >
+                    <td className="border border-gray-300 px-3 py-2">
                       {index + 1}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border border-gray-300 px-3 py-2">
                       {item.namaDosen}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border border-gray-300 px-3 py-2">
                       {item.mataKuliah}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border border-gray-300 px-3 py-2">
                       {item.ruangan}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border border-gray-300 px-3 py-2">
                       {item.waktu}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border border-gray-300 px-3 py-2">
                       <button
-                        className="text-black hover:text-gray-700"
+                        className="text-black hover:text-gray-700 transition duration-200"
                         onClick={() => deleteJadwal(item.id)}
                       >
-                        <FaTrash size={18} />
+                        <FaTrash size={16} />
                       </button>
                     </td>
                   </tr>

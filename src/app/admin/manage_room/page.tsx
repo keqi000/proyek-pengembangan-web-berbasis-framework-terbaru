@@ -103,15 +103,21 @@ const KelolaRuangan = () => {
         </h2>
 
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300 text-sm md:text-base">
+          <table className="w-full border-collapse border border-gray-300 text-xs sm:text-sm md:text-base">
             <thead className="bg-[#4F959D] text-white">
               <tr>
-                <th className="border border-gray-300 px-4 py-3 w-12">No</th>
-                <th className="border border-gray-300 px-6 py-3">
+                <th className="border border-gray-300 px-2 md:px-4 py-3 w-12">
+                  No
+                </th>
+                <th className="border border-gray-300 px-2 md:px-6 py-3">
                   Nama Ruangan
                 </th>
-                <th className="border border-gray-300 px-6 py-3">Kapasitas</th>
-                <th className="border border-gray-300 px-6 py-3">Aksi</th>
+                <th className="border border-gray-300 px-2 md:px-6 py-3">
+                  Kapasitas
+                </th>
+                <th className="border border-gray-300 px-2 md:px-6 py-3">
+                  Aksi
+                </th>
               </tr>
             </thead>
             <tbody className="text-black">
@@ -121,21 +127,21 @@ const KelolaRuangan = () => {
                     key={ruangan.id}
                     className="text-center hover:bg-gray-100"
                   >
-                    <td className="border border-gray-300 px-4 py-3">
+                    <td className="border border-gray-300 px-2 md:px-4 py-3">
                       {index + 1}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3">
+                    <td className="border border-gray-300 px-2 md:px-6 py-3">
                       {ruangan.nama}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3">
+                    <td className="border border-gray-300 px-2 md:px-6 py-3">
                       {ruangan.kapasitas}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3 flex justify-center gap-3">
+                    <td className="border border-gray-300 px-2 md:px-6 py-3 flex justify-center gap-2 flex-wrap">
                       <button
                         className="text-black hover:text-gray-700"
                         onClick={() => handleEditClick(ruangan)}
                       >
-                        <FaEdit size={18} />
+                        <FaEdit size={16} />
                       </button>
                       <button
                         className="text-black hover:text-gray-700"
@@ -145,7 +151,7 @@ const KelolaRuangan = () => {
                           )
                         }
                       >
-                        <FaTrash size={18} />
+                        <FaTrash size={16} />
                       </button>
                     </td>
                   </tr>

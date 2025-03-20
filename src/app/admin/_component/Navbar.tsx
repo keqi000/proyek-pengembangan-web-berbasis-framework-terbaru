@@ -52,26 +52,27 @@ export default function NavigationBar({
       >
         {/* Tombol Tutup */}
         <div className="flex p-3.5 justify-center bg-[#4F959D]">
-          <h1 className="text-xl font-bold text-white">Sistem Penjadwalan</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-white">
+            Sistem Penjadwalan
+          </h1>
         </div>
 
         {/* Daftar Menu */}
         <ul className="mt-2 w-[240px] mx-auto">
-          {" "}
-          {/* Lebar maksimum sidebar lebih kecil */}
           {linkData.map((item, index) => (
             <li key={index}>
               <Link
                 href={item.href}
-                className={`flex items-center gap-2 p-2 rounded-md transition-all  text-sm ${
+                className={`flex items-center gap-2 p-2 rounded-md transition-all text-xs sm:text-sm md:text-base ${
                   item.href === currentPath
-                    ? "bg-[#4F959D] text-white" // Warna aktif
+                    ? "bg-[#4F959D] text-white"
                     : "hover:bg-gray-200 hover:text-black"
                 }`}
               >
                 {item.icon}
-                <span className="hidden sm:inline">{item.name}</span>{" "}
-                {/* Nama hanya muncul di layar besar */}
+                <span className="text-xs sm:text-sm md:text-base">
+                  {item.name}
+                </span>
               </Link>
             </li>
           ))}

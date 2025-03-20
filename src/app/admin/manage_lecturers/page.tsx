@@ -109,7 +109,7 @@ const KelolaDosen = () => {
         </h2>
 
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300 text-sm md:text-base">
+          <table className="w-full border-collapse border border-gray-300 text-xs sm:text-sm md:text-base">
             <thead className="bg-[#4F959D] text-white">
               <tr>
                 <th className="border border-gray-300 px-2 md:px-4 py-3 w-12">
@@ -139,18 +139,18 @@ const KelolaDosen = () => {
                     <td className="border border-gray-300 px-2 md:px-6 py-3">
                       {dosen.mata_kuliah}
                     </td>
-                    <td className="border border-gray-300 px-2 md:px-6 py-3 flex justify-center gap-3">
+                    <td className="border border-gray-300 px-2 md:px-6 py-3 flex flex-wrap justify-center gap-2">
                       <button
                         className="text-black hover:text-gray-700"
                         onClick={() => handleEditClick(dosen)}
                       >
-                        <FaEdit size={18} />
+                        <FaEdit size={16} />
                       </button>
                       <button
                         className="text-black hover:text-gray-700"
                         onClick={() => deleteDosen(dosen.id)}
                       >
-                        <FaTrash size={18} />
+                        <FaTrash size={16} />
                       </button>
                     </td>
                   </tr>
@@ -191,20 +191,6 @@ const KelolaDosen = () => {
                     setSelectedDosen({ ...selectedDosen, nama: e.target.value })
                   }
                 />
-              </div>
-              <div className="flex justify-between mt-4">
-                <button
-                  className="bg-[#4F959D] text-white px-4 py-2 rounded-lg hover:bg-[#3C7A85]"
-                  onClick={handleConfirmEdit}
-                >
-                  Confirm
-                </button>
-                <button
-                  className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500"
-                  onClick={() => setEditPopup(false)}
-                >
-                  Cancel
-                </button>
               </div>
             </form>
           </div>
