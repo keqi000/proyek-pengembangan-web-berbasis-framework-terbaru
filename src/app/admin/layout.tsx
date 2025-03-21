@@ -46,7 +46,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* Footer selalu di bawah tanpa menyebabkan scroll berlebihan */}
         <footer className="flex flex-col bg-gray-200 text-center p-3">
           <p className="text-gray-700">
-            &copy; 2025 Sistem Penjadwalan Otomatis
+            &copy; {new Date().getFullYear()} Sistem Penjadwalan Otomatis
           </p>
         </footer>
       </div>
