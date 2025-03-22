@@ -24,7 +24,7 @@ const HomePage: FC = () => {
         {/* Grid Container */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           {/* Beranda */}
-          <div className="bg-gray-100 p-6 rounded-lg shadow-md flex items-start">
+          <div className="bg-gray-100 p-6 rounded-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] flex items-start">
             <Home className="w-12 h-12 mr-4 text-[#A27B5C]" />
             <div>
               <h3 className="text-2xl font-bold text-[#A27B5C] font-bebas">
@@ -38,7 +38,7 @@ const HomePage: FC = () => {
           </div>
 
           {/* Jadwal Kuliah */}
-          <div className="bg-gray-100 p-6 rounded-lg shadow-md flex items-start">
+          <div className="bg-gray-100 p-6 rounded-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] flex items-start">
             <Calendar className="w-12 h-12 mr-4 text-[#A27B5C]" />
             <div>
               <h3 className="text-2xl font-bold text-[#A27B5C] font-bebas">
@@ -52,7 +52,7 @@ const HomePage: FC = () => {
           </div>
 
           {/* Mata Kuliah */}
-          <div className="bg-gray-100 p-6 rounded-lg shadow-md flex items-start">
+          <div className="bg-gray-100 p-6 rounded-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] flex items-start">
             <Book className="w-12 h-12 mr-4 text-[#A27B5C]" />
             <div>
               <h3 className="text-2xl font-bold text-[#A27B5C] font-bebas">
@@ -66,7 +66,7 @@ const HomePage: FC = () => {
           </div>
 
           {/* Cetak Jadwal */}
-          <div className="bg-gray-100 p-6 rounded-lg shadow-md flex items-start">
+          <div className="bg-gray-100 p-6 rounded-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] flex items-start">
             <Printer className="w-12 h-12 mr-4 text-[#A27B5C]" />
             <div>
               <h3 className="text-2xl font-bold text-[#A27B5C] font-bebas">
@@ -85,14 +85,14 @@ const HomePage: FC = () => {
       <div className="px-8 py-12 bg-white flex flex-col items-center">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
           {/* Info Akademik */}
-          <div className="rounded shadow-lg overflow-hidden w-full bg-white font-poppins text-sm">
+          <div className="rounded shadow-[0_0_15px_rgba(0,0,0,0.5)] overflow-hidden w-full bg-white font-poppins text-sm">
             {/* Bagian Header Merah */}
             <div className="bg-[#2C3930] text-white py-3 text-center">
               <h3 className="font-bold">PERHATIAN!</h3>
             </div>
 
             {/* Bagian Konten */}
-            <div className="p-4 text-black space-y-4 ">
+            <div className="p-4 text-black space-y-4">
               <p className="text-sm">
                 Saat ini Anda sedang menempuh semester{" "}
                 <strong>6 T.A 2024/2025</strong> Genap
@@ -118,7 +118,7 @@ const HomePage: FC = () => {
           </div>
 
           {/* Pengumuman */}
-          <div className="rounded shadow-lg overflow-hidden w-full bg-white text-sm font-poppins">
+          <div className="rounded shadow-[0_0_15px_rgba(0,0,0,0.5)] overflow-hidden w-full bg-white text-sm font-poppins ">
             <div className="bg-[#2C3930] text-white py-3 px-4 text-center">
               <h3 className="font-bold">PENGUMUMAN</h3>
             </div>

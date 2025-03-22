@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-700 w-full max-w-full overflow-hidden">
       {/* Sidebar */}
       <NavigationBar
         isSidebarOpen={isSidebarOpen}
@@ -41,7 +41,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </nav>
 
         {/* Konten utama */}
-        <main className="flex flex-col p-4 flex-grow">{children}</main>
+        <main className="flex flex-col p-4 flex-grow max-w-full bg-gray-100">
+          {children}
+        </main>
 
         {/* Footer selalu di bawah tanpa menyebabkan scroll berlebihan */}
         <footer className="flex flex-col bg-gray-200 text-center p-3">

@@ -42,9 +42,9 @@ const GenerateJadwal = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="min-h-screen bg-gray-100 p-2 sm:p-4 max-w-full overflow-hidden">
       {/* Card Generate Jadwal */}
-      <div className="max-w-lg w-full mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-md">
+      <div className="w-full max-w-full sm:max-w-screen-lg mx-auto bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md">
         <h2 className="text-[#4F959D] text-lg font-semibold mb-4 text-center">
           Generate Jadwal
         </h2>
@@ -56,24 +56,35 @@ const GenerateJadwal = () => {
         </button>
       </div>
 
-      {/* Tabel Jadwal (Responsive) */}
-      <div className="mt-6 w-full bg-white p-4 sm:p-6 rounded-lg shadow-md">
+      {/* Tabel Jadwal */}
+      <div className="mt-6 w-full max-w-full sm:max-w-screen-md md:max-w-screen-lg mx-auto bg-white p-2 sm:p-3 md:p-6 rounded-lg shadow-md">
         <h2 className="text-[#4F959D] text-lg font-semibold mb-4 text-center">
           Hasil Jadwal
         </h2>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full border-collapse border border-gray-300 text-xs sm:text-sm md:text-base">
+        {/* Improved overflow handling */}
+        <div className="overflow-x-auto w-full">
+          <table className="w-full border-collapse border border-gray-300 text-xs sm:text-sm md:text-base">
             <thead className="bg-[#4F959D] text-white">
               <tr>
-                <th className="border border-gray-300 px-3 py-2">No</th>
-                <th className="border border-gray-300 px-3 py-2">Nama Dosen</th>
-                <th className="border border-gray-300 px-3 py-2">
+                <th className="border border-gray-300 px-1 sm:px-2 md:px-3 py-1 sm:py-2 text-xs sm:text-sm">
+                  No
+                </th>
+                <th className="border border-gray-300 px-1 sm:px-2 md:px-3 py-1 sm:py-2 text-xs sm:text-sm">
+                  Nama Dosen
+                </th>
+                <th className="border border-gray-300 px-1 sm:px-2 md:px-3 py-1 sm:py-2 text-xs sm:text-sm">
                   Mata Kuliah
                 </th>
-                <th className="border border-gray-300 px-3 py-2">Ruangan</th>
-                <th className="border border-gray-300 px-3 py-2">Waktu</th>
-                <th className="border border-gray-300 px-3 py-2">Aksi</th>
+                <th className="border border-gray-300 px-1 sm:px-2 md:px-3 py-1 sm:py-2 text-xs sm:text-sm">
+                  Ruangan
+                </th>
+                <th className="border border-gray-300 px-1 sm:px-2 md:px-3 py-1 sm:py-2 text-xs sm:text-sm">
+                  Waktu
+                </th>
+                <th className="border border-gray-300 px-1 sm:px-2 md:px-3 py-1 sm:py-2 text-xs sm:text-sm">
+                  Aksi
+                </th>
               </tr>
             </thead>
             <tbody className="text-black">
@@ -83,27 +94,27 @@ const GenerateJadwal = () => {
                     key={item.id}
                     className="text-center hover:bg-gray-100 transition duration-200 ease-in-out"
                   >
-                    <td className="border border-gray-300 px-3 py-2">
+                    <td className="border border-gray-300 px-1 sm:px-2 md:px-3 py-1 sm:py-2 text-xs sm:text-sm">
                       {index + 1}
                     </td>
-                    <td className="border border-gray-300 px-3 py-2">
+                    <td className="border border-gray-300 px-1 sm:px-2 md:px-3 py-1 sm:py-2 text-xs sm:text-sm truncate max-w-[60px] sm:max-w-none">
                       {item.namaDosen}
                     </td>
-                    <td className="border border-gray-300 px-3 py-2">
+                    <td className="border border-gray-300 px-1 sm:px-2 md:px-3 py-1 sm:py-2 text-xs sm:text-sm truncate max-w-[60px] sm:max-w-none">
                       {item.mataKuliah}
                     </td>
-                    <td className="border border-gray-300 px-3 py-2">
+                    <td className="border border-gray-300 px-1 sm:px-2 md:px-3 py-1 sm:py-2 text-xs sm:text-sm truncate max-w-[60px] sm:max-w-none">
                       {item.ruangan}
                     </td>
-                    <td className="border border-gray-300 px-3 py-2">
+                    <td className="border border-gray-300 px-1 sm:px-2 md:px-3 py-1 sm:py-2 text-xs sm:text-sm">
                       {item.waktu}
                     </td>
-                    <td className="border border-gray-300 px-3 py-2">
+                    <td className="border border-gray-300 px-1 sm:px-2 md:px-3 py-1 sm:py-2 text-xs sm:text-sm">
                       <button
                         className="text-black hover:text-gray-700 transition duration-200"
                         onClick={() => deleteJadwal(item.id)}
                       >
-                        <FaTrash size={16} />
+                        <FaTrash size={12} className="mx-auto" />
                       </button>
                     </td>
                   </tr>
@@ -112,7 +123,7 @@ const GenerateJadwal = () => {
                 <tr>
                   <td
                     colSpan={6}
-                    className="border border-gray-300 px-4 py-2 text-center text-gray-400"
+                    className="border border-gray-300 px-2 sm:px-4 py-2 text-center text-gray-400 text-xs sm:text-sm"
                   >
                     Belum ada jadwal dibuat
                   </td>

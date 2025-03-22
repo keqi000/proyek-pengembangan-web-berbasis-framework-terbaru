@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { FC } from "react";
 import {
-  FaPhone,
   FaEnvelope,
-  FaMapMarkerAlt,
+  FaUser,
   FaHome,
   FaBook,
   FaCalendarAlt,
@@ -21,16 +20,12 @@ const Navbar: FC = () => {
         <div className="container flex justify-between items-center px-4">
           <div className="flex space-x-6">
             <Link href="#" className="flex items-center">
-              <FaPhone className="mr-2" />
-              <span>Call: 082290581860</span>
-            </Link>
-            <Link href="#" className="flex items-center">
               <FaEnvelope className="mr-2" />
-              <span>Email: febrianhemeto04@gmail.com</span>
+              <span>Email: Yonatan@gmail.com</span>
             </Link>
             <Link href="#" className="flex items-center">
-              <FaMapMarkerAlt className="mr-2" />
-              <span>Location</span>
+              <FaUser className="mr-2" />
+              <span>Yonatan Hot Gabe Sihotang</span>
             </Link>
           </div>
         </div>
