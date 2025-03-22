@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   FaEnvelope,
   FaUser,
@@ -10,37 +10,56 @@ import {
   FaCalendarAlt,
   FaPrint,
   FaSignInAlt,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 
 const Navbar: FC = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <>
       {/* Header Section */}
-      <header className="bg-[#2C3930] text-white py-4 font-bebas">
-        <div className="container flex justify-between items-center px-4">
-          <div className="flex space-x-6">
-            <Link href="#" className="flex items-center">
+      <header className="bg-[#2C3930] text-white py-2 sm:py-4 font-bebas">
+        <div className="container flex flex-col sm:flex-row justify-between items-start sm:items-center px-4">
+          <div className="flex flex-col sm:flex-row sm:space-x-6 text-xs sm:text-base">
+            <Link href="#" className="flex items-center mb-1 sm:mb-0">
               <FaEnvelope className="mr-2" />
-              <span>Email: Yonatan@gmail.com</span>
+              <span className="truncate">Email: Yonatan@gmail.com</span>
             </Link>
             <Link href="#" className="flex items-center">
               <FaUser className="mr-2" />
-              <span>Yonatan Hot Gabe Sihotang</span>
+              <span className="truncate">Yonatan Hot Gabe Sihotang</span>
             </Link>
           </div>
         </div>
       </header>
 
       {/* Navbar Section */}
-      <nav className="bg-white py-4 shadow-md">
+      <nav className="bg-white py-3 sm:py-4 shadow-md relative">
         <div className="container flex justify-between items-center px-4">
           <Link
             href="/user/home"
-            className="text-4xl font-bold text-black flex items-center font-bebas"
+            className="text-xl sm:text-2xl md:text-4xl font-bold text-black flex items-center font-bebas"
           >
-            SISTEM PENJADWALAN KULIAH
+            <span className="hidden sm:inline">SISTEM PENJADWALAN KULIAH</span>
+            <span className="sm:hidden">SISTEM PENJADWALAN KULIAH</span>
           </Link>
-          <div className="flex flex-row space-x-6 font-poppins">
+
+          {/* Mobile menu button */}
+          <button
+            className="sm:hidden text-black focus:outline-none"
+            onClick={toggleMenu}
+          >
+            {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          </button>
+
+          {/* Desktop menu */}
+          <div className="hidden sm:flex flex-row space-x-4 md:space-x-6 font-poppins text-sm md:text-base">
             <Link
               href="/"
               className="py-2 text-black hover:text-[#3F4F44] flex items-center"
@@ -73,6 +92,49 @@ const Navbar: FC = () => {
             </Link>
           </div>
         </div>
+
+        {/* Mobile menu */}
+        {isMenuOpen && (
+          <div className="sm:hidden absolute top-full left-0 right-0 bg-white shadow-md z-50 border-t border-gray-200 font-poppins">
+            <div className="flex flex-col px-4 py-2">
+              <Link
+                href="/"
+                className="py-3 border-b border-gray-100 text-black hover:text-[#3F4F44] flex items-center"
+                onClick={toggleMenu}
+              >
+                <FaHome className="mr-2" /> Beranda
+              </Link>
+              <Link
+                href="/services"
+                className="py-3 border-b border-gray-100 text-black hover:text-[#3F4F44] flex items-center"
+                onClick={toggleMenu}
+              >
+                <FaBook className="mr-2" /> Mata Kuliah
+              </Link>
+              <Link
+                href="/about"
+                className="py-3 border-b border-gray-100 text-black hover:text-[#3F4F44] flex items-center"
+                onClick={toggleMenu}
+              >
+                <FaCalendarAlt className="mr-2" /> Jadwal Kuliah
+              </Link>
+              <Link
+                href="/contact"
+                className="py-3 border-b border-gray-100 text-black hover:text-[#3F4F44] flex items-center"
+                onClick={toggleMenu}
+              >
+                <FaPrint className="mr-2" /> Cetak Jadwal
+              </Link>
+              <Link
+                href="#"
+                className="py-3 text-black hover:text-[#3F4F44] flex items-center"
+                onClick={toggleMenu}
+              >
+                <FaSignInAlt className="mr-2" /> Login
+              </Link>
+            </div>
+          </div>
+        )}
       </nav>
     </>
   );
