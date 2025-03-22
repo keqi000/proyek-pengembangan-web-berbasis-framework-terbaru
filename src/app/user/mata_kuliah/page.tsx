@@ -35,13 +35,13 @@ const courses = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-100 p-6 font-poppins">
       {/* Status KRS */}
       <div className="max-w-4xl mx-auto">
         <div className="rounded shadow-[0_0_15px_rgba(0,0,0,0.5)] overflow-hidden w-full bg-white font-poppins text-sm">
           {/* Bagian Header Merah */}
           <div className="bg-[#2C3930] text-white py-3 text-center">
-            <h3 className="font-bold">MATA KULIAH ANDA</h3>
+            <h3 className="font-bold">PERKULIAHAN ANDA</h3>
           </div>
 
           {/* Bagian Konten */}
@@ -71,11 +71,11 @@ export default function Home() {
         </div>
 
         <div className="bg-green-500 text-white p-4 rounded-md mt-4 text-center font-semibold">
-          ✅ KRS sudah disetujui oleh Dosen Pembimbing Akademik
+          ✅ Mata kuliah sudah disetujui oleh Admin
         </div>
 
         {/* Daftar Mata Kuliah */}
-        <h3 className="mt-6 text-lg font-semibold text-gray-700">
+        <h3 className="mt-6 text-lg font-semibold font-poppins text-gray-700">
           Mata Kuliah Dikontak
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
@@ -87,7 +87,9 @@ export default function Home() {
               <h4 className="text-md font-semibold text-gray-700">
                 {course.code} - {course.sks}
               </h4>
-              <h3 className="text-lg font-bold text-gray-900">{course.name}</h3>
+              <h3 className="text-lg font-poppins font-bold text-gray-900">
+                {course.name}
+              </h3>
               <p className="text-sm text-gray-600">
                 <strong>Dosen:</strong> {course.lecturer}
               </p>

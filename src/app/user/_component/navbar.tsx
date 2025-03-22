@@ -34,10 +34,6 @@ const Navbar: FC = () => {
       <header className="bg-[#2C3930] text-white py-2 sm:py-4 font-bebas">
         <div className="container flex flex-col sm:flex-row justify-between items-start sm:items-center px-4">
           <div className="flex flex-col sm:flex-row sm:space-x-6 text-xs sm:text-base">
-            <Link href="#" className="flex items-center mb-1 sm:mb-0">
-              <FaEnvelope className="mr-2" />
-              <span className="truncate">Email: Yonatan@gmail.com</span>
-            </Link>
             <Link href="#" className="flex items-center">
               <FaUser className="mr-2" />
               <span className="truncate">Yonatan Hot Gabe Sihotang</span>
