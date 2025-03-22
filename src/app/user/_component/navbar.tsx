@@ -6,10 +6,11 @@ import {
   FaPhone,
   FaEnvelope,
   FaMapMarkerAlt,
-  FaUser,
   FaHome,
-  FaTools,
-  FaInfoCircle,
+  FaBook,
+  FaCalendarAlt,
+  FaPrint,
+  FaSignInAlt,
 } from "react-icons/fa";
 
 const Navbar: FC = () => {
@@ -49,31 +50,31 @@ const Navbar: FC = () => {
               href="/"
               className="py-2 text-black hover:text-[#3F4F44] flex items-center"
             >
-              <FaHome className="mr-2" /> Home
+              <FaHome className="mr-2" /> Beranda
             </Link>
             <Link
               href="/services"
               className="py-2 text-black hover:text-[#3F4F44] flex items-center"
             >
-              <FaTools className="mr-2" /> Services
+              <FaBook className="mr-2" /> Mata Kuliah
             </Link>
             <Link
               href="/about"
               className="py-2 text-black hover:text-[#3F4F44] flex items-center"
             >
-              <FaInfoCircle className="mr-2" /> About
+              <FaCalendarAlt className="mr-2" /> Jadwal Kuliah
             </Link>
             <Link
               href="/contact"
               className="py-2 text-black hover:text-[#3F4F44] flex items-center"
             >
-              <FaPhone className="mr-2" /> Contact Us
+              <FaPrint className="mr-2" /> Cetak Jadwal
             </Link>
             <Link
               href="#"
               className="py-2 text-black hover:text-[#3F4F44] flex items-center"
             >
-              <FaUser className="mr-2" /> Login
+              <FaSignInAlt className="mr-2" /> Login
             </Link>
           </div>
         </div>
