@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FC, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   FaEnvelope,
   FaUser,
@@ -16,9 +17,15 @@ import {
 
 const Navbar: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Function to determine if a link is active
+  const isActive = (path: string) => {
+    return pathname === path;
   };
 
   return (
@@ -61,32 +68,52 @@ const Navbar: FC = () => {
           {/* Desktop menu */}
           <div className="hidden sm:flex flex-row space-x-4 md:space-x-6 font-poppins text-sm md:text-base">
             <Link
-              href="/"
-              className="py-2 text-black hover:text-[#3F4F44] flex items-center"
+              href="/user/home"
+              className={`py-2 flex items-center ${
+                isActive("/user/home")
+                  ? "text-[#3F4F44] font-medium"
+                  : "text-black hover:text-[#3F4F44]"
+              }`}
             >
               <FaHome className="mr-2" /> Beranda
             </Link>
             <Link
-              href="/services"
-              className="py-2 text-black hover:text-[#3F4F44] flex items-center"
+              href="/user/mata_kuliah"
+              className={`py-2 flex items-center ${
+                isActive("/user/mata_kuliah")
+                  ? "text-[#3F4F44] font-medium"
+                  : "text-black hover:text-[#3F4F44]"
+              }`}
             >
               <FaBook className="mr-2" /> Mata Kuliah
             </Link>
             <Link
               href="/about"
-              className="py-2 text-black hover:text-[#3F4F44] flex items-center"
+              className={`py-2 flex items-center ${
+                isActive("/about")
+                  ? "text-[#3F4F44] font-medium"
+                  : "text-black hover:text-[#3F4F44]"
+              }`}
             >
               <FaCalendarAlt className="mr-2" /> Jadwal Kuliah
             </Link>
             <Link
               href="/contact"
-              className="py-2 text-black hover:text-[#3F4F44] flex items-center"
+              className={`py-2 flex items-center ${
+                isActive("/contact")
+                  ? "text-[#3F4F44] font-medium"
+                  : "text-black hover:text-[#3F4F44]"
+              }`}
             >
               <FaPrint className="mr-2" /> Cetak Jadwal
             </Link>
             <Link
-              href="#"
-              className="py-2 text-black hover:text-[#3F4F44] flex items-center"
+              href="/login"
+              className={`py-2 flex items-center ${
+                isActive("/login")
+                  ? "text-[#3F4F44] font-medium"
+                  : "text-black hover:text-[#3F4F44]"
+              }`}
             >
               <FaSignInAlt className="mr-2" /> Login
             </Link>
@@ -98,36 +125,56 @@ const Navbar: FC = () => {
           <div className="sm:hidden absolute top-full left-0 right-0 bg-white shadow-md z-50 border-t border-gray-200 font-poppins">
             <div className="flex flex-col px-4 py-2">
               <Link
-                href="/"
-                className="py-3 border-b border-gray-100 text-black hover:text-[#3F4F44] flex items-center"
+                href="/user/home"
+                className={`py-3 border-b border-gray-100 flex items-center ${
+                  isActive("/user/home")
+                    ? "text-[#3F4F44] font-medium"
+                    : "text-black hover:text-[#3F4F44]"
+                }`}
                 onClick={toggleMenu}
               >
                 <FaHome className="mr-2" /> Beranda
               </Link>
               <Link
-                href="/services"
-                className="py-3 border-b border-gray-100 text-black hover:text-[#3F4F44] flex items-center"
+                href="/user/mata_kuliah"
+                className={`py-3 border-b border-gray-100 flex items-center ${
+                  isActive("/user/mata_kuliah")
+                    ? "text-[#3F4F44] font-medium"
+                    : "text-black hover:text-[#3F4F44]"
+                }`}
                 onClick={toggleMenu}
               >
                 <FaBook className="mr-2" /> Mata Kuliah
               </Link>
               <Link
                 href="/about"
-                className="py-3 border-b border-gray-100 text-black hover:text-[#3F4F44] flex items-center"
+                className={`py-3 border-b border-gray-100 flex items-center ${
+                  isActive("/about")
+                    ? "text-[#3F4F44] font-medium"
+                    : "text-black hover:text-[#3F4F44]"
+                }`}
                 onClick={toggleMenu}
               >
                 <FaCalendarAlt className="mr-2" /> Jadwal Kuliah
               </Link>
               <Link
                 href="/contact"
-                className="py-3 border-b border-gray-100 text-black hover:text-[#3F4F44] flex items-center"
+                className={`py-3 border-b border-gray-100 flex items-center ${
+                  isActive("/contact")
+                    ? "text-[#3F4F44] font-medium"
+                    : "text-black hover:text-[#3F4F44]"
+                }`}
                 onClick={toggleMenu}
               >
                 <FaPrint className="mr-2" /> Cetak Jadwal
               </Link>
               <Link
-                href="#"
-                className="py-3 text-black hover:text-[#3F4F44] flex items-center"
+                href="/login"
+                className={`py-3 flex items-center ${
+                  isActive("/login")
+                    ? "text-[#3F4F44] font-medium"
+                    : "text-black hover:text-[#3F4F44]"
+                }`}
                 onClick={toggleMenu}
               >
                 <FaSignInAlt className="mr-2" /> Login

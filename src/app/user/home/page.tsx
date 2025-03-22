@@ -2,7 +2,6 @@
 
 import { Home, Calendar, Book, Printer } from "lucide-react"; // Import ikon dari Lucide
 import { FC } from "react";
-import Image from "next/image"; // Import Image dari Next.js
 import HeroSlider from "../_component/HeroSlider";
 
 const HomePage: FC = () => {
