@@ -28,12 +28,7 @@ const KelolaDosen = () => {
 
   const handleSubmit = () => {
     if (tempInput.id) {
-      updateDosen(
-        tempInput.id,
-        tempInput.nama,
-        tempInput.mata_kuliah,
-      );
-      console.log("dosen diupdate")
+      updateDosen(tempInput.id, tempInput.nama, tempInput.mata_kuliah);
     } else {
       addDosen({
         id: (dosenList.length + 1).toString(),
@@ -41,7 +36,6 @@ const KelolaDosen = () => {
         mata_kuliah: tempInput.mata_kuliah,
       });
     }
-
     setTempInput({ nama: "", mata_kuliah: "" });
   };
 
@@ -52,13 +46,16 @@ const KelolaDosen = () => {
 
   const handleConfirmEdit = () => {
     if (selectedDosen !== null && selectedDosen.id) {
-      console.log("dosen diedit")
       updateDosen(
-        selectedDosen.id, 
-        selectedDosen.nama, 
+        selectedDosen.id,
+        selectedDosen.nama,
         selectedDosen.mata_kuliah
       );
     }
+    setEditPopup(false);
+  };
+
+  const handleCancelEdit = () => {
     setEditPopup(false);
   };
 
@@ -116,43 +113,51 @@ const KelolaDosen = () => {
         </h2>
 
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300">
+          <table className="w-full border-collapse border border-gray-300 text-xs sm:text-sm md:text-base">
             <thead className="bg-[#4F959D] text-white">
               <tr>
-                <th className="border border-gray-300 px-4 py-3 w-12">No</th>
-                <th className="border border-gray-300 px-6 py-3">Nama Dosen</th>
-                <th className="border border-gray-300 px-6 py-3">
+                <th className="border border-gray-300 px-2 md:px-4 py-3 w-12">
+                  No
+                </th>
+                <th className="border border-gray-300 px-2 md:px-6 py-3">
+                  Nama Dosen
+                </th>
+                <th className="border border-gray-300 px-2 md:px-6 py-3">
                   Mata Kuliah
                 </th>
-                <th className="border border-gray-300 px-6 py-3">Aksi</th>
+                <th className="border border-gray-300 px-2 md:px-6 py-3 w-20 md:w-24">
+                  Aksi
+                </th>
               </tr>
             </thead>
             <tbody className="text-black">
               {dosenList.length > 0 ? (
                 dosenList.map((dosen, index) => (
                   <tr key={dosen.id} className="text-center hover:bg-gray-100">
-                    <td className="border border-gray-300 px-4 py-3">
+                    <td className="border border-gray-300 px-2 md:px-4 py-3">
                       {index + 1}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3">
+                    <td className="border border-gray-300 px-2 md:px-6 py-3">
                       {dosen.nama}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3">
+                    <td className="border border-gray-300 px-2 md:px-6 py-3">
                       {dosen.mata_kuliah}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3 flex justify-center gap-3">
-                      <button
-                        className="text-black hover:text-gray-700"
-                        onClick={() => handleEditClick(dosen)}
-                      >
-                        <FaEdit size={18} />
-                      </button>
-                      <button
-                        className="text-black hover:text-gray-700"
-                        onClick={() => deleteDosen(dosen.id)}
-                      >
-                        <FaTrash size={18} />
-                      </button>
+                    <td className="border border-gray-300 px-2 md:px-6 py-3 w-20 md:w-24">
+                      <div className="flex justify-center gap-4">
+                        <button
+                          className="text-black hover:text-gray-700"
+                          onClick={() => handleEditClick(dosen)}
+                        >
+                          <FaEdit size={16} />
+                        </button>
+                        <button
+                          className="text-black hover:text-gray-700"
+                          onClick={() => deleteDosen(dosen.id)}
+                        >
+                          <FaTrash size={16} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -173,8 +178,8 @@ const KelolaDosen = () => {
 
       {/* Popup Edit */}
       {editPopup && selectedDosen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center p-4 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96 max-w-md">
             <h2 className="text-[#4F959D] text-lg font-semibold mb-4 text-center">
               Edit Dosen
             </h2>
@@ -209,18 +214,20 @@ const KelolaDosen = () => {
                   }
                 />
               </div>
-              <div className="flex justify-between mt-4">
+              <div className="flex space-x-3">
                 <button
-                  className="bg-[#4F959D] text-white px-4 py-2 rounded-lg hover:bg-[#3C7A85]"
-                  onClick={handleConfirmEdit}
+                  type="button"
+                  className="bg-gray-300 text-gray-800 px-4 py-2 w-1/2 rounded-lg hover:bg-gray-400 transition"
+                  onClick={handleCancelEdit}
                 >
-                  Confirm
+                  Batal
                 </button>
                 <button
-                  className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500"
-                  onClick={() => setEditPopup(false)}
+                  type="button"
+                  className="bg-[#4F959D] text-white px-4 py-2 w-1/2 rounded-lg hover:bg-[#3C7A85] transition"
+                  onClick={handleConfirmEdit}
                 >
-                  Cancel
+                  Simpan
                 </button>
               </div>
             </form>

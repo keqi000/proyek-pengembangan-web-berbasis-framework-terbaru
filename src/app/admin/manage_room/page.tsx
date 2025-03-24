@@ -11,9 +11,9 @@ type RuanganItem = {
 };
 
 const KelolaRuangan = () => {
-  const ruanganList = useRoomStore((state) => state.data)
-  const addRuangan = useRoomStore((state) => state.addData)
-  const setRuanganList = useRoomStore((state) => state.setData)
+  const ruanganList = useRoomStore((state) => state.data);
+  const addRuangan = useRoomStore((state) => state.addData);
+  const setRuanganList = useRoomStore((state) => state.setData);
 
   const [tempInput, setTempInput] = useState<RuanganItem>({
     id: "",
@@ -25,7 +25,6 @@ const KelolaRuangan = () => {
   const [selectedRuangan, setSelectedRuangan] = useState<RuanganItem | null>(
     null
   );
-
 
   const handleEditClick = (ruangan: RuanganItem) => {
     setSelectedRuangan(ruangan);
@@ -40,6 +39,10 @@ const KelolaRuangan = () => {
         )
       );
     }
+    setEditPopup(false);
+  };
+
+  const handleCancelEdit = () => {
     setEditPopup(false);
   };
 
@@ -83,10 +86,13 @@ const KelolaRuangan = () => {
           <button
             type="button"
             className="bg-[#4F959D] text-white px-4 py-2 w-full rounded-lg hover:bg-[#3C7A85] transition"
-            // onClick={handleSubmit}
             onClick={() => {
-              addRuangan({...tempInput})
-              setTempInput({nama: "", kapasitas: "", id: (ruanganList.length + 1).toString()})
+              addRuangan({ ...tempInput });
+              setTempInput({
+                nama: "",
+                kapasitas: "",
+                id: (ruanganList.length + 1).toString(),
+              });
             }}
           >
             Tambah Ruangan
@@ -101,15 +107,21 @@ const KelolaRuangan = () => {
         </h2>
 
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300">
+          <table className="w-full border-collapse border border-gray-300 text-xs sm:text-sm md:text-base">
             <thead className="bg-[#4F959D] text-white">
               <tr>
-                <th className="border border-gray-300 px-4 py-3 w-12">No</th>
-                <th className="border border-gray-300 px-6 py-3">
+                <th className="border border-gray-300 px-2 md:px-4 py-3 w-12">
+                  No
+                </th>
+                <th className="border border-gray-300 px-2 md:px-6 py-3">
                   Nama Ruangan
                 </th>
-                <th className="border border-gray-300 px-6 py-3">Kapasitas</th>
-                <th className="border border-gray-300 px-6 py-3">Aksi</th>
+                <th className="border border-gray-300 px-2 md:px-6 py-3">
+                  Kapasitas
+                </th>
+                <th className="border border-gray-300 px-2 md:px-6 py-3 w-20 md:w-24">
+                  Aksi
+                </th>
               </tr>
             </thead>
             <tbody className="text-black">
@@ -119,32 +131,36 @@ const KelolaRuangan = () => {
                     key={ruangan.id}
                     className="text-center hover:bg-gray-100"
                   >
-                    <td className="border border-gray-300 px-4 py-3">
+                    <td className="border border-gray-300 px-2 md:px-4 py-3">
                       {index + 1}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3">
+                    <td className="border border-gray-300 px-2 md:px-6 py-3">
                       {ruangan.nama}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3">
+                    <td className="border border-gray-300 px-2 md:px-6 py-3">
                       {ruangan.kapasitas}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3 flex justify-center gap-3">
-                      <button
-                        className="text-black hover:text-gray-700"
-                        onClick={() => handleEditClick(ruangan)}
-                      >
-                        <FaEdit size={18} />
-                      </button>
-                      <button
-                        className="text-black hover:text-gray-700"
-                        onClick={() =>
-                          setRuanganList(
-                            ruanganList.filter((item) => item.id !== ruangan.id)
-                          )
-                        }
-                      >
-                        <FaTrash size={18} />
-                      </button>
+                    <td className="border border-gray-300 px-2 md:px-6 py-3 w-20 md:w-24">
+                      <div className="flex justify-center gap-4">
+                        <button
+                          className="text-black hover:text-gray-700"
+                          onClick={() => handleEditClick(ruangan)}
+                        >
+                          <FaEdit size={16} />
+                        </button>
+                        <button
+                          className="text-black hover:text-gray-700"
+                          onClick={() =>
+                            setRuanganList(
+                              ruanganList.filter(
+                                (item) => item.id !== ruangan.id
+                              )
+                            )
+                          }
+                        >
+                          <FaTrash size={16} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -165,8 +181,8 @@ const KelolaRuangan = () => {
 
       {/* Popup Edit */}
       {editPopup && selectedRuangan && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center p-4 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96 max-w-md">
             <h2 className="text-[#4F959D] text-lg font-semibold mb-4 text-center">
               Edit Ruangan
             </h2>
@@ -190,7 +206,7 @@ const KelolaRuangan = () => {
               </div>
               <div>
                 <label className="block text-[#4F959D] font-medium">
-                  Kapasitas
+                  Kapasitas Ruangan
                 </label>
                 <input
                   type="number"
@@ -204,18 +220,20 @@ const KelolaRuangan = () => {
                   }
                 />
               </div>
-              <div className="flex justify-between mt-4">
+              <div className="flex space-x-3">
                 <button
-                  className="bg-[#4F959D] text-white px-4 py-2 rounded-lg hover:bg-[#3C7A85]"
-                  onClick={handleConfirmEdit}
+                  type="button"
+                  className="bg-gray-300 text-gray-800 px-4 py-2 w-1/2 rounded-lg hover:bg-gray-400 transition"
+                  onClick={handleCancelEdit}
                 >
-                  Confirm
+                  Batal
                 </button>
                 <button
-                  className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500"
-                  onClick={() => setEditPopup(false)}
+                  type="button"
+                  className="bg-[#4F959D] text-white px-4 py-2 w-1/2 rounded-lg hover:bg-[#3C7A85] transition"
+                  onClick={handleConfirmEdit}
                 >
-                  Cancel
+                  Simpan
                 </button>
               </div>
             </form>
