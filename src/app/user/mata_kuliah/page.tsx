@@ -37,7 +37,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-100 p-6 font-poppins">
       {/* Status KRS */}
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-full mx-auto">
         <div className="rounded shadow-[0_0_15px_rgba(0,0,0,0.5)] overflow-hidden w-full bg-white font-poppins text-sm">
           {/* Bagian Header Merah */}
           <div className="bg-[#2C3930] text-white py-3 text-center">
