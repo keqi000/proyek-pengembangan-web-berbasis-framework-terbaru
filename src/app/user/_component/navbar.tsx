@@ -74,9 +74,9 @@ const Navbar: FC = () => {
               <FaHome className="mr-2" /> Beranda
             </Link>
             <Link
-              href="/user/lecturers"
+              href="/user/course"
               className={`py-2 flex items-center ${
-                isActive("/user/lecturers")
+                isActive("/user/course")
                   ? "text-[#3F4F44] font-medium"
                   : "text-black hover:text-[#3F4F44]"
               }`}
@@ -132,9 +132,9 @@ const Navbar: FC = () => {
                 <FaHome className="mr-2" /> Beranda
               </Link>
               <Link
-                href="/user/lecturers"
+                href="/user/course"
                 className={`py-3 border-b border-gray-100 flex items-center ${
-                  isActive("/user/lecturers")
+                  isActive("/user/course")
                     ? "text-[#3F4F44] font-medium"
                     : "text-black hover:text-[#3F4F44]"
                 }`}
