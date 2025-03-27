@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import { useMataKuliahStore } from "../_store/matakuliah";
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaBook } from "react-icons/fa";
 
-type TempInputData = {
-  id?: string;
-  kode: string;
+type MataKuliahItem = {
+  id: string;
   nama: string;
+  kode: string;
   semester: string;
   sks: string;
 };
@@ -18,7 +18,7 @@ const KelolaMataKuliah = () => {
   const updateMataKuliah = useMataKuliahStore((state) => state.updateData);
   const deleteMataKuliah = useMataKuliahStore((state) => state.deleteData);
 
-  const [tempInput, setTempInput] = useState<TempInputData>({
+  const [tempInput, setTempInput] = useState<Omit<MataKuliahItem, "id">>({
     kode: "",
     nama: "",
     semester: "",
@@ -27,7 +27,7 @@ const KelolaMataKuliah = () => {
 
   const [editPopup, setEditPopup] = useState(false);
   const [selectedMataKuliah, setSelectedMataKuliah] =
-    useState<TempInputData | null>(null);
+    useState<MataKuliahItem | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -42,27 +42,12 @@ const KelolaMataKuliah = () => {
       return;
     }
 
-    if (tempInput.id) {
-      updateMataKuliah(
-        tempInput.id,
-        tempInput.kode,
-        tempInput.nama,
-        tempInput.semester,
-        tempInput.sks
-      );
-    } else {
-      addMataKuliah({
-        kode: tempInput.kode,
-        nama: tempInput.nama,
-        semester: tempInput.semester,
-        sks: tempInput.sks,
-      });
-    }
+    addMataKuliah(tempInput);
     setTempInput({ kode: "", nama: "", semester: "", sks: "" });
     setShowAddForm(false);
   };
 
-  const handleEditClick = (mataKuliah: TempInputData) => {
+  const handleEditClick = (mataKuliah: MataKuliahItem) => {
     setSelectedMataKuliah(mataKuliah);
     setEditPopup(true);
   };
@@ -80,8 +65,8 @@ const KelolaMataKuliah = () => {
       }
       updateMataKuliah(
         selectedMataKuliah.id,
-        selectedMataKuliah.kode,
         selectedMataKuliah.nama,
+        selectedMataKuliah.kode,
         selectedMataKuliah.semester,
         selectedMataKuliah.sks
       );

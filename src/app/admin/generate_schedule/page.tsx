@@ -17,6 +17,7 @@ type JadwalItem = {
   id: number;
   namaDosen: string;
   mataKuliah: string;
+  semester: string; // Added semester property
   ruangan: string;
   waktu: string;
   hari: string;
@@ -56,7 +57,7 @@ const GenerateJadwal = () => {
       const generatedJadwal: JadwalItem[] = [];
       let id = 1;
 
-      // More realistic schedule generation
+      // Generate schedule based on mata kuliah list
       mataKuliahList.forEach((mataKuliah) => {
         // Randomly assign a day, time slot, dosen, and room
         const randomDay = days[Math.floor(Math.random() * days.length)];
@@ -71,6 +72,7 @@ const GenerateJadwal = () => {
           id: id++,
           namaDosen: randomDosen.nama,
           mataKuliah: mataKuliah.nama,
+          semester: mataKuliah.semester || "-", // Include semester from mata kuliah
           ruangan: randomRoom.nama,
           waktu: randomTimeSlot,
           hari: randomDay,
@@ -94,7 +96,15 @@ const GenerateJadwal = () => {
       return;
     }
 
-    const headers = ["No", "Hari", "Waktu", "Mata Kuliah", "Dosen", "Ruangan"];
+    const headers = [
+      "No",
+      "Hari",
+      "Waktu",
+      "Mata Kuliah",
+      "Semester",
+      "Dosen",
+      "Ruangan",
+    ]; // Added Semester to headers
     const csvContent = [
       headers.join(","),
       ...jadwal.map((item, index) =>
@@ -103,6 +113,7 @@ const GenerateJadwal = () => {
           item.hari,
           item.waktu,
           item.mataKuliah,
+          item.semester,
           item.namaDosen,
           item.ruangan,
         ].join(",")
@@ -236,6 +247,9 @@ const GenerateJadwal = () => {
                         Mata Kuliah
                       </th>
                       <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                        Semester
+                      </th>
+                      <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
                         Dosen
                       </th>
                       <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
@@ -266,6 +280,9 @@ const GenerateJadwal = () => {
                             {item.mataKuliah}
                           </td>
                           <td className="px-2 sm:px-4 py-2 sm:py-3">
+                            {item.semester ? `Semester ${item.semester}` : "-"}
+                          </td>
+                          <td className="px-2 sm:px-4 py-2 sm:py-3">
                             {item.namaDosen}
                           </td>
                           <td className="px-2 sm:px-4 py-2 sm:py-3">
@@ -287,7 +304,7 @@ const GenerateJadwal = () => {
                     ) : (
                       <tr>
                         <td
-                          colSpan={7}
+                          colSpan={8} // Updated from 7 to 8 to account for the new semester column
                           className="px-4 sm:px-6 py-6 sm:py-8 text-center text-gray-500 bg-gray-50 text-xs sm:text-sm"
                         >
                           {jadwal.length > 0

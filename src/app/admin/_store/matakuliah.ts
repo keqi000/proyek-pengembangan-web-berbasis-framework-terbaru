@@ -7,6 +7,7 @@ type MataKuliahItem = {
   nama: string;
   kode: string;
   sks: string;
+  semester: string; // Added semester property
 };
 
 type MataKuliahStore = {
@@ -18,6 +19,7 @@ type MataKuliahStore = {
     id: MataKuliahItem["id"],
     nama: MataKuliahItem["nama"],
     kode: MataKuliahItem["kode"],
+    semester: MataKuliahItem["semester"], // Added semester parameter
     sks: MataKuliahItem["sks"]
   ) => void;
 };
@@ -46,6 +48,7 @@ export const useMataKuliahStore = create<MataKuliahStore>((set) => ({
     id: MataKuliahItem["id"],
     nama: MataKuliahItem["nama"],
     kode: MataKuliahItem["kode"],
+    semester: MataKuliahItem["semester"], // Added semester parameter
     sks: MataKuliahItem["sks"]
   ) =>
     set((state) => {
@@ -56,6 +59,7 @@ export const useMataKuliahStore = create<MataKuliahStore>((set) => ({
               ...item,
               nama: nama ?? item.nama,
               kode: kode ?? item.kode,
+              semester: semester ?? item.semester, // Added semester update
               sks: sks ?? item.sks,
             }
       );
