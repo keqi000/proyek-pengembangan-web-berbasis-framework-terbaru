@@ -350,7 +350,7 @@ const KelolaMataKuliah = () => {
                   >
                     <td className="px-4 py-4">{index + 1}</td>
                     <td className="px-4 py-4">{mataKuliah.kode}</td>
-                    <td className="px-4 py-4 font-medium">{mataKuliah.nama}</td>
+                    <td className="px-4 py-4">{mataKuliah.nama}</td>
                     <td className="px-4 py-4 text-center">
                       Semester {mataKuliah.semester}
                     </td>
