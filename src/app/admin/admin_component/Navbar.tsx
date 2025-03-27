@@ -13,6 +13,7 @@ import {
   Settings,
   Bell,
   HelpCircle,
+  Book,
 } from "lucide-react";
 import { JSX, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -36,6 +37,12 @@ const linkData: LinkItemType[] = [
     href: "/admin/home",
     icon: <Home size={20} />,
     description: "Dashboard utama sistem",
+  },
+  {
+    name: "Kelola Mata Kuliah",
+    href: "/admin/course",
+    icon: <Book size={20} />,
+    description: "Manajemen Mata Kuliah"
   },
   {
     name: "Kelola Dosen",
