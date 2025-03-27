@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa";
 import { useDosenStore } from "../_store/dosen";
 import { useRoomStore } from "../_store/ruangan";
+import { useMataKuliahStore } from "../_store/matakuliah";
 
 type JadwalItem = {
   id: number;
@@ -24,6 +25,7 @@ type JadwalItem = {
 const GenerateJadwal = () => {
   const dosenList = useDosenStore((state) => state.data);
   const ruanganList = useRoomStore((state) => state.data);
+  const mataKuliahList = useMataKuliahStore((state) => state.data);
   const [jadwal, setJadwal] = useState<JadwalItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDay, setFilterDay] = useState<string | null>(null);
@@ -38,8 +40,12 @@ const GenerateJadwal = () => {
   ];
 
   const generateSchedule = () => {
-    if (dosenList.length === 0 || ruanganList.length === 0) {
-      alert("Data dosen atau ruangan belum tersedia.");
+    if (
+      dosenList.length === 0 ||
+      ruanganList.length === 0 ||
+      mataKuliahList.length === 0
+    ) {
+      alert("Data dosen, ruangan, atau mata kuliah belum tersedia.");
       return;
     }
 
@@ -51,18 +57,20 @@ const GenerateJadwal = () => {
       let id = 1;
 
       // More realistic schedule generation
-      dosenList.forEach((dosen) => {
-        // Randomly assign a day and time slot
+      mataKuliahList.forEach((mataKuliah) => {
+        // Randomly assign a day, time slot, dosen, and room
         const randomDay = days[Math.floor(Math.random() * days.length)];
         const randomTimeSlot =
           timeSlots[Math.floor(Math.random() * timeSlots.length)];
         const randomRoom =
           ruanganList[Math.floor(Math.random() * ruanganList.length)];
+        const randomDosen =
+          dosenList[Math.floor(Math.random() * dosenList.length)];
 
         generatedJadwal.push({
           id: id++,
-          namaDosen: dosen.nama,
-          mataKuliah: dosen.mata_kuliah,
+          namaDosen: randomDosen.nama,
+          mataKuliah: mataKuliah.nama,
           ruangan: randomRoom.nama,
           waktu: randomTimeSlot,
           hari: randomDay,
@@ -357,7 +365,7 @@ const GenerateJadwal = () => {
             </p>
             <p className="flex justify-between py-1">
               <span>Mata Kuliah:</span>
-              <span className="font-medium">{dosenList.length}</span>
+              <span className="font-medium">{mataKuliahList.length}</span>
             </p>
           </div>
         </div>
@@ -405,7 +413,9 @@ const GenerateJadwal = () => {
           <ul className="text-gray-700 text-xs sm:text-sm space-y-1 sm:space-y-2">
             <li className="flex items-start">
               <span className="text-[#4F959D] mr-1 sm:mr-2">1.</span>
-              <span>Pastikan data dosen dan ruangan sudah tersedia</span>
+              <span>
+                Pastikan data dosen, ruangan, dan mata kuliah sudah tersedia
+              </span>
             </li>
             <li className="flex items-start">
               <span className="text-[#4F959D] mr-1 sm:mr-2">2.</span>

@@ -4,9 +4,8 @@ import { create } from "zustand";
 
 type MataKuliahItem = {
   id: string;
-  kode: string;
   nama: string;
-  semester: string;
+  kode: string;
   sks: string;
 };
 
@@ -17,9 +16,8 @@ type MataKuliahStore = {
   deleteData: (id: MataKuliahItem["id"]) => void;
   updateData: (
     id: MataKuliahItem["id"],
-    kode: MataKuliahItem["kode"],
     nama: MataKuliahItem["nama"],
-    semester: MataKuliahItem["semester"],
+    kode: MataKuliahItem["kode"],
     sks: MataKuliahItem["sks"]
   ) => void;
 };
@@ -46,9 +44,8 @@ export const useMataKuliahStore = create<MataKuliahStore>((set) => ({
     }),
   updateData: (
     id: MataKuliahItem["id"],
-    kode: MataKuliahItem["kode"],
     nama: MataKuliahItem["nama"],
-    semester: MataKuliahItem["semester"],
+    kode: MataKuliahItem["kode"],
     sks: MataKuliahItem["sks"]
   ) =>
     set((state) => {
@@ -57,10 +54,9 @@ export const useMataKuliahStore = create<MataKuliahStore>((set) => ({
           ? item
           : {
               ...item,
-              kode: kode,
-              nama: nama,
-              semester: semester,
-              sks: sks,
+              nama: nama ?? item.nama,
+              kode: kode ?? item.kode,
+              sks: sks ?? item.sks,
             }
       );
       return {
