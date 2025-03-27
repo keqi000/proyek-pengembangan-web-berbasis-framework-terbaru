@@ -45,7 +45,7 @@ const linkData: LinkItemType[] = [
   },
   {
     name: "Kelola Ruangan",
-    href: "/admin/manage_room",
+    href: "/admin/rooms",
     icon: <Building size={20} />,
     description: "Manajemen ruangan kuliah",
   },
