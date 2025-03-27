@@ -20,7 +20,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       <Navbar />
 
       {/* Main Content */}
-      <main className="flex-1 container mx-auto">{children}</main>
+      <main className="flex-1 max-w-full w-full mx-auto">{children}</main>
 
       {/* Footer */}
       <footer className="bg-[#2C3930] text-white py-6">

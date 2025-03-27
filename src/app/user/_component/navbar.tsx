@@ -84,7 +84,7 @@ const Navbar: FC = () => {
               <FaBook className="mr-2" /> Mata Kuliah
             </Link>
             <Link
-              href="/about"
+              href="/user/jadwal_kuliah"
               className={`py-2 flex items-center ${
                 isActive("/about")
                   ? "text-[#3F4F44] font-medium"
@@ -94,7 +94,7 @@ const Navbar: FC = () => {
               <FaCalendarAlt className="mr-2" /> Jadwal Kuliah
             </Link>
             <Link
-              href="/contact"
+              href="/user/cetak_jadwal"
               className={`py-2 flex items-center ${
                 isActive("/contact")
                   ? "text-[#3F4F44] font-medium"
@@ -143,7 +143,7 @@ const Navbar: FC = () => {
                 <FaBook className="mr-2" /> Mata Kuliah
               </Link>
               <Link
-                href="/about"
+                href="/user/jadwal_kuliah"
                 className={`py-3 border-b border-gray-100 flex items-center ${
                   isActive("/about")
                     ? "text-[#3F4F44] font-medium"
@@ -154,7 +154,7 @@ const Navbar: FC = () => {
                 <FaCalendarAlt className="mr-2" /> Jadwal Kuliah
               </Link>
               <Link
-                href="/contact"
+                href="/user/cetak_jadwal"
                 className={`py-3 border-b border-gray-100 flex items-center ${
                   isActive("/contact")
                     ? "text-[#3F4F44] font-medium"
