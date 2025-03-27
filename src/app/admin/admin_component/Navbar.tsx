@@ -39,7 +39,7 @@ const linkData: LinkItemType[] = [
   },
   {
     name: "Kelola Dosen",
-    href: "/admin/manage_lecturers",
+    href: "/admin/lecturers",
     icon: <Users size={20} />,
     description: "Manajemen data dosen",
   },
