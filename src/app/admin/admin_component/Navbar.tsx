@@ -40,7 +40,7 @@ const linkData: LinkItemType[] = [
   },
   {
     name: "Kelola Dosen",
-    href: "/admin/manage_lecturers",
+    href: "/admin/lecturers",
     icon: <Users size={20} />,
     description: "Manajemen data dosen",
   },
@@ -52,7 +52,7 @@ const linkData: LinkItemType[] = [
   },
   {
     name: "Kelola Ruangan",
-    href: "/admin/manage_room",
+    href: "/admin/rooms",
     icon: <Building size={20} />,
     description: "Manajemen ruangan kuliah",
   },
