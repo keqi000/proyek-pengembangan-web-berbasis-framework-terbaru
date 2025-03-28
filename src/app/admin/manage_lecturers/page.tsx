@@ -7,7 +7,7 @@ import { FaEdit, FaTrash, FaPlus, FaSearch, FaUserTie } from "react-icons/fa";
 type TempInputData = {
   id?: string;
   nama: string;
-  mata_kuliah: string;
+  nip: string;
 };
 
 const KelolaDosen = () => {
@@ -18,7 +18,7 @@ const KelolaDosen = () => {
 
   const [tempInput, setTempInput] = useState<TempInputData>({
     nama: "",
-    mata_kuliah: "",
+    nip: "",
   });
 
   const [editPopup, setEditPopup] = useState(false);
@@ -29,21 +29,21 @@ const KelolaDosen = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSubmit = () => {
-    if (!tempInput.nama || !tempInput.mata_kuliah) {
+    if (!tempInput.nama || !tempInput.nip) {
       alert("Harap isi semua field!");
       return;
     }
 
     if (tempInput.id) {
-      updateDosen(tempInput.id, tempInput.nama, tempInput.mata_kuliah);
+      updateDosen(tempInput.id, tempInput.nama, tempInput.nip);
     } else {
       addDosen({
         id: (dosenList.length + 1).toString(),
         nama: tempInput.nama,
-        mata_kuliah: tempInput.mata_kuliah,
+        nip: tempInput.nip,
       });
     }
-    setTempInput({ nama: "", mata_kuliah: "" });
+    setTempInput({ nama: "", nip: "" });
     setShowAddForm(false);
   };
 
@@ -54,15 +54,11 @@ const KelolaDosen = () => {
 
   const handleConfirmEdit = () => {
     if (selectedDosen !== null && selectedDosen.id) {
-      if (!selectedDosen.nama || !selectedDosen.mata_kuliah) {
+      if (!selectedDosen.nama || !selectedDosen.nip) {
         alert("Harap isi semua field!");
         return;
       }
-      updateDosen(
-        selectedDosen.id,
-        selectedDosen.nama,
-        selectedDosen.mata_kuliah
-      );
+      updateDosen(selectedDosen.id, selectedDosen.nama, selectedDosen.nip);
     }
     setEditPopup(false);
   };
@@ -74,7 +70,7 @@ const KelolaDosen = () => {
   const filteredDosen = dosenList.filter(
     (dosen) =>
       dosen.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dosen.mata_kuliah.toLowerCase().includes(searchTerm.toLowerCase())
+      dosen.nip.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -87,14 +83,14 @@ const KelolaDosen = () => {
               Kelola <span className="text-[#4F959D]">Dosen</span>
             </h1>
             <p className="text-gray-600 mt-1">
-              Mengelola data dosen dan mata kuliah yang diampu
+              Mengelola data dosen untuk sistem penjadwalan
             </p>
           </div>
           <div className="flex space-x-3">
             <div className="relative">
               <input
                 type="text"
-                placeholder="Cari dosen atau mata kuliah..."
+                placeholder="Cari dosen atau NIP..."
                 className="pl-10 pr-4 py-2 border border-white rounded-lg focus:outline-none ring-1 ring-gray-400 focus:ring-1 focus:ring-[#4F959D] w-full md:w-64 text-gray-600"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -135,15 +131,15 @@ const KelolaDosen = () => {
             </div>
             <div>
               <label className="block text-[#4F959D] font-medium mb-2">
-                Mata Kuliah
+                NIP
               </label>
               <input
                 type="text"
                 className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
-                placeholder="Masukkan mata kuliah"
-                value={tempInput.mata_kuliah}
+                placeholder="Masukkan NIP dosen"
+                value={tempInput.nip}
                 onChange={(e) =>
-                  setTempInput({ ...tempInput, mata_kuliah: e.target.value })
+                  setTempInput({ ...tempInput, nip: e.target.value })
                 }
               />
             </div>
@@ -184,7 +180,7 @@ const KelolaDosen = () => {
                   Nama Dosen
                 </th>
                 <th className="px-4 py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                  Mata Kuliah
+                  NIP
                 </th>
                 <th className="px-4 py-3 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-24">
                   Aksi
@@ -200,7 +196,7 @@ const KelolaDosen = () => {
                   >
                     <td className="px-4 py-4">{index + 1}</td>
                     <td className="px-4 py-4 font-medium">{dosen.nama}</td>
-                    <td className="px-4 py-4">{dosen.mata_kuliah}</td>
+                    <td className="px-4 py-4">{dosen.nip}</td>
                     <td className="px-4 py-4">
                       <div className="flex justify-center gap-4">
                         <button
@@ -282,16 +278,16 @@ const KelolaDosen = () => {
               </div>
               <div>
                 <label className="block text-[#4F959D] font-medium mb-2">
-                  Mata Kuliah
+                  NIP
                 </label>
                 <input
                   type="text"
                   className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
-                  value={selectedDosen.mata_kuliah}
+                  value={selectedDosen.nip}
                   onChange={(e) =>
                     setSelectedDosen({
                       ...selectedDosen,
-                      mata_kuliah: e.target.value,
+                      nip: e.target.value,
                     })
                   }
                 />
