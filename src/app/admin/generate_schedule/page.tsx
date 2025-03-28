@@ -11,11 +11,13 @@ import {
 } from "react-icons/fa";
 import { useDosenStore } from "../_store/dosen";
 import { useRoomStore } from "../_store/ruangan";
+import { useMataKuliahStore } from "../_store/matakuliah";
 
 type JadwalItem = {
   id: number;
   namaDosen: string;
   mataKuliah: string;
+  semester: string; // Added semester property
   ruangan: string;
   waktu: string;
   hari: string;
@@ -24,6 +26,7 @@ type JadwalItem = {
 const GenerateJadwal = () => {
   const dosenList = useDosenStore((state) => state.data);
   const ruanganList = useRoomStore((state) => state.data);
+  const mataKuliahList = useMataKuliahStore((state) => state.data);
   const [jadwal, setJadwal] = useState<JadwalItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDay, setFilterDay] = useState<string | null>(null);
@@ -38,8 +41,12 @@ const GenerateJadwal = () => {
   ];
 
   const generateSchedule = () => {
-    if (dosenList.length === 0 || ruanganList.length === 0) {
-      alert("Data dosen atau ruangan belum tersedia.");
+    if (
+      dosenList.length === 0 ||
+      ruanganList.length === 0 ||
+      mataKuliahList.length === 0
+    ) {
+      alert("Data dosen, ruangan, atau mata kuliah belum tersedia.");
       return;
     }
 
@@ -50,19 +57,22 @@ const GenerateJadwal = () => {
       const generatedJadwal: JadwalItem[] = [];
       let id = 1;
 
-      // More realistic schedule generation
-      dosenList.forEach((dosen) => {
-        // Randomly assign a day and time slot
+      // Generate schedule based on mata kuliah list
+      mataKuliahList.forEach((mataKuliah) => {
+        // Randomly assign a day, time slot, dosen, and room
         const randomDay = days[Math.floor(Math.random() * days.length)];
         const randomTimeSlot =
           timeSlots[Math.floor(Math.random() * timeSlots.length)];
         const randomRoom =
           ruanganList[Math.floor(Math.random() * ruanganList.length)];
+        const randomDosen =
+          dosenList[Math.floor(Math.random() * dosenList.length)];
 
         generatedJadwal.push({
           id: id++,
-          namaDosen: dosen.nama,
-          mataKuliah: dosen.mata_kuliah,
+          namaDosen: randomDosen.nama,
+          mataKuliah: mataKuliah.nama,
+          semester: mataKuliah.semester || "-", // Include semester from mata kuliah
           ruangan: randomRoom.nama,
           waktu: randomTimeSlot,
           hari: randomDay,
@@ -86,7 +96,15 @@ const GenerateJadwal = () => {
       return;
     }
 
-    const headers = ["No", "Hari", "Waktu", "Mata Kuliah", "Dosen", "Ruangan"];
+    const headers = [
+      "No",
+      "Hari",
+      "Waktu",
+      "Mata Kuliah",
+      "Semester",
+      "Dosen",
+      "Ruangan",
+    ]; // Added Semester to headers
     const csvContent = [
       headers.join(","),
       ...jadwal.map((item, index) =>
@@ -95,6 +113,7 @@ const GenerateJadwal = () => {
           item.hari,
           item.waktu,
           item.mataKuliah,
+          item.semester,
           item.namaDosen,
           item.ruangan,
         ].join(",")
@@ -228,6 +247,9 @@ const GenerateJadwal = () => {
                         Mata Kuliah
                       </th>
                       <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                        Semester
+                      </th>
+                      <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
                         Dosen
                       </th>
                       <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
@@ -258,6 +280,9 @@ const GenerateJadwal = () => {
                             {item.mataKuliah}
                           </td>
                           <td className="px-2 sm:px-4 py-2 sm:py-3">
+                            {item.semester ? `Semester ${item.semester}` : "-"}
+                          </td>
+                          <td className="px-2 sm:px-4 py-2 sm:py-3">
                             {item.namaDosen}
                           </td>
                           <td className="px-2 sm:px-4 py-2 sm:py-3">
@@ -279,7 +304,7 @@ const GenerateJadwal = () => {
                     ) : (
                       <tr>
                         <td
-                          colSpan={7}
+                          colSpan={8} // Updated from 7 to 8 to account for the new semester column
                           className="px-4 sm:px-6 py-6 sm:py-8 text-center text-gray-500 bg-gray-50 text-xs sm:text-sm"
                         >
                           {jadwal.length > 0
@@ -357,7 +382,7 @@ const GenerateJadwal = () => {
             </p>
             <p className="flex justify-between py-1">
               <span>Mata Kuliah:</span>
-              <span className="font-medium">{dosenList.length}</span>
+              <span className="font-medium">{mataKuliahList.length}</span>
             </p>
           </div>
         </div>
@@ -405,7 +430,9 @@ const GenerateJadwal = () => {
           <ul className="text-gray-700 text-xs sm:text-sm space-y-1 sm:space-y-2">
             <li className="flex items-start">
               <span className="text-[#4F959D] mr-1 sm:mr-2">1.</span>
-              <span>Pastikan data dosen dan ruangan sudah tersedia</span>
+              <span>
+                Pastikan data dosen, ruangan, dan mata kuliah sudah tersedia
+              </span>
             </li>
             <li className="flex items-start">
               <span className="text-[#4F959D] mr-1 sm:mr-2">2.</span>
