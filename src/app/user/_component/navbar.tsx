@@ -10,7 +10,7 @@ import {
   FaBook,
   FaCalendarAlt,
   FaPrint,
-  FaSignInAlt,
+  FaSignOutAlt,
   FaBars,
   FaTimes,
 } from "react-icons/fa";
@@ -104,14 +104,14 @@ const Navbar: FC = () => {
               <FaPrint className="mr-2" /> Cetak Jadwal
             </Link>
             <Link
-              href="/login"
+              href="/"
               className={`py-2 flex items-center ${
                 isActive("/login")
                   ? "text-[#3F4F44] font-medium"
                   : "text-black hover:text-[#3F4F44]"
               }`}
             >
-              <FaSignInAlt className="mr-2" /> Login
+              <FaSignOutAlt className="mr-2" /> Logout
             </Link>
           </div>
         </div>
@@ -165,7 +165,7 @@ const Navbar: FC = () => {
                 <FaPrint className="mr-2" /> Cetak Jadwal
               </Link>
               <Link
-                href="/login"
+                href="/"
                 className={`py-3 flex items-center ${
                   isActive("/login")
                     ? "text-[#3F4F44] font-medium"
@@ -173,7 +173,7 @@ const Navbar: FC = () => {
                 }`}
                 onClick={toggleMenu}
               >
-                <FaSignInAlt className="mr-2" /> Login
+                <FaSignOutAlt className="mr-2" /> Logout
               </Link>
             </div>
           </div>
