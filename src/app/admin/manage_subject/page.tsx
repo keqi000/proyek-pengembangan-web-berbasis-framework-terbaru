@@ -1,24 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useMataKuliahStore } from "../_store/matakuliah";
-import { useDosenStore } from "../_store/dosen";
-import { useDosenMatakuliahStore } from "../_store/dosenMatakuliah";
-import {
-  FaEdit,
-  FaTrash,
-  FaPlus,
-  FaSearch,
-  FaBook,
-  FaUserTie,
-  FaCheck,
-  FaTimes,
-} from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaSearch, FaBook } from "react-icons/fa";
 
-type MataKuliahItem = {
-  id: string;
-  nama: string;
+type TempInputData = {
+  id?: string;
   kode: string;
+  nama: string;
   semester: string;
   sks: string;
 };
@@ -29,14 +18,7 @@ const KelolaMataKuliah = () => {
   const updateMataKuliah = useMataKuliahStore((state) => state.updateData);
   const deleteMataKuliah = useMataKuliahStore((state) => state.deleteData);
 
-  // Dosen store
-  const dosenList = useDosenStore((state) => state.data);
-
-  // Dosen-MataKuliah relationship store
-  const { addAssignment, removeAssignment, getDosenByMataKuliah } =
-    useDosenMatakuliahStore();
-
-  const [tempInput, setTempInput] = useState<Omit<MataKuliahItem, "id">>({
+  const [tempInput, setTempInput] = useState<TempInputData>({
     kode: "",
     nama: "",
     semester: "",
@@ -45,18 +27,9 @@ const KelolaMataKuliah = () => {
 
   const [editPopup, setEditPopup] = useState(false);
   const [selectedMataKuliah, setSelectedMataKuliah] =
-    useState<MataKuliahItem | null>(null);
+    useState<TempInputData | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
-  // New state for dosen assignment
-  const [showDosenAssignmentPopup, setShowDosenAssignmentPopup] =
-    useState(false);
-  const [selectedMataKuliahForDosen, setSelectedMataKuliahForDosen] =
-    useState<MataKuliahItem | null>(null);
-  const [selectedDosenIds, setSelectedDosenIds] = useState<string[]>([]);
-  const [dosenSearchTerm, setDosenSearchTerm] = useState(""); // New state for dosen search
-  const [filteredDosenList, setFilteredDosenList] = useState(dosenList); // New state for filtered dosen list
 
   const handleSubmit = () => {
     if (
@@ -69,12 +42,27 @@ const KelolaMataKuliah = () => {
       return;
     }
 
-    addMataKuliah(tempInput);
+    if (tempInput.id) {
+      updateMataKuliah(
+        tempInput.id,
+        tempInput.kode,
+        tempInput.nama,
+        tempInput.semester,
+        tempInput.sks
+      );
+    } else {
+      addMataKuliah({
+        kode: tempInput.kode,
+        nama: tempInput.nama,
+        semester: tempInput.semester,
+        sks: tempInput.sks,
+      });
+    }
     setTempInput({ kode: "", nama: "", semester: "", sks: "" });
     setShowAddForm(false);
   };
 
-  const handleEditClick = (mataKuliah: MataKuliahItem) => {
+  const handleEditClick = (mataKuliah: TempInputData) => {
     setSelectedMataKuliah(mataKuliah);
     setEditPopup(true);
   };
@@ -92,8 +80,8 @@ const KelolaMataKuliah = () => {
       }
       updateMataKuliah(
         selectedMataKuliah.id,
-        selectedMataKuliah.nama,
         selectedMataKuliah.kode,
+        selectedMataKuliah.nama,
         selectedMataKuliah.semester,
         selectedMataKuliah.sks
       );
@@ -105,82 +93,11 @@ const KelolaMataKuliah = () => {
     setEditPopup(false);
   };
 
-  useEffect(() => {
-    if (dosenSearchTerm.trim() === "") {
-      setFilteredDosenList(dosenList);
-    } else {
-      const searchTermLower = dosenSearchTerm.toLowerCase();
-      const filtered = dosenList.filter(
-        (dosen) =>
-          dosen.nama.toLowerCase().includes(searchTermLower) ||
-          dosen.nip.toLowerCase().includes(searchTermLower)
-      );
-      setFilteredDosenList(filtered);
-    }
-  }, [dosenSearchTerm, dosenList]);
-
-  // New function to handle dosen assignment
-  const handleAssignDosenClick = (mataKuliah: MataKuliahItem) => {
-    setSelectedMataKuliahForDosen(mataKuliah);
-    // Get currently assigned dosen for this mata kuliah
-    const assignedDosenIds = getDosenByMataKuliah(mataKuliah.id);
-    setSelectedDosenIds(assignedDosenIds);
-    setDosenSearchTerm("");
-    setFilteredDosenList(dosenList);
-    setShowDosenAssignmentPopup(true);
-  };
-
-  const handleToggleDosenSelection = (dosenId: string) => {
-    setSelectedDosenIds((prev) => {
-      if (prev.includes(dosenId)) {
-        return prev.filter((id) => id !== dosenId);
-      } else {
-        return [...prev, dosenId];
-      }
-    });
-  };
-
-  const handleConfirmDosenAssignment = () => {
-    if (!selectedMataKuliahForDosen) return;
-
-    // Get current assignments
-    const currentAssignments = getDosenByMataKuliah(
-      selectedMataKuliahForDosen.id
-    );
-
-    // Remove dosen that were unselected
-    currentAssignments.forEach((dosenId) => {
-      if (!selectedDosenIds.includes(dosenId)) {
-        removeAssignment(dosenId, selectedMataKuliahForDosen.id);
-      }
-    });
-
-    // Add newly selected dosen
-    selectedDosenIds.forEach((dosenId) => {
-      if (!currentAssignments.includes(dosenId)) {
-        addAssignment(dosenId, selectedMataKuliahForDosen.id);
-      }
-    });
-
-    setShowDosenAssignmentPopup(false);
-  };
-
   const filteredMataKuliah = mataKuliahList.filter(
     (mataKuliah) =>
       mataKuliah.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
       mataKuliah.kode.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // Function to get dosen names for a mata kuliah
-  const getDosenNamesForMataKuliah = (mataKuliahId: string) => {
-    const dosenIds = getDosenByMataKuliah(mataKuliahId);
-    return dosenIds
-      .map((id) => {
-        const dosen = dosenList.find((d) => d.id === id);
-        return dosen ? dosen.nama : "Unknown";
-      })
-      .join(", ");
-  };
 
   return (
     <div className="container mx-auto p-4 bg-[#F2F2F2] min-h-screen">
@@ -333,10 +250,7 @@ const KelolaMataKuliah = () => {
                 <th className="px-4 py-3 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
                   SKS
                 </th>
-                <th className="px-4 py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                  Dosen Pengampu
-                </th>
-                <th className="px-4 py-3 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-32">
+                <th className="px-4 py-3 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-24">
                   Aksi
                 </th>
               </tr>
@@ -350,33 +264,19 @@ const KelolaMataKuliah = () => {
                   >
                     <td className="px-4 py-4">{index + 1}</td>
                     <td className="px-4 py-4">{mataKuliah.kode}</td>
-                    <td className="px-4 py-4">{mataKuliah.nama}</td>
+                    <td className="px-4 py-4 font-medium">{mataKuliah.nama}</td>
                     <td className="px-4 py-4 text-center">
                       Semester {mataKuliah.semester}
                     </td>
                     <td className="px-4 py-4 text-center">{mataKuliah.sks}</td>
                     <td className="px-4 py-4">
-                      {getDosenNamesForMataKuliah(mataKuliah.id) || (
-                        <span className="text-gray-600 italic">
-                          Belum ada dosen
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex justify-center gap-3">
+                      <div className="flex justify-center gap-4">
                         <button
                           className="text-blue-600 hover:text-blue-800 transition-colors"
                           onClick={() => handleEditClick(mataKuliah)}
                           title="Edit"
                         >
                           <FaEdit size={18} />
-                        </button>
-                        <button
-                          className="text-green-600 hover:text-green-800 transition-colors"
-                          onClick={() => handleAssignDosenClick(mataKuliah)}
-                          title="Assign Dosen"
-                        >
-                          <FaUserTie size={18} />
                         </button>
                         <button
                           className="text-red-600 hover:text-red-800 transition-colors"
@@ -400,7 +300,7 @@ const KelolaMataKuliah = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={6}
                     className="px-6 py-8 text-center text-gray-500 bg-gray-50"
                   >
                     {searchTerm
@@ -528,107 +428,6 @@ const KelolaMataKuliah = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-
-      {/* Popup Assign Dosen */}
-      {showDosenAssignmentPopup && selectedMataKuliahForDosen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg animate-fadeIn">
-            <h2 className="text-[#4F959D] text-lg font-semibold mb-2 flex items-center">
-              <FaUserTie className="mr-2" /> Pilih Dosen Pengampu
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Mata Kuliah:{" "}
-              <span className="font-medium">
-                {selectedMataKuliahForDosen.nama}
-              </span>{" "}
-              ({selectedMataKuliahForDosen.kode})
-            </p>
-
-            {/* Search input for dosen */}
-            <div className="relative mb-4">
-              <input
-                type="text"
-                placeholder="Cari dosen berdasarkan nama atau NIP..."
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] text-gray-600"
-                value={dosenSearchTerm}
-                onChange={(e) => setDosenSearchTerm(e.target.value)}
-              />
-              <FaSearch className="absolute left-3 top-3 text-gray-400" />
-            </div>
-
-            <div className="max-h-80 overflow-y-auto border rounded-lg mb-4">
-              {filteredDosenList.length > 0 ? (
-                <ul className="divide-y divide-gray-200">
-                  {filteredDosenList.map((dosen) => (
-                    <li key={dosen.id} className="p-3 hover:bg-gray-50">
-                      <label className="flex items-center space-x-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          className="form-checkbox h-5 w-5 text-[#4F959D] rounded border-gray-300 focus:ring-[#4F959D]"
-                          checked={selectedDosenIds.includes(dosen.id)}
-                          onChange={() => handleToggleDosenSelection(dosen.id)}
-                        />
-                        <div>
-                          <p className="font-medium text-gray-600">
-                            {dosen.nama}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            NIP: {dosen.nip}
-                          </p>
-                        </div>
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <div className="p-4 text-center text-gray-500">
-                  {dosenSearchTerm
-                    ? "Tidak ada dosen yang sesuai dengan pencarian"
-                    : "Belum ada data dosen. Silakan tambahkan dosen terlebih dahulu."}
-                </div>
-              )}
-            </div>
-
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-gray-600">
-                {dosenSearchTerm ? (
-                  <span>
-                    Hasil pencarian:{" "}
-                    <span className="font-medium">
-                      {filteredDosenList.length}
-                    </span>{" "}
-                    dosen
-                  </span>
-                ) : (
-                  <span>
-                    Dosen terpilih:{" "}
-                    <span className="font-medium">
-                      {selectedDosenIds.length}
-                    </span>
-                  </span>
-                )}
-                <span className="font-medium">{selectedDosenIds.length}</span>
-              </div>
-              <div className="flex space-x-3">
-                <button
-                  type="button"
-                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
-                  onClick={() => setShowDosenAssignmentPopup(false)}
-                >
-                  Batal
-                </button>
-                <button
-                  type="button"
-                  className="bg-[#4F959D] text-white px-6 py-2 rounded-lg hover:bg-[#3C7A85] transition"
-                  onClick={handleConfirmDosenAssignment}
-                >
-                  Simpan
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       )}
