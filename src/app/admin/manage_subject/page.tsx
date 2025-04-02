@@ -2,8 +2,14 @@
 
 import React, { useState } from "react";
 import { useMataKuliahStore } from "../_store/matakuliah";
-import { FaEdit, FaTrash, FaPlus, FaSearch, FaBook } from "react-icons/fa";
-import { useCourseInfo } from "../_query/course";
+import { 
+  FaEdit, 
+  FaTrash, 
+  FaPlus, 
+  FaSearch, 
+  FaBook 
+} from "react-icons/fa";
+import { useCourseInfo, useCreateCourse} from "../_query/course";
 
 type TempInputData = {
   id?: string;
@@ -16,7 +22,9 @@ type TempInputData = {
 const KelolaMataKuliah = () => {
   // const mataKuliahList = useMataKuliahStore((state) => state.data);
   const {data: mataKuliahList} = useCourseInfo()
-  const addMataKuliah = useMataKuliahStore((state) => state.addData);
+  // const addMataKuliah = useMataKuliahStore((state) => state.addData);
+  const createMutation = useCreateCourse()
+
   const updateMataKuliah = useMataKuliahStore((state) => state.updateData);
   const deleteMataKuliah = useMataKuliahStore((state) => state.deleteData);
 
@@ -53,12 +61,18 @@ const KelolaMataKuliah = () => {
         tempInput.sks
       );
     } else {
-      addMataKuliah({
-        kode: tempInput.kode,
-        nama: tempInput.nama,
-        semester: tempInput.semester,
-        sks: tempInput.sks,
-      });
+      // addMataKuliah({
+      //   kode: tempInput.kode,
+      //   nama: tempInput.nama,
+      //   semester: tempInput.semester,
+      //   sks: tempInput.sks,
+      // });
+      createMutation.mutate({
+        'name':tempInput.nama, 
+        'credit': +tempInput.sks, 
+        'description': "deskripsi", 
+        'semester': +tempInput.semester
+      })
     }
     setTempInput({ kode: "", nama: "", semester: "", sks: "" });
     setShowAddForm(false);
