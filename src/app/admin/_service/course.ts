@@ -10,7 +10,8 @@ type CourseItem = {
   id: number,
   name: string,
   semester: number,
-  description: string
+  description: string,
+  credit: number
 }
 
 export async function getAllCourse(){
@@ -29,7 +30,7 @@ export async function getAllCourse(){
     kode: item.id.toString(), 
     nama: item.name, 
     semester: item.semester.toString(),
-    sks: String(10),
+    sks: item.credit.toString(),
   }))
   return newData
 }
