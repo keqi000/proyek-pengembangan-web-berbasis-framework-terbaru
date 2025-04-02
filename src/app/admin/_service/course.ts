@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { CourseItem, courseItemSchema } from "../_schema/course";
 
 type MataKuliahItem = {
   id: string;
@@ -7,16 +7,6 @@ type MataKuliahItem = {
   semester: string;
   sks: string;
 };
-
-const courseItemSchema = z.object({
-  id: z.number({message: "Id Bukan Angka!"}),
-  name: z.string().min(1, {message: "Nama tidak boleh kosong"}),
-  semester: z.number().min(1).max(8, {message: "Semester MK paling tinggi adalah 8"}),
-  description: z.string().nullable(),
-  credit: z.number().min(1)
-})
-
-type CourseItem = z.infer<typeof courseItemSchema>
 
 export async function getAllCourse(){
   const response = await fetch(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/course`, {
