@@ -39,3 +39,36 @@ export async function getAllCourse(){
   }))
   return newData
 }
+
+type CreateCourseProps = Omit<CourseItem, "id">
+
+export async function createCourse(courseData: CreateCourseProps){
+  const response = await fetch(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/course`, {
+    method: "POST",
+    body: JSON.stringify({
+      'name': courseData.name,
+      'description': courseData.description,
+      'semester': courseData.semester,
+      'credit': courseData.credit
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  
+
+  if (!response.ok){
+    throw Error(`Error when creating resource: ${response.status}`)
+  }
+
+  // TODO: set typing
+  const data: CourseItem = await response.json()
+  try {
+    courseItemSchema.parse(data)
+  }
+  catch (err){
+    throw err
+  }
+
+  return data
+}
