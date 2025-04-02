@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useMataKuliahStore } from "../_store/matakuliah";
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaBook } from "react-icons/fa";
+import { useCourseInfo } from "../_query/course";
 
 type TempInputData = {
   id?: string;
@@ -13,7 +14,8 @@ type TempInputData = {
 };
 
 const KelolaMataKuliah = () => {
-  const mataKuliahList = useMataKuliahStore((state) => state.data);
+  // const mataKuliahList = useMataKuliahStore((state) => state.data);
+  const {data: mataKuliahList} = useCourseInfo()
   const addMataKuliah = useMataKuliahStore((state) => state.addData);
   const updateMataKuliah = useMataKuliahStore((state) => state.updateData);
   const deleteMataKuliah = useMataKuliahStore((state) => state.deleteData);
@@ -93,7 +95,7 @@ const KelolaMataKuliah = () => {
     setEditPopup(false);
   };
 
-  const filteredMataKuliah = mataKuliahList.filter(
+  const filteredMataKuliah = mataKuliahList?.filter(
     (mataKuliah) =>
       mataKuliah.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
       mataKuliah.kode.toLowerCase().includes(searchTerm.toLowerCase())
@@ -256,8 +258,8 @@ const KelolaMataKuliah = () => {
               </tr>
             </thead>
             <tbody className="text-gray-700">
-              {filteredMataKuliah.length > 0 ? (
-                filteredMataKuliah.map((mataKuliah, index) => (
+              {filteredMataKuliah?.length! > 0 ? (
+                filteredMataKuliah?.map((mataKuliah, index) => (
                   <tr
                     key={mataKuliah.id}
                     className="hover:bg-gray-50 border-b border-gray-200 transition-colors"
@@ -317,7 +319,7 @@ const KelolaMataKuliah = () => {
         <div className="mt-4 text-sm text-gray-600 flex justify-between items-center">
           <div>
             Total:{" "}
-            <span className="font-medium">{filteredMataKuliah.length}</span>{" "}
+            <span className="font-medium">{filteredMataKuliah?.length}</span>{" "}
             mata kuliah
           </div>
           {searchTerm && (
