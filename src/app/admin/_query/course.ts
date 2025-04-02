@@ -22,6 +22,9 @@ export function useCreateCourse(){
     },
     onError: (error, variable, context) => {
       console.error(error.message)
+    },
+    onSettled: (data, error, variable) => {
+      queryClient.invalidateQueries({queryKey: ['course']})
     }
   })
 }
