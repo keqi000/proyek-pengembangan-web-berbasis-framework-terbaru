@@ -9,7 +9,7 @@ import {
   FaSearch, 
   FaBook 
 } from "react-icons/fa";
-import { useCourseInfo, useCreateCourse} from "../_query/course";
+import { useCourseInfo, useCreateCourse, useUpdateCourse} from "../_query/course";
 
 // TODo: rename the attribute
 type TempInputData = {
@@ -25,8 +25,9 @@ const KelolaMataKuliah = () => {
   const {data: mataKuliahList} = useCourseInfo()
   // const addMataKuliah = useMataKuliahStore((state) => state.addData);
   const createMutation = useCreateCourse()
+  const updateMutation = useUpdateCourse()
 
-  const updateMataKuliah = useMataKuliahStore((state) => state.updateData);
+  // const updateMataKuliah = useMataKuliahStore((state) => state.updateData);
   const deleteMataKuliah = useMataKuliahStore((state) => state.deleteData);
 
   const [tempInput, setTempInput] = useState<TempInputData>({
@@ -54,13 +55,21 @@ const KelolaMataKuliah = () => {
     }
 
     if (tempInput.id) {
-      updateMataKuliah(
-        tempInput.id,
-        tempInput.kode,
-        tempInput.nama,
-        tempInput.semester,
-        tempInput.sks
-      );
+      // updateMataKuliah(
+      //   tempInput.id,
+      //   tempInput.kode,
+      //   tempInput.nama,
+      //   tempInput.semester,
+      //   tempInput.sks
+      // );
+      updateMutation.mutate({
+        id: +tempInput.id,
+        name:tempInput.nama, 
+        credit: +tempInput.sks, 
+        description: null, 
+        semester: +tempInput.semester,
+        
+      })
     } else {
       // addMataKuliah({
       //   kode: tempInput.kode,
@@ -95,13 +104,22 @@ const KelolaMataKuliah = () => {
         alert("Harap isi semua field!");
         return;
       }
-      updateMataKuliah(
-        selectedMataKuliah.id,
-        selectedMataKuliah.kode,
-        selectedMataKuliah.nama,
-        selectedMataKuliah.semester,
-        selectedMataKuliah.sks
-      );
+      // updateMataKuliah(
+      //   selectedMataKuliah.id,
+      //   selectedMataKuliah.kode,
+      //   selectedMataKuliah.nama,
+      //   selectedMataKuliah.semester,
+      //   selectedMataKuliah.sks
+      // );
+      
+      updateMutation.mutate({
+        id: +selectedMataKuliah.id,
+        name:selectedMataKuliah.nama, 
+        credit: +selectedMataKuliah.sks, 
+        description: null, 
+        semester: +selectedMataKuliah.semester,
+      })
+      
     }
     setEditPopup(false);
   };
