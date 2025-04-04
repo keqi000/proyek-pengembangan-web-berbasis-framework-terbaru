@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { createCourse, getAllCourse, updateCourse } from "../_service/course"
+import { createCourse, deleteCourse, getAllCourse, updateCourse } from "../_service/course"
 import { CourseItem } from "../_schema/course"
 
 export function useCourseInfo(){
@@ -43,6 +43,18 @@ export function useUpdateCourse(){
     },
     onSettled: (data, error, variable) => {
       queryClient.invalidateQueries({queryKey: ['course']})
+    }
+  })
+}
+
+export function useDeleteCourse(){
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ['course'],
+    mutationFn: (id: number) => deleteCourse(id),
+    onSuccess: (data, variable, context) => {
+      console.log("Success to delete course")
+      queryClient.invalidateQueries({queryKey: ['course', data.id]})
     },
     onError: (error, variable, context) => {
       console.error(error.message)
