@@ -9,7 +9,7 @@ import {
   FaSearch, 
   FaBook 
 } from "react-icons/fa";
-import { useCourseInfo, useCreateCourse, useUpdateCourse} from "../_query/course";
+import { useCourseInfo, useCreateCourse, useDeleteCourse, useUpdateCourse} from "../_query/course";
 
 // TODo: rename the attribute
 type TempInputData = {
@@ -26,9 +26,10 @@ const KelolaMataKuliah = () => {
   // const addMataKuliah = useMataKuliahStore((state) => state.addData);
   const createMutation = useCreateCourse()
   const updateMutation = useUpdateCourse()
+  const deleteMutation = useDeleteCourse()
 
   // const updateMataKuliah = useMataKuliahStore((state) => state.updateData);
-  const deleteMataKuliah = useMataKuliahStore((state) => state.deleteData);
+  // const deleteMataKuliah = useMataKuliahStore((state) => state.deleteData);
 
   const [tempInput, setTempInput] = useState<TempInputData>({
     kode: "",
@@ -321,7 +322,8 @@ const KelolaMataKuliah = () => {
                                 "Yakin ingin menghapus mata kuliah ini?"
                               )
                             ) {
-                              deleteMataKuliah(mataKuliah.id);
+                              // deleteMataKuliah(mataKuliah.id);
+                              deleteMutation.mutate(+mataKuliah.id)
                             }
                           }}
                           title="Hapus"
