@@ -2,8 +2,6 @@
 
 import React, { useState } from "react";
 import { 
-  FaEdit, 
-  FaTrash, 
   FaPlus, 
   FaSearch, 
   FaBook 
@@ -12,9 +10,12 @@ import {
 import { 
   useCourseInfo, 
   useCreateCourse, 
-  useDeleteCourse, 
   useUpdateCourse
 } from "../_query/course";
+
+import CourseDataRowInfo from "./components/CourseDataRow";
+import CourseEditPopupDialog from "./components/CourseEditPopupDialog";
+import { useCourseClientState } from "./hooks/clientStateStore";
 
 // TODo: rename the attribute
 type TempInputData = {
@@ -30,7 +31,6 @@ const KelolaMataKuliah = () => {
 
   const createMutation = useCreateCourse()
   const updateMutation = useUpdateCourse()
-  const deleteMutation = useDeleteCourse()
 
   const [tempInput, setTempInput] = useState<TempInputData>({
     kode: "",
@@ -39,9 +39,6 @@ const KelolaMataKuliah = () => {
     sks: "",
   });
 
-  const [editPopup, setEditPopup] = useState(false);
-  const [selectedMataKuliah, setSelectedMataKuliah] =
-    useState<TempInputData | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -77,37 +74,8 @@ const KelolaMataKuliah = () => {
     setShowAddForm(false);
   };
 
-  const handleEditClick = (mataKuliah: TempInputData) => {
-    setSelectedMataKuliah(mataKuliah);
-    setEditPopup(true);
-  };
-
-  const handleConfirmEdit = () => {
-    if (selectedMataKuliah !== null && selectedMataKuliah.id) {
-      if (
-        !selectedMataKuliah.kode ||
-        !selectedMataKuliah.nama ||
-        !selectedMataKuliah.semester ||
-        !selectedMataKuliah.sks
-      ) {
-        alert("Harap isi semua field!");
-        return;
-      }      
-      updateMutation.mutate({
-        id: +selectedMataKuliah.id,
-        name:selectedMataKuliah.nama, 
-        credit: +selectedMataKuliah.sks, 
-        description: null, 
-        semester: +selectedMataKuliah.semester,
-      })
-      
-    }
-    setEditPopup(false);
-  };
-
-  const handleCancelEdit = () => {
-    setEditPopup(false);
-  };
+  const selectedData = useCourseClientState((state) => state.selectedData)
+  const isEditDialogOpen = useCourseClientState((state) => state.isEditDialogOpen)
 
   const filteredMataKuliah = mataKuliahList?.filter(
     (mataKuliah) =>
@@ -247,7 +215,7 @@ const KelolaMataKuliah = () => {
           <FaBook className="mr-2" /> Daftar Mata Kuliah
         </h2>
 
-        <div className="overflow-x-auto">
+        <section className="overflow-x-auto">
           <table className="w-full border-collapse text-sm md:text-base">
             <thead>
               <tr className="bg-[#F5F5F5]">
@@ -274,45 +242,11 @@ const KelolaMataKuliah = () => {
             <tbody className="text-gray-700">
               {filteredMataKuliah?.length! > 0 ? (
                 filteredMataKuliah?.map((mataKuliah, index) => (
-                  <tr
+                  <CourseDataRowInfo 
                     key={mataKuliah.id}
-                    className="hover:bg-gray-50 border-b border-gray-200 transition-colors"
-                  >
-                    <td className="px-4 py-4">{index + 1}</td>
-                    <td className="px-4 py-4">{mataKuliah.kode}</td>
-                    <td className="px-4 py-4 font-medium">{mataKuliah.nama}</td>
-                    <td className="px-4 py-4 text-center">
-                      Semester {mataKuliah.semester}
-                    </td>
-                    <td className="px-4 py-4 text-center">{mataKuliah.sks}</td>
-                    <td className="px-4 py-4">
-                      <div className="flex justify-center gap-4">
-                        <button
-                          className="text-blue-600 hover:text-blue-800 transition-colors"
-                          onClick={() => handleEditClick(mataKuliah)}
-                          title="Edit"
-                        >
-                          <FaEdit size={18} />
-                        </button>
-                        <button
-                          className="text-red-600 hover:text-red-800 transition-colors"
-                          onClick={() => {
-                            if (
-                              window.confirm(
-                                "Yakin ingin menghapus mata kuliah ini?"
-                              )
-                            ) {
-                              // deleteMataKuliah(mataKuliah.id);
-                              deleteMutation.mutate(+mataKuliah.id)
-                            }
-                          }}
-                          title="Hapus"
-                        >
-                          <FaTrash size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                    mataKuliah={mataKuliah}
+                    index={index}
+                  />
                 ))
               ) : (
                 <tr>
@@ -328,7 +262,7 @@ const KelolaMataKuliah = () => {
               )}
             </tbody>
           </table>
-        </div>
+        </section>
 
         {/* Table Footer with Stats */}
         <div className="mt-4 text-sm text-gray-600 flex justify-between items-center">
@@ -346,108 +280,7 @@ const KelolaMataKuliah = () => {
         </div>
       </div>
 
-      {/* Popup Edit */}
-      {editPopup && selectedMataKuliah && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96 max-w-md animate-fadeIn">
-            <h2 className="text-[#4F959D] text-lg font-semibold mb-4 flex items-center">
-              <FaBook className="mr-2" /> Edit Data Mata Kuliah
-            </h2>
-
-            <form className="space-y-4">
-              <div>
-                <label className="block text-[#4F959D] font-medium mb-2">
-                  Kode Mata Kuliah
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
-                  value={selectedMataKuliah.kode}
-                  onChange={(e) =>
-                    setSelectedMataKuliah({
-                      ...selectedMataKuliah,
-                      kode: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <label className="block text-[#4F959D] font-medium mb-2">
-                  Nama Mata Kuliah
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
-                  value={selectedMataKuliah.nama}
-                  onChange={(e) =>
-                    setSelectedMataKuliah({
-                      ...selectedMataKuliah,
-                      nama: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <label className="block text-[#4F959D] font-medium mb-2">
-                  Semester
-                </label>
-                <select
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
-                  value={selectedMataKuliah.semester}
-                  onChange={(e) =>
-                    setSelectedMataKuliah({
-                      ...selectedMataKuliah,
-                      semester: e.target.value,
-                    })
-                  }
-                >
-                  <option value="">Pilih Semester</option>
-                  <option value="1">Semester 1</option>
-                  <option value="2">Semester 2</option>
-                  <option value="3">Semester 3</option>
-                  <option value="4">Semester 4</option>
-                  <option value="5">Semester 5</option>
-                  <option value="6">Semester 6</option>
-                  <option value="7">Semester 7</option>
-                  <option value="8">Semester 8</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-[#4F959D] font-medium mb-2">
-                  SKS
-                </label>
-                <input
-                  type="number"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
-                  value={selectedMataKuliah.sks}
-                  onChange={(e) =>
-                    setSelectedMataKuliah({
-                      ...selectedMataKuliah,
-                      sks: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="flex space-x-3 pt-2">
-                <button
-                  type="button"
-                  className="bg-gray-300 text-gray-800 px-4 py-2 w-1/2 rounded-lg hover:bg-gray-400 transition"
-                  onClick={handleCancelEdit}
-                >
-                  Batal
-                </button>
-                <button
-                  type="button"
-                  className="bg-[#4F959D] text-white px-4 py-2 w-1/2 rounded-lg hover:bg-[#3C7A85] transition"
-                  onClick={handleConfirmEdit}
-                >
-                  Simpan
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      {isEditDialogOpen && selectedData && <CourseEditPopupDialog mataKuliah={selectedData}/>}
     </div>
   );
 };
