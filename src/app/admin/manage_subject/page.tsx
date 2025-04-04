@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa";
 import { useCourseInfo, useCreateCourse} from "../_query/course";
 
+// TODo: rename the attribute
 type TempInputData = {
   id?: string;
   kode: string;
