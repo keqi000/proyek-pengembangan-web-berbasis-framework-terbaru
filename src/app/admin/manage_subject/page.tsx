@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useMataKuliahStore } from "../_store/matakuliah";
 import { 
   FaEdit, 
   FaTrash, 
@@ -9,7 +8,13 @@ import {
   FaSearch, 
   FaBook 
 } from "react-icons/fa";
-import { useCourseInfo, useCreateCourse, useDeleteCourse, useUpdateCourse} from "../_query/course";
+
+import { 
+  useCourseInfo, 
+  useCreateCourse, 
+  useDeleteCourse, 
+  useUpdateCourse
+} from "../_query/course";
 
 // TODo: rename the attribute
 type TempInputData = {
@@ -21,15 +26,11 @@ type TempInputData = {
 };
 
 const KelolaMataKuliah = () => {
-  // const mataKuliahList = useMataKuliahStore((state) => state.data);
   const {data: mataKuliahList} = useCourseInfo()
-  // const addMataKuliah = useMataKuliahStore((state) => state.addData);
+
   const createMutation = useCreateCourse()
   const updateMutation = useUpdateCourse()
   const deleteMutation = useDeleteCourse()
-
-  // const updateMataKuliah = useMataKuliahStore((state) => state.updateData);
-  // const deleteMataKuliah = useMataKuliahStore((state) => state.deleteData);
 
   const [tempInput, setTempInput] = useState<TempInputData>({
     kode: "",
@@ -56,13 +57,6 @@ const KelolaMataKuliah = () => {
     }
 
     if (tempInput.id) {
-      // updateMataKuliah(
-      //   tempInput.id,
-      //   tempInput.kode,
-      //   tempInput.nama,
-      //   tempInput.semester,
-      //   tempInput.sks
-      // );
       updateMutation.mutate({
         id: +tempInput.id,
         name:tempInput.nama, 
@@ -72,12 +66,6 @@ const KelolaMataKuliah = () => {
         
       })
     } else {
-      // addMataKuliah({
-      //   kode: tempInput.kode,
-      //   nama: tempInput.nama,
-      //   semester: tempInput.semester,
-      //   sks: tempInput.sks,
-      // });
       createMutation.mutate({
         'name':tempInput.nama, 
         'credit': +tempInput.sks, 
@@ -104,15 +92,7 @@ const KelolaMataKuliah = () => {
       ) {
         alert("Harap isi semua field!");
         return;
-      }
-      // updateMataKuliah(
-      //   selectedMataKuliah.id,
-      //   selectedMataKuliah.kode,
-      //   selectedMataKuliah.nama,
-      //   selectedMataKuliah.semester,
-      //   selectedMataKuliah.sks
-      // );
-      
+      }      
       updateMutation.mutate({
         id: +selectedMataKuliah.id,
         name:selectedMataKuliah.nama, 
