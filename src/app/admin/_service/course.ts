@@ -103,3 +103,17 @@ export async function updateCourse(courseData: CourseItem){
 
   return data
 }
+
+export async function deleteCourse(courseId: number){
+  const response = await fetch(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/course/${courseId}`, {
+    method: "DELETE"
+  })
+
+  if (!response.ok){
+    throw Error(`Error when delete resource: ${response.status}`)
+  }
+
+  // TODO: set typing
+  const data: CourseItem = await response.json()
+  return data
+}
