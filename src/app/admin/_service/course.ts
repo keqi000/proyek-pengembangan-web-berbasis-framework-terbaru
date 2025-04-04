@@ -89,7 +89,7 @@ export async function updateCourse(courseData: CourseItem){
   
 
   if (!response.ok){
-    throw Error(`Error when creating resource: ${response.status}`)
+    throw Error(`Error when update resource: ${response.status}`)
   }
 
   // TODO: set typing
