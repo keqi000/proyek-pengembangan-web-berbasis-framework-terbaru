@@ -36,6 +36,12 @@ export function useUpdateCourse(){
     mutationFn: (updateData: CourseItem) => updateCourse(updateData),
     onSuccess: (data, variable, context) => {
       console.log("Success to update course")
+      queryClient.invalidateQueries({queryKey: ['course', data.id]})
+    },
+    onError: (error, variable, context) => {
+      console.error(error.message)
+    },
+    onSettled: (data, error, variable) => {
       queryClient.invalidateQueries({queryKey: ['course']})
     },
     onError: (error, variable, context) => {
