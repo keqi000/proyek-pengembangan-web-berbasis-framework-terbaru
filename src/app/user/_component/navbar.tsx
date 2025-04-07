@@ -58,7 +58,7 @@ const Navbar: FC = () => {
             className="sm:hidden text-black focus:outline-none"
             onClick={toggleMenu}
           >
-            {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            {isMenuOpen ? <FaTimes className="h-5" /> : <FaBars className="h-5" />}
           </button>
 
           {/* Desktop menu */}
