@@ -169,11 +169,11 @@ const JadwalKuliahPage: FC = () => {
           <div className="flex-1">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
+                <Search className="h-4 md:h-5 md:w-5 text-gray-400" />
               </div>
               <input
                 type="text"
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-[#A27B5C] focus:border-[#A27B5C] sm:text-sm text-black"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-[#A27B5C] focus:border-[#A27B5C] text-sm md:text-base text-black"
                 placeholder="Cari mata kuliah, dosen, atau ruangan..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
