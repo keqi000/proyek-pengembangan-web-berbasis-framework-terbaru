@@ -75,7 +75,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
                 </li>
                 <li>
                   <Link
-                    href="/services"
+                    href="/user/course"
                     className="hover:text-[#4F959D] transition-colors"
                   >
                     Mata Kuliah
@@ -83,7 +83,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
                 </li>
                 <li>
                   <Link
-                    href="/about"
+                    href="/user/schedule"
                     className="hover:text-[#4F959D] transition-colors"
                   >
                     Jadwal Kuliah
@@ -91,7 +91,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
                 </li>
                 <li>
                   <Link
-                    href="/contact"
+                    href="/user/cetak_jadwal"
                     className="hover:text-[#4F959D] transition-colors"
                   >
                     Cetak Jadwal
