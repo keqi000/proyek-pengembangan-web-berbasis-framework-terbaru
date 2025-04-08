@@ -160,6 +160,98 @@ const cardSectionData: CardSectionProp[] = [{
   }]
 }]
 
+type FeatureHelpItemType = {
+  title: string;
+  steps: string[];
+  icon: ReactNode;
+}
+
+const featureHelpStepData: FeatureHelpItemType[] = [{
+  title: "Membuat Jadwal Perkuliahan",
+  icon: <Calendar className="h-5 w-5 text-[#4F959D]" />,
+  steps: [
+    "Login ke sistem dengan akun administrator",
+    `Navigasi ke menu "Generate Jadwal" di sidebar`,
+    "Pilih semester dan tahun ajaran yang akan dijadwalkan",
+    `Klik tombol "Generate Jadwal" untuk memulai proses`,
+    `Sistem akan menampilkan preview jadwal yang dihasilkan`,
+    `Periksa jadwal dan lakukan penyesuaian jika diperlukan`,
+    `Klik "Simpan Jadwal" untuk menyimpan jadwal final`,
+    `Jadwal dapat diekspor ke format Excel atau PDF untuk distribusi`,
+  ]
+}, {
+  title: "Mengelola Data Dosen",
+  icon: <Users className="h-5 w-5 text-[#4F959D]" />,
+  steps: [
+    `Navigasi ke menu "Kelola Dosen" di sidebar`,
+    `Untuk menambah dosen baru, klik tombol "Tambah Dosen"`,
+    `Isi formulir dengan data dosen yang lengkap`,
+    `Atur preferensi waktu mengajar dosen`,
+    `Klik "Simpan" untuk menyimpan data dosen`,
+    `Untuk mengedit data dosen, klik ikon edit pada daftar dosen`,
+    `Untuk menghapus dosen, klik ikon hapus (pastikan dosen tidak terkait dengan jadwal aktif)`,
+  ]
+}, {
+  title: "Mengelola Mata Kuliah",
+  icon: <BookOpen className="h-5 w-5 text-[#4F959D]" />,
+  steps: [
+    `Navigasi ke menu "Kelola Mata Kuliah" di sidebar`,
+    `Untuk menambah mata kuliah baru, klik tombol "Tambah Mata Kuliah"`,
+    `Isi formulir dengan data mata kuliah yang lengkap`,
+    `Tentukan dosen pengampu mata kuliah`,
+    `Atur prasyarat mata kuliah jika ada`,
+    `Klik "Simpan" untuk menyimpan data mata kuliah`,
+    `Untuk mengedit data mata kuliah, klik ikon edit padadaftar mata kuliah`,
+    `Untuk menghapus mata kuliah, klik ikon hapus (pastikan mata kuliah tidak terkait dengan jadwal aktif)`,
+  ]
+}, {
+  title: "Mengelola Ruangan",
+  icon: <Building className="h-5 w-5 text-[#4F959D]" />,
+  steps: [
+    `Navigasi ke menu "Kelola Ruangan" di sidebar`,
+    `Untuk menambah ruangan baru, klik tombol "Tambah Ruangan"`,
+    `Isi formulir dengan data ruangan yang lengkap`,
+    `Tentukan kapasitas dan fasilitas ruangan`,
+    `Atur ketersediaan ruangan jika ada batasan waktu`,
+    `Klik "Simpan" untuk menyimpan data ruangan`,
+    `Untuk mengedit data ruangan, klik ikon edit pada daftar ruangan`,
+    `Untuk menghapus ruangan, klik ikon hapus (pastikan ruangan tidak terkait dengan jadwal aktif)`,
+  ]
+}, {
+  title: "Mencari dan Memfilter Data",
+  icon: <Search className="h-5 w-5 text-[#4F959D]" />,
+  steps: [
+    `Pada setiap halaman pengelolaan data, gunakan kotak pencarian di bagian atas tabel`,
+    `Masukkan kata kunci yang ingin dicari`,
+    `Sistem akan menampilkan hasil yang sesuai dengan kata kunci`,
+    `Gunakan filter untuk mempersempit hasil pencarian`,
+    `Klik header kolom untuk mengurutkan data berdasarkan kolom tersebut`,
+    `Gunakan tombol ekspor untuk mengunduh data dalam format Excel atau PDF`,
+  ]
+}]
+
+
+// TODO: better name?
+function FeatureHelpStepSection({title, icon, steps}: FeatureHelpItemType){
+  return (
+  <div>
+    <h3 className="text-lg font-medium flex items-center gap-2 mb-3 text-black">
+      {" "}
+      {/* Changed text color */}
+      {icon}
+      {title}
+    </h3>
+    <ol className="list-decimal pl-5 space-y-2 text-black">
+      {" "}
+      {/* Changed text color */}
+      {steps.map((step, index) => (
+        <li key={`step-${index}`}>{step}</li>
+      ))}
+    </ol>
+  </div>
+  )
+}
+
 function CardSection({title, description, icon, questionData}: CardSectionProp){
   return (
     <Card>
@@ -267,173 +359,14 @@ export default function HelpPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-8">
-                      <div>
-                        <h3 className="text-lg font-medium flex items-center gap-2 mb-3 text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          <Calendar className="h-5 w-5 text-[#4F959D]" />
-                          Membuat Jadwal Perkuliahan
-                        </h3>
-                        <ol className="list-decimal pl-5 space-y-2 text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          <li>Login ke sistem dengan akun administrator</li>
-                          <li>Navigasi ke menu "Generate Jadwal" di sidebar</li>
-                          <li>
-                            Pilih semester dan tahun ajaran yang akan
-                            dijadwalkan
-                          </li>
-                          <li>
-                            Klik tombol "Generate Jadwal" untuk memulai proses
-                          </li>
-                          <li>
-                            Sistem akan menampilkan preview jadwal yang
-                            dihasilkan
-                          </li>
-                          <li>
-                            Periksa jadwal dan lakukan penyesuaian jika
-                            diperlukan
-                          </li>
-                          <li>
-                            Klik "Simpan Jadwal" untuk menyimpan jadwal final
-                          </li>
-                          <li>
-                            Jadwal dapat diekspor ke format Excel atau PDF untuk
-                            distribusi
-                          </li>
-                        </ol>
-                      </div>
-
-                      <div>
-                        <h3 className="text-lg font-medium flex items-center gap-2 mb-3 text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          <Users className="h-5 w-5 text-[#4F959D]" />
-                          Mengelola Data Dosen
-                        </h3>
-                        <ol className="list-decimal pl-5 space-y-2 text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          <li>Navigasi ke menu "Kelola Dosen" di sidebar</li>
-                          <li>
-                            Untuk menambah dosen baru, klik tombol "Tambah
-                            Dosen"
-                          </li>
-                          <li>Isi formulir dengan data dosen yang lengkap</li>
-                          <li>Atur preferensi waktu mengajar dosen</li>
-                          <li>Klik "Simpan" untuk menyimpan data dosen</li>
-                          <li>
-                            Untuk mengedit data dosen, klik ikon edit pada
-                            daftar dosen
-                          </li>
-                          <li>
-                            Untuk menghapus dosen, klik ikon hapus (pastikan
-                            dosen tidak terkait dengan jadwal aktif)
-                          </li>
-                        </ol>
-                      </div>
-
-                      <div>
-                        <h3 className="text-lg font-medium flex items-center gap-2 mb-3 text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          <BookOpen className="h-5 w-5 text-[#4F959D]" />
-                          Mengelola Mata Kuliah
-                        </h3>
-                        <ol className="list-decimal pl-5 space-y-2 text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          <li>
-                            Navigasi ke menu "Kelola Mata Kuliah" di sidebar
-                          </li>
-                          <li>
-                            Untuk menambah mata kuliah baru, klik tombol "Tambah
-                            Mata Kuliah"
-                          </li>
-                          <li>
-                            Isi formulir dengan data mata kuliah yang lengkap
-                          </li>
-                          <li>Tentukan dosen pengampu mata kuliah</li>
-                          <li>Atur prasyarat mata kuliah jika ada</li>
-                          <li>
-                            Klik "Simpan" untuk menyimpan data mata kuliah
-                          </li>
-                          <li>
-                            Untuk mengedit data mata kuliah, klik ikon edit pada
-                            daftar mata kuliah
-                          </li>
-                          <li>
-                            Untuk menghapus mata kuliah, klik ikon hapus
-                            (pastikan mata kuliah tidak terkait dengan jadwal
-                            aktif)
-                          </li>
-                        </ol>
-                      </div>
-
-                      <div>
-                        <h3 className="text-lg font-medium flex items-center gap-2 mb-3 text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          <Building className="h-5 w-5 text-[#4F959D]" />
-                          Mengelola Ruangan
-                        </h3>
-                        <ol className="list-decimal pl-5 space-y-2 text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          <li>Navigasi ke menu "Kelola Ruangan" di sidebar</li>
-                          <li>
-                            Untuk menambah ruangan baru, klik tombol "Tambah
-                            Ruangan"
-                          </li>
-                          <li>Isi formulir dengan data ruangan yang lengkap</li>
-                          <li>Tentukan kapasitas dan fasilitas ruangan</li>
-                          <li>
-                            Atur ketersediaan ruangan jika ada batasan waktu
-                          </li>
-                          <li>Klik "Simpan" untuk menyimpan data ruangan</li>
-                          <li>
-                            Untuk mengedit data ruangan, klik ikon edit pada
-                            daftar ruangan
-                          </li>
-                          <li>
-                            Untuk menghapus ruangan, klik ikon hapus (pastikan
-                            ruangan tidak terkait dengan jadwal aktif)
-                          </li>
-                        </ol>
-                      </div>
-
-                      <div>
-                        <h3 className="text-lg font-medium flex items-center gap-2 mb-3 text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          <Search className="h-5 w-5 text-[#4F959D]" />
-                          Mencari dan Memfilter Data
-                        </h3>
-                        <ol className="list-decimal pl-5 space-y-2 text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          <li>
-                            Pada setiap halaman pengelolaan data, gunakan kotak
-                            pencarian di bagian atas tabel
-                          </li>
-                          <li>Masukkan kata kunci yang ingin dicari</li>
-                          <li>
-                            Sistem akan menampilkan hasil yang sesuai dengan
-                            kata kunci
-                          </li>
-                          <li>
-                            Gunakan filter untuk mempersempit hasil pencarian
-                          </li>
-                          <li>
-                            Klik header kolom untuk mengurutkan data berdasarkan
-                            kolom tersebut
-                          </li>
-                          <li>
-                            Gunakan tombol ekspor untuk mengunduh data dalam
-                            format Excel atau PDF
-                          </li>
-                        </ol>
-                      </div>
+                      {featureHelpStepData.map((feature, index) => (
+                        <FeatureHelpStepSection
+                          key={`feature-help-step-${index}`} 
+                          title={feature.title}
+                          icon={feature.icon}
+                          steps={feature.steps}
+                        />
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
