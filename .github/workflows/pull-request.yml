@@ -1,4 +1,4 @@
-name: 'Linting and Building'
+name: 'NextJS lint'
 on:
     push:
         branches: 
