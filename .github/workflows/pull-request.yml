@@ -1,4 +1,4 @@
-name: 'Linting and Building'
+name: 'NextJS lint'
 on:
     push:
         branches: 
@@ -25,12 +25,7 @@ jobs:
 
       - name: Run lint check
         run: npm run lint
-
-      - name: Build application
-        run: npm run build
-        # env:
-        #   CI: true
-        
+    
         # Ref: https://nextjs.org/docs/pages/building-your-application/deploying/ci-build-caching#github-actions
       - name: Cache node modules
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
