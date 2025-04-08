@@ -276,7 +276,7 @@ function CardSection({title, description, icon, questionData}: CardSectionProp){
                 {item.question}
               </AccordionTrigger>{" "}
               {/* Changed text color */}
-              <AccordionContent className="text-black">
+              <AccordionContent className="text-black bg-gray-100 p-2">
                 {" "}
                 {item.content}
               </AccordionContent>
