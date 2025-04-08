@@ -1,6 +1,6 @@
 "use client"
 
-type JadwalItem = {
+export type JadwalItem = {
   namaDosen: string;
   mataKuliah: string;
   ruangan: string;
