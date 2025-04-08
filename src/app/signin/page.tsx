@@ -66,7 +66,7 @@ export default function SignInPage() {
             </form>
 
             <p className="text-center text-gray-600 mt-4">
-              Don't have an account?
+              Don&lsquo;t have an account?
               <Link href="../" className="text-[#4F959D] font-semibold">
                 Sign Up
               </Link>
