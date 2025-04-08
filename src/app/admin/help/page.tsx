@@ -464,33 +464,35 @@ export default function HelpPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg">
+                    <div className="space-y-4 flex flex-col md:flex-row justify-center w-full gap-x-4">
+                      <div className="flex flex-col md:flex-row md:items-start items-center gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg">
                         <div className="h-10 w-10 rounded-full bg-[#4F959D] flex items-center justify-center text-white">
                           <HelpCircle size={20} />
                         </div>
-                        <div>
-                          <h4 className="font-medium text-black text-sm sm:text-base">
+                        <div className="flex flex-col">
+                          <h4 className="font-medium text-black text-sm sm:text-base text-center md:text-left">
                             Dukungan Teknis
                           </h4>
-                          <p className="text-xs sm:text-sm text-black">
+                          <p className="text-xs md:text-sm text-black text-center md:text-left">
                             support@sistempenjadwalan.ac.id
                           </p>
-                          <p className="text-xs sm:text-sm text-black">
+                          <p className="text-xs md:text-sm text-black text-center md:text-left">
                             +62 123 4567 890
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                        <div className="h-10 w-10 rounded-full bg-[#4F959D] flex items-center justify-center text-white">
-                          <BookOpen size={20} />
+                      <div className="flex flex-col md:flex-row md:items-start items-center gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg justify-center">
+                        <div className="flex flex-col">
+                          <div className="h-10 w-10 rounded-full bg-[#4F959D] flex items-center justify-center text-white">
+                            <BookOpen size={20}/>
+                          </div>
                         </div>
-                        <div>
-                          <h4 className="font-medium text-black text-sm sm:text-base">
+                        <div className="flex flex-col">
+                          <h4 className="font-medium text-black text-sm md:text-base text-center md:text-left">
                             Dokumentasi Lengkap
                           </h4>
-                          <p className="text-xs sm:text-sm text-black">
+                          <p className="text-xs md:text-sm text-black text-center md:text-left">
                             Akses dokumentasi lengkap sistem di{" "}
                             <a
                               href="#"
