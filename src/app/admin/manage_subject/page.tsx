@@ -3,14 +3,7 @@
 import React, { useState } from "react";
 import { useMataKuliahStore } from "../_store/matakuliah";
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaBook } from "react-icons/fa";
-
-type TempInputData = {
-  id?: string;
-  kode: string;
-  nama: string;
-  semester: string;
-  sks: string;
-};
+import { CourseTempInputData } from "../_scheme/course";
 
 const KelolaMataKuliah = () => {
   const mataKuliahList = useMataKuliahStore((state) => state.data);
@@ -18,7 +11,7 @@ const KelolaMataKuliah = () => {
   const updateMataKuliah = useMataKuliahStore((state) => state.updateData);
   const deleteMataKuliah = useMataKuliahStore((state) => state.deleteData);
 
-  const [tempInput, setTempInput] = useState<TempInputData>({
+  const [tempInput, setTempInput] = useState<CourseTempInputData>({
     kode: "",
     nama: "",
     semester: "",
@@ -27,7 +20,7 @@ const KelolaMataKuliah = () => {
 
   const [editPopup, setEditPopup] = useState(false);
   const [selectedMataKuliah, setSelectedMataKuliah] =
-    useState<TempInputData | null>(null);
+    useState<CourseTempInputData | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -62,7 +55,7 @@ const KelolaMataKuliah = () => {
     setShowAddForm(false);
   };
 
-  const handleEditClick = (mataKuliah: TempInputData) => {
+  const handleEditClick = (mataKuliah: CourseTempInputData) => {
     setSelectedMataKuliah(mataKuliah);
     setEditPopup(true);
   };
