@@ -272,7 +272,7 @@ function CardSection({title, description, icon, questionData}: CardSectionProp){
         <Accordion type="single" collapsible className="w-full">
           {questionData.map((item, index) => (
             <AccordionItem key={`card-${title}-accordion-${index}`} value={`item-${index}`}>
-              <AccordionTrigger className="text-black">
+              <AccordionTrigger className="text-black text-left">
                 {item.question}
               </AccordionTrigger>{" "}
               {/* Changed text color */}
