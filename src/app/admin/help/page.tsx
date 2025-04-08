@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -29,6 +29,173 @@ import {
   Search,
 } from "lucide-react";
 import NavigationBar from "../admin_component/Navbar";
+
+type QuestionItemData = {
+  title: string;
+  content: string;
+}
+
+type CardSectionProp = {
+  title: string;
+  description: string;
+  questionData: QuestionItemData[];
+  icon: ReactNode
+}
+
+// TODO: just make this data into JSON maybe?
+const cardSectionData: CardSectionProp[] = [{
+  title: "Penjadwalan",
+  description: "Pertanyaan umum tentang penjadwalan",
+  icon: <Calendar className="h-5 w-5 text-[#4F959D]" />,
+  questionData: [{
+    title: "Bagaimana cara generate jadwal?",
+    content: `
+      Untuk generate jadwal, navigasi ke menu "Generate
+      Jadwal", pilih semester dan tahun ajaran, kemudian
+      klik tombol "Generate Jadwal". Sistem akan otomatis
+      membuat jadwal berdasarkan data dosen, mata kuliah,
+      dan ruangan yang tersedia.
+    `
+  }, {
+    title: "Bagaimana jika terjadi bentrok jadwal?",
+    content: `
+      Sistem dirancang untuk menghindari bentrok jadwal.
+      Namun jika terjadi, sistem akan memberikan notifikasi
+      dan Anda dapat melakukan penyesuaian manual pada
+      jadwal yang bentrok.
+    `
+  }, {
+    title: "Apakah jadwal dapat diedit setelah digenerate?",
+    content: `
+      Ya, jadwal yang sudah digenerate dapat diedit secara
+      manual. Anda dapat mengubah waktu, ruangan, atau dosen
+      untuk menyesuaikan kebutuhan.
+    `
+  }],
+}, {
+  title: "Pengelolaan Dosen",
+  description: "Pertanyaan tentang manajemen data dosen",
+  icon: <Users className="h-5 w-5 text-[#4F959D]" />,
+  questionData: [{
+    title: "Bagaimana cara menambahkan dosen baru?",
+    content: `
+      Navigasi ke menu "Kelola Dosen", klik tombol "Tambah
+      Dosen", isi formulir dengan data dosen yang diperlukan
+      seperti nama, NIP, bidang keahlian, dan preferensi
+      waktu mengajar, kemudian klik "Simpan".
+    `
+  }, {
+    title: "Bagaimana cara mengatur preferensi waktu dosen?",
+    content: `
+      Pada halaman detail dosen, Anda dapat mengatur
+      preferensi waktu mengajar dengan memilih hari dan jam
+      yang tersedia. Sistem akan memprioritaskan preferensi
+      ini saat generate jadwal.
+    `
+  }, {
+    title: 'Bagaimana jika dosen tidak tersedia pada waktu tertentu?',
+    content: `
+      Anda dapat menandai waktu tidak tersedia pada
+      preferensi dosen. Sistem tidak akan menjadwalkan dosen
+      tersebut pada waktu yang ditandai tidak tersedia.
+    `
+  }]
+}, {
+  title: 'Mata Kuliah',
+  description: 'Pertanyaan tentang pengelolaan mata kuliah',
+  icon: <BookOpen className="h-5 w-5 text-[#4F959D]" />,
+  questionData: [{
+    title: "Bagaimana cara menambahkan mata kuliah baru?",
+    content: `
+      Navigasi ke menu "Kelola Mata Kuliah", klik tombol
+      "Tambah Mata Kuliah", isi formulir dengan data yang
+      diperlukan seperti kode, nama, SKS, dan prasyarat,
+      kemudian klik "Simpan".
+    `
+  }, {
+    title: "Bagaimana cara mengatur dosen pengampu mata kuliah?",
+    content: `
+      Pada halaman detail mata kuliah, Anda dapat
+      menambahkan dosen pengampu dengan memilih dari daftar
+      dosen yang tersedia. Satu mata kuliah dapat memiliki
+      beberapa dosen pengampu.
+    `
+  }, {
+    title: "Bagaimana cara mengatur prasyarat mata kuliah?",
+    content: `
+      Pada halaman edit mata kuliah, Anda dapat menambahkan
+      prasyarat dengan memilih mata kuliah lain yang menjadi
+      prasyarat. Sistem akan mempertimbangkan prasyarat ini
+      saat generate jadwal.
+    `
+  }]
+}, {
+  title: "Ruangan",
+  description: "Pertanyaan tentang pengelolaan ruangan",
+  icon: <Building className="h-5 w-5 text-[#4F959D]" />,
+  questionData: [{
+    title: "Bagaimana cara menambahkan ruangan baru?",
+    content: `
+      Navigasi ke menu "Kelola Ruangan", klik tombol "Tambah
+      Ruangan", isi formulir dengan data yang diperlukan
+      seperti kode ruangan, kapasitas, dan fasilitas,
+      kemudian klik "Simpan".
+    `
+  }, {
+    title: "Bagaimana cara mengatur ketersediaan ruangan?",
+    content: `
+      Pada halaman detail ruangan, Anda dapat mengatur
+      ketersediaan ruangan dengan menandai waktu yang
+      tersedia. Sistem akan memperhitungkan ketersediaan ini
+      saat generate jadwal.
+    `
+  }, {
+    title: "Bagaimana jika ruangan sedang dalam perbaikan?",
+    content: `
+      Anda dapat menandai ruangan sebagai "Tidak Tersedia"
+      atau "Dalam Perbaikan" pada halaman edit ruangan.
+      Ruangan yang ditandai tidak akan digunakan dalam
+      penjadwalan.
+    `
+  }]
+}]
+
+function CardSection({title, description, icon, questionData}: CardSectionProp){
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-black">
+          {" "}
+          {/* Changed text color */}
+          {/* <Calendar className="h-5 w-5 text-[#4F959D]" /> */}
+          {icon}
+          {title}
+        </CardTitle>
+        <CardDescription className="text-black">
+          {description}
+        </CardDescription>{" "}
+        {/* Changed text color */}
+      </CardHeader>
+      <CardContent>
+        <Accordion type="single" collapsible className="w-full">
+          {questionData.map((item, index) => (
+            <AccordionItem key={`card-${title}-accordion-${index}`} value={`item-${index}`}>
+              <AccordionTrigger className="text-black">
+                {item.title}
+              </AccordionTrigger>{" "}
+              {/* Changed text color */}
+              <AccordionContent className="text-black">
+                {" "}
+                {item.content}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+          
+        </Accordion>
+      </CardContent>
+    </Card>
+  )
+}
 
 export default function HelpPage() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -71,249 +238,15 @@ export default function HelpPage() {
 
             <TabsContent value="faq">
               <div className="grid gap-6 md:grid-cols-2">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-black">
-                      {" "}
-                      {/* Changed text color */}
-                      <Calendar className="h-5 w-5 text-[#4F959D]" />
-                      Penjadwalan
-                    </CardTitle>
-                    <CardDescription className="text-black">
-                      Pertanyaan umum tentang penjadwalan
-                    </CardDescription>{" "}
-                    {/* Changed text color */}
-                  </CardHeader>
-                  <CardContent>
-                    <Accordion type="single" collapsible className="w-full">
-                      <AccordionItem value="item-1">
-                        <AccordionTrigger className="text-black">
-                          Bagaimana cara generate jadwal?
-                        </AccordionTrigger>{" "}
-                        {/* Changed text color */}
-                        <AccordionContent className="text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          Untuk generate jadwal, navigasi ke menu "Generate
-                          Jadwal", pilih semester dan tahun ajaran, kemudian
-                          klik tombol "Generate Jadwal". Sistem akan otomatis
-                          membuat jadwal berdasarkan data dosen, mata kuliah,
-                          dan ruangan yang tersedia.
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="item-2">
-                        <AccordionTrigger className="text-black">
-                          Bagaimana jika terjadi bentrok jadwal?
-                        </AccordionTrigger>{" "}
-                        {/* Changed text color */}
-                        <AccordionContent className="text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          Sistem dirancang untuk menghindari bentrok jadwal.
-                          Namun jika terjadi, sistem akan memberikan notifikasi
-                          dan Anda dapat melakukan penyesuaian manual pada
-                          jadwal yang bentrok.
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="item-3">
-                        <AccordionTrigger className="text-black">
-                          Apakah jadwal dapat diedit setelah digenerate?
-                        </AccordionTrigger>{" "}
-                        {/* Changed text color */}
-                        <AccordionContent className="text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          Ya, jadwal yang sudah digenerate dapat diedit secara
-                          manual. Anda dapat mengubah waktu, ruangan, atau dosen
-                          untuk menyesuaikan kebutuhan.
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-black">
-                      {" "}
-                      {/* Changed text color */}
-                      <Users className="h-5 w-5 text-[#4F959D]" />
-                      Pengelolaan Dosen
-                    </CardTitle>
-                    <CardDescription className="text-black">
-                      Pertanyaan tentang manajemen data dosen
-                    </CardDescription>{" "}
-                    {/* Changed text color */}
-                  </CardHeader>
-                  <CardContent>
-                    <Accordion type="single" collapsible className="w-full">
-                      <AccordionItem value="item-1">
-                        <AccordionTrigger className="text-black">
-                          Bagaimana cara menambahkan dosen baru?
-                        </AccordionTrigger>{" "}
-                        {/* Changed text color */}
-                        <AccordionContent className="text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          Navigasi ke menu "Kelola Dosen", klik tombol "Tambah
-                          Dosen", isi formulir dengan data dosen yang diperlukan
-                          seperti nama, NIP, bidang keahlian, dan preferensi
-                          waktu mengajar, kemudian klik "Simpan".
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="item-2">
-                        <AccordionTrigger className="text-black">
-                          Bagaimana cara mengatur preferensi waktu dosen?
-                        </AccordionTrigger>{" "}
-                        {/* Changed text color */}
-                        <AccordionContent className="text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          Pada halaman detail dosen, Anda dapat mengatur
-                          preferensi waktu mengajar dengan memilih hari dan jam
-                          yang tersedia. Sistem akan memprioritaskan preferensi
-                          ini saat generate jadwal.
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="item-3">
-                        <AccordionTrigger className="text-black">
-                          Bagaimana jika dosen tidak tersedia pada waktu
-                          tertentu?
-                        </AccordionTrigger>{" "}
-                        {/* Changed text color */}
-                        <AccordionContent className="text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          Anda dapat menandai waktu tidak tersedia pada
-                          preferensi dosen. Sistem tidak akan menjadwalkan dosen
-                          tersebut pada waktu yang ditandai tidak tersedia.
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-black">
-                      {" "}
-                      {/* Changed text color */}
-                      <BookOpen className="h-5 w-5 text-[#4F959D]" />
-                      Mata Kuliah
-                    </CardTitle>
-                    <CardDescription className="text-black">
-                      Pertanyaan tentang pengelolaan mata kuliah
-                    </CardDescription>{" "}
-                    {/* Changed text color */}
-                  </CardHeader>
-                  <CardContent>
-                    <Accordion type="single" collapsible className="w-full">
-                      <AccordionItem value="item-1">
-                        <AccordionTrigger className="text-black">
-                          Bagaimana cara menambahkan mata kuliah baru?
-                        </AccordionTrigger>{" "}
-                        {/* Changed text color */}
-                        <AccordionContent className="text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          Navigasi ke menu "Kelola Mata Kuliah", klik tombol
-                          "Tambah Mata Kuliah", isi formulir dengan data yang
-                          diperlukan seperti kode, nama, SKS, dan prasyarat,
-                          kemudian klik "Simpan".
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="item-2">
-                        <AccordionTrigger className="text-black">
-                          Bagaimana cara mengatur dosen pengampu mata kuliah?
-                        </AccordionTrigger>{" "}
-                        {/* Changed text color */}
-                        <AccordionContent className="text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          Pada halaman detail mata kuliah, Anda dapat
-                          menambahkan dosen pengampu dengan memilih dari daftar
-                          dosen yang tersedia. Satu mata kuliah dapat memiliki
-                          beberapa dosen pengampu.
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="item-3">
-                        <AccordionTrigger className="text-black">
-                          Bagaimana cara mengatur prasyarat mata kuliah?
-                        </AccordionTrigger>{" "}
-                        {/* Changed text color */}
-                        <AccordionContent className="text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          Pada halaman edit mata kuliah, Anda dapat menambahkan
-                          prasyarat dengan memilih mata kuliah lain yang menjadi
-                          prasyarat. Sistem akan mempertimbangkan prasyarat ini
-                          saat generate jadwal.
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-black">
-                      {" "}
-                      {/* Changed text color */}
-                      <Building className="h-5 w-5 text-[#4F959D]" />
-                      Ruangan
-                    </CardTitle>
-                    <CardDescription className="text-black">
-                      Pertanyaan tentang pengelolaan ruangan
-                    </CardDescription>{" "}
-                    {/* Changed text color */}
-                  </CardHeader>
-                  <CardContent>
-                    <Accordion type="single" collapsible className="w-full">
-                      <AccordionItem value="item-1">
-                        <AccordionTrigger className="text-black">
-                          Bagaimana cara menambahkan ruangan baru?
-                        </AccordionTrigger>{" "}
-                        {/* Changed text color */}
-                        <AccordionContent className="text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          Navigasi ke menu "Kelola Ruangan", klik tombol "Tambah
-                          Ruangan", isi formulir dengan data yang diperlukan
-                          seperti kode ruangan, kapasitas, dan fasilitas,
-                          kemudian klik "Simpan".
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="item-2">
-                        <AccordionTrigger className="text-black">
-                          Bagaimana cara mengatur ketersediaan ruangan?
-                        </AccordionTrigger>{" "}
-                        {/* Changed text color */}
-                        <AccordionContent className="text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          Pada halaman detail ruangan, Anda dapat mengatur
-                          ketersediaan ruangan dengan menandai waktu yang
-                          tersedia. Sistem akan memperhitungkan ketersediaan ini
-                          saat generate jadwal.
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="item-3">
-                        <AccordionTrigger className="text-black">
-                          Bagaimana jika ruangan sedang dalam perbaikan?
-                        </AccordionTrigger>{" "}
-                        {/* Changed text color */}
-                        <AccordionContent className="text-black">
-                          {" "}
-                          {/* Changed text color */}
-                          Anda dapat menandai ruangan sebagai "Tidak Tersedia"
-                          atau "Dalam Perbaikan" pada halaman edit ruangan.
-                          Ruangan yang ditandai tidak akan digunakan dalam
-                          penjadwalan.
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  </CardContent>
-                </Card>
+                {cardSectionData.map((item, index) => (
+                  <CardSection 
+                    key={`card-${index}`}
+                    title={item.title} 
+                    description={item.description}
+                    icon={item.icon}
+                    questionData={item.questionData}
+                  />
+                ))}
               </div>
             </TabsContent>
 
