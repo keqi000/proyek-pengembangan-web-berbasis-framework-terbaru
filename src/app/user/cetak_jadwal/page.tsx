@@ -19,7 +19,7 @@ import {
   FileText,
   Info,
 } from "lucide-react";
-import Link from "next/link";
+
 
 type JadwalItem = {
   id: string;
@@ -128,7 +128,8 @@ const CetakJadwalPage: FC = () => {
     documentTitle: "Jadwal Kuliah - Yonathan Hot Gabe Sihotang",
     onAfterPrint: () => console.log("Printed successfully!"),
     content: () => printRef.current,
-  } as any); // Use type assertion as a last resort
+    // Use type assertion as a last resort
+  } as any);   // eslint-disable-line  
 
   // Function to download as PDF
   const handleDownloadPDF = () => {
@@ -257,7 +258,7 @@ const CetakJadwalPage: FC = () => {
               </button>
 
               <button
-                onClick={(e) => handlePrint()}
+                onClick={() => handlePrint()}
                 className="w-full py-2.5 px-4 bg-[#2C3930] text-white rounded-md flex items-center justify-center hover:bg-[#3F4F44] transition"
               >
                 <Printer className="w-5 h-5 mr-2" />

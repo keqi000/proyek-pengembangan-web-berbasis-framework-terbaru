@@ -341,11 +341,11 @@ const GenerateJadwal = () => {
                   )}
                   {searchTerm && (
                     <span className="bg-[#E5F2F3] text-[#4F959D] px-2 py-1 rounded-full text-xs font-medium flex items-center">
-                      Pencarian: "
+                      Pencarian: &quot;
                       {searchTerm.length > 10
                         ? searchTerm.substring(0, 10) + "..."
                         : searchTerm}
-                      "
+                      &quot;
                       <button
                         className="ml-1 text-[#4F959D] hover:text-[#3C7A85]"
                         onClick={() => setSearchTerm("")}
@@ -437,7 +437,7 @@ const GenerateJadwal = () => {
             <li className="flex items-start">
               <span className="text-[#4F959D] mr-1 sm:mr-2">2.</span>
               <span>
-                Klik tombol "Generate Jadwal" untuk membuat jadwal otomatis
+                Klik tombol &quot;Generate Jadwal&quot; untuk membuat jadwal otomatis
               </span>
             </li>
             <li className="flex items-start">
@@ -451,7 +451,7 @@ const GenerateJadwal = () => {
             <li className="flex items-start">
               <span className="text-[#4F959D] mr-1 sm:mr-2">5.</span>
               <span>
-                Klik "Export CSV" untuk mengunduh jadwal dalam format CSV
+                Klik &quot;Export CSV&quot; untuk mengunduh jadwal dalam format CSV
               </span>
             </li>
           </ul>

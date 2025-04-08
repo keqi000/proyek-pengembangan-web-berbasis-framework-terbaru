@@ -255,7 +255,7 @@ const KelolaRuangan = () => {
           {searchTerm && (
             <div>
               Hasil pencarian untuk:{" "}
-              <span className="font-medium">"{searchTerm}"</span>
+              <span className="font-medium">&quot;{searchTerm}&quot;</span>
             </div>
           )}
         </div>
