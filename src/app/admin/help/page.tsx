@@ -261,11 +261,11 @@ const featureHelpStepData: FeatureHelpItemType[] = [
 function FeatureHelpStepSection({ title, icon, steps }: FeatureHelpItemType) {
   return (
     <div>
-      <h3 className="text-lg font-medium flex items-center gap-2 mb-3 text-black">
+      <h3 className="text-base md:text-lg font-medium flex items-center gap-2 mb-3 text-black">
         {icon}
         <span className="break-words">{title}</span>
       </h3>
-      <ol className="list-decimal pl-5 space-y-2 text-black text-sm sm:text-base">
+      <ol className="list-decimal pl-5 space-y-2 text-black text-xs md:text-base">
         {steps.map((step, index) => (
           <li key={`step-${index}`} className="break-words">
             {step}
