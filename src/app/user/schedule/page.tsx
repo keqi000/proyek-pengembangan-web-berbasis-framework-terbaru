@@ -10,8 +10,6 @@ import {
   BookOpen,
   Info,
 } from "lucide-react";
-import { useRoomStore } from "../../admin/_store/ruangan";
-import { useDosenStore } from "../../admin/_store/dosen";
 
 type JadwalItem = {
   id: string;
@@ -30,8 +28,6 @@ const JadwalKuliahPage: FC = () => {
   const [jadwalData, setJadwalData] = useState<JadwalItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDay, setFilterDay] = useState<string | null>(null);
-  const { data: ruanganData } = useRoomStore();
-  const { data: dosenData } = useDosenStore();
 
   // Mock data for demonstration
   useEffect(() => {

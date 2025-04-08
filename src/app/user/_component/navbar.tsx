@@ -4,7 +4,6 @@ import Link from "next/link";
 import { FC, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
-  FaEnvelope,
   FaUser,
   FaHome,
   FaBook,
