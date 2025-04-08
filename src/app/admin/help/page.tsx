@@ -31,7 +31,7 @@ import {
 import NavigationBar from "../admin_component/Navbar";
 
 type QuestionItemData = {
-  title: string;
+  question: string;
   content: string;
 }
 
@@ -48,7 +48,7 @@ const cardSectionData: CardSectionProp[] = [{
   description: "Pertanyaan umum tentang penjadwalan",
   icon: <Calendar className="h-5 w-5 text-[#4F959D]" />,
   questionData: [{
-    title: "Bagaimana cara generate jadwal?",
+    question: "Bagaimana cara generate jadwal?",
     content: `
       Untuk generate jadwal, navigasi ke menu "Generate
       Jadwal", pilih semester dan tahun ajaran, kemudian
@@ -57,7 +57,7 @@ const cardSectionData: CardSectionProp[] = [{
       dan ruangan yang tersedia.
     `
   }, {
-    title: "Bagaimana jika terjadi bentrok jadwal?",
+    question: "Bagaimana jika terjadi bentrok jadwal?",
     content: `
       Sistem dirancang untuk menghindari bentrok jadwal.
       Namun jika terjadi, sistem akan memberikan notifikasi
@@ -65,7 +65,7 @@ const cardSectionData: CardSectionProp[] = [{
       jadwal yang bentrok.
     `
   }, {
-    title: "Apakah jadwal dapat diedit setelah digenerate?",
+    question: "Apakah jadwal dapat diedit setelah digenerate?",
     content: `
       Ya, jadwal yang sudah digenerate dapat diedit secara
       manual. Anda dapat mengubah waktu, ruangan, atau dosen
@@ -77,7 +77,7 @@ const cardSectionData: CardSectionProp[] = [{
   description: "Pertanyaan tentang manajemen data dosen",
   icon: <Users className="h-5 w-5 text-[#4F959D]" />,
   questionData: [{
-    title: "Bagaimana cara menambahkan dosen baru?",
+    question: "Bagaimana cara menambahkan dosen baru?",
     content: `
       Navigasi ke menu "Kelola Dosen", klik tombol "Tambah
       Dosen", isi formulir dengan data dosen yang diperlukan
@@ -85,7 +85,7 @@ const cardSectionData: CardSectionProp[] = [{
       waktu mengajar, kemudian klik "Simpan".
     `
   }, {
-    title: "Bagaimana cara mengatur preferensi waktu dosen?",
+    question: "Bagaimana cara mengatur preferensi waktu dosen?",
     content: `
       Pada halaman detail dosen, Anda dapat mengatur
       preferensi waktu mengajar dengan memilih hari dan jam
@@ -93,7 +93,7 @@ const cardSectionData: CardSectionProp[] = [{
       ini saat generate jadwal.
     `
   }, {
-    title: 'Bagaimana jika dosen tidak tersedia pada waktu tertentu?',
+    question: 'Bagaimana jika dosen tidak tersedia pada waktu tertentu?',
     content: `
       Anda dapat menandai waktu tidak tersedia pada
       preferensi dosen. Sistem tidak akan menjadwalkan dosen
@@ -105,7 +105,7 @@ const cardSectionData: CardSectionProp[] = [{
   description: 'Pertanyaan tentang pengelolaan mata kuliah',
   icon: <BookOpen className="h-5 w-5 text-[#4F959D]" />,
   questionData: [{
-    title: "Bagaimana cara menambahkan mata kuliah baru?",
+    question: "Bagaimana cara menambahkan mata kuliah baru?",
     content: `
       Navigasi ke menu "Kelola Mata Kuliah", klik tombol
       "Tambah Mata Kuliah", isi formulir dengan data yang
@@ -113,7 +113,7 @@ const cardSectionData: CardSectionProp[] = [{
       kemudian klik "Simpan".
     `
   }, {
-    title: "Bagaimana cara mengatur dosen pengampu mata kuliah?",
+    question: "Bagaimana cara mengatur dosen pengampu mata kuliah?",
     content: `
       Pada halaman detail mata kuliah, Anda dapat
       menambahkan dosen pengampu dengan memilih dari daftar
@@ -121,7 +121,7 @@ const cardSectionData: CardSectionProp[] = [{
       beberapa dosen pengampu.
     `
   }, {
-    title: "Bagaimana cara mengatur prasyarat mata kuliah?",
+    question: "Bagaimana cara mengatur prasyarat mata kuliah?",
     content: `
       Pada halaman edit mata kuliah, Anda dapat menambahkan
       prasyarat dengan memilih mata kuliah lain yang menjadi
@@ -134,7 +134,7 @@ const cardSectionData: CardSectionProp[] = [{
   description: "Pertanyaan tentang pengelolaan ruangan",
   icon: <Building className="h-5 w-5 text-[#4F959D]" />,
   questionData: [{
-    title: "Bagaimana cara menambahkan ruangan baru?",
+    question: "Bagaimana cara menambahkan ruangan baru?",
     content: `
       Navigasi ke menu "Kelola Ruangan", klik tombol "Tambah
       Ruangan", isi formulir dengan data yang diperlukan
@@ -142,7 +142,7 @@ const cardSectionData: CardSectionProp[] = [{
       kemudian klik "Simpan".
     `
   }, {
-    title: "Bagaimana cara mengatur ketersediaan ruangan?",
+    question: "Bagaimana cara mengatur ketersediaan ruangan?",
     content: `
       Pada halaman detail ruangan, Anda dapat mengatur
       ketersediaan ruangan dengan menandai waktu yang
@@ -150,7 +150,7 @@ const cardSectionData: CardSectionProp[] = [{
       saat generate jadwal.
     `
   }, {
-    title: "Bagaimana jika ruangan sedang dalam perbaikan?",
+    question: "Bagaimana jika ruangan sedang dalam perbaikan?",
     content: `
       Anda dapat menandai ruangan sebagai "Tidak Tersedia"
       atau "Dalam Perbaikan" pada halaman edit ruangan.
@@ -181,7 +181,7 @@ function CardSection({title, description, icon, questionData}: CardSectionProp){
           {questionData.map((item, index) => (
             <AccordionItem key={`card-${title}-accordion-${index}`} value={`item-${index}`}>
               <AccordionTrigger className="text-black">
-                {item.title}
+                {item.question}
               </AccordionTrigger>{" "}
               {/* Changed text color */}
               <AccordionContent className="text-black">
