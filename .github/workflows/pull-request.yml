@@ -1,4 +1,4 @@
-name: 'NextJS Ci'
+name: 'Linting and Building'
 on:
     push:
         branches: 
@@ -7,7 +7,7 @@ on:
     pull_request: 
 
 jobs:
-  build-and-lint:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
