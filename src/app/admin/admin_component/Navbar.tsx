@@ -209,7 +209,7 @@ export default function NavigationBar({
               ))}
             </ul>
 
-            <div className="mt-8 pt-4 border-t border-gray-200">
+            <div className="py-8 border-t border-gray-200">
               <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
                 Lainnya
               </h3>
