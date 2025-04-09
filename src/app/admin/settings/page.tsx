@@ -189,7 +189,7 @@ const SettingsPage = () => {
                         name="name"
                         value={profileData.name}
                         onChange={handleProfileChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                       />
                     </div>
                     <div>
@@ -205,7 +205,7 @@ const SettingsPage = () => {
                         name="email"
                         value={profileData.email}
                         onChange={handleProfileChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                       />
                     </div>
                     <div>
@@ -221,7 +221,7 @@ const SettingsPage = () => {
                         name="phone"
                         value={profileData.phone}
                         onChange={handleProfileChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                       />
                     </div>
                     <div>
@@ -237,7 +237,7 @@ const SettingsPage = () => {
                         name="position"
                         value={profileData.position}
                         onChange={handleProfileChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                       />
                     </div>
                   </div>
@@ -257,7 +257,7 @@ const SettingsPage = () => {
                         <input
                           type="password"
                           id="currentPassword"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                         />
                       </div>
                       <div>
@@ -270,7 +270,7 @@ const SettingsPage = () => {
                         <input
                           type="password"
                           id="newPassword"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                         />
                       </div>
                       <div>
@@ -283,7 +283,7 @@ const SettingsPage = () => {
                         <input
                           type="password"
                           id="confirmPassword"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                         />
                       </div>
                     </div>
