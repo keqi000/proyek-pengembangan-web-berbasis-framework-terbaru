@@ -7,7 +7,9 @@ import { AlertTriangle } from 'lucide-react';
 export default function CustomNotFoundPage() {
   useEffect(() => {
     console.warn('Halaman 404 dirender');
-    console.log("Trigger PR berhasil dari folder yang benar"); // Tambahan untuk trigger PR, Dari Tadi Ngak Ditangkap Apapun LOL
+    console.log(
+      "✅ Trigger PR berhasil dari folder yang benar — revisi kecil untuk tracking perubahan Git" // Please Semoga Ada Demi Dah
+    );
   }, []);
 
   return (
