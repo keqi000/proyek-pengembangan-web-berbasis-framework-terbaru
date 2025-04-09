@@ -147,7 +147,7 @@ const GenerateJadwal = () => {
       {/* Header Section */}
       <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md mb-2 sm:mb-3">
         <div className="flex flex-col md:flex-row justify-between items-center gap-2">
-          <div className="text-center sm:text-left">
+          <div className="text-center md:text-left">
             <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#2C3930]">
               Generate <span className="text-[#4F959D]">Jadwal</span>
             </h1>
