@@ -181,7 +181,7 @@ const GenerateJadwal = () => {
 
       {/* Filter and Search Section */}
       {jadwal.length > 0 && (
-        <div className="bg-white p-2 md:p-3 lg:p-4 rounded-lg shadow-md mb-2 sm:mb-3">
+        <div className="md:hidden bg-white p-2 md:p-3 lg:p-4 rounded-lg shadow-md mb-2 sm:mb-3">
           <div className="flex flex-col gap-2 items-start">
             <div className="relative w-full">
               <input
@@ -194,7 +194,7 @@ const GenerateJadwal = () => {
               <FaSearch className="absolute left-2 top-1.5 text-gray-400 text-xs" />
             </div>
 
-            <div className="flex items-center gap-1 w-full">
+            <div className="flex items-center gap-1 w-full md:hidden">
               <FaFilter className="text-[#4F959D] text-xs" />
               <span className="text-gray-700 text-xs">Filter:</span>
               <select
@@ -216,9 +216,51 @@ const GenerateJadwal = () => {
 
       {/* Jadwal Table */}
       <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md">
-        <h2 className="text-[#4F959D] text-sm md:text-base font-semibold mb-2 flex items-center">
-          <FaCalendarAlt className="mr-1.5" /> Hasil Jadwal
-        </h2>
+        <div className="flex flex-row justify-between">
+          <h2 className="text-[#4F959D] text-sm md:text-base font-semibold mb-2 flex items-center">
+            <FaCalendarAlt className="mr-1.5" /> Hasil Jadwal
+          </h2>
+
+          <div className="hidden md:flex flex-row items-center gap-x-3">
+            {/* Search bar - md*/}
+            <div className="flex flex-col gap-2 items-start">
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  placeholder="Cari jadwal..."
+                  className="pl-7 pr-2 py-1 text-xs border rounded-lg focus:outline-none ring-1 ring-gray-500 focus:ring-1 focus:ring-[#4F959D] text-gray-600 w-full"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <FaSearch className="absolute left-2 top-1.5 text-gray-400 text-xs" />
+              </div>
+            </div>
+
+            {/* Filter - md */}
+            <div className="hidden md:flex flex-row items-center gap-x-2 py-2">
+              <div className="flex flex-row gap-x-1">
+                {/* <FaFilter className="text-[#4F959D] text-base" /> */}
+                <span className="text-gray-700 text-xs">Filter:</span>
+              </div>
+
+              {/* Filter Option */}
+              <div className="flex flex-col">
+                <select
+                  className="border rounded-lg px-1 py-1 text-xs focus:outline-none ring-1 ring-gray-500 focus:ring-1 focus:ring-[#4F959D] text-gray-600 w-full"
+                  value={filterDay || ""}
+                  onChange={(e) => setFilterDay(e.target.value || null)}
+                >
+                  <option value="">Semua Hari</option>
+                  {days.map((day) => (
+                    <option key={day} value={day}>
+                      {day}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {isGenerating ? (
           <div className="flex flex-col items-center justify-center py-4 sm:py-6">
