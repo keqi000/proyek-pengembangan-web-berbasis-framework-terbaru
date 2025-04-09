@@ -326,7 +326,7 @@ const GenerateJadwal = () => {
                               onClick={() => deleteJadwal(item.id)}
                               title="Hapus"
                             >
-                              <FaTrash size={10} />
+                              <FaTrash className="w-3 h-3 md:w-4 md:h-4" />
                             </button>
                           </div>
                         </td>
