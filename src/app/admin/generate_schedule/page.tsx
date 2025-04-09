@@ -246,7 +246,7 @@ const GenerateJadwal = () => {
               {/* Filter Option */}
               <div className="flex flex-col">
                 <select
-                  className="border rounded-lg px-1 py-1 text-xs focus:outline-none ring-1 ring-gray-500 focus:ring-1 focus:ring-[#4F959D] text-gray-600 w-full"
+                  className="border rounded-lg px-1 py-1 md:px-2 text-xs md:text-sm focus:outline-none ring-1 ring-gray-500 focus:ring-1 focus:ring-[#4F959D] text-gray-600 w-full"
                   value={filterDay || ""}
                   onChange={(e) => setFilterDay(e.target.value || null)}
                 >
