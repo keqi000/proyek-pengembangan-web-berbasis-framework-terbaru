@@ -3,13 +3,18 @@
 import React, { useState } from "react";
 import { useDosenStore } from "../_store/dosen";
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaUserTie } from "react-icons/fa";
+import { z } from "zod";
 
-type TempInputData = {
-  id?: string;
-  nama: string;
-  nip: string;
-};
 
+const tempInputDataSchema = z.object({
+  id: z.string().nullish(),
+  nama: z.string({message: "Nama belum ada"}),
+  nip: z.string().regex(/\d+/, 'NIP bukan dalam bentuk angka!')
+})
+
+type TempInputData = z.infer<typeof tempInputDataSchema>
+
+ 
 const KelolaDosen = () => {
   const dosenList = useDosenStore((state) => state.data);
   const addDosen = useDosenStore((state) => state.addData);
@@ -29,9 +34,11 @@ const KelolaDosen = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSubmit = () => {
-    if (!tempInput.nama || !tempInput.nip) {
-      alert("Harap isi semua field!");
-      return;
+    const validationResult = tempInputDataSchema.safeParse(tempInput)
+    if (!validationResult.success){
+      // Not ideal, but still ...
+      alert(validationResult.error.issues[0].message)
+      return
     }
 
     if (tempInput.id) {
@@ -153,7 +160,7 @@ const KelolaDosen = () => {
               </button>
               <button
                 type="button"
-                className="bg-[#4F959D] text-white px-6 py-2 rounded-lg hover:bg-[#3C7A85] transition"
+                className="bg-[#4F959D] text-white px-6 py-2 rounded-lg hover:bg-[#3C7A85] transition disabled:bg-[#396168]"
                 onClick={handleSubmit}
               >
                 Simpan
