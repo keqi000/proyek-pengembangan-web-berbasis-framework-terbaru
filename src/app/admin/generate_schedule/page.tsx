@@ -216,26 +216,26 @@ const GenerateJadwal = () => {
 
       {/* Jadwal Table */}
       <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md">
-        <h2 className="text-[#4F959D] text-sm sm:text-base font-semibold mb-2 flex items-center">
+        <h2 className="text-[#4F959D] text-sm md:text-base font-semibold mb-2 flex items-center">
           <FaCalendarAlt className="mr-1.5" /> Hasil Jadwal
         </h2>
 
         {isGenerating ? (
           <div className="flex flex-col items-center justify-center py-4 sm:py-6">
-            <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-t-2 border-b-2 border-[#4F959D] mb-2"></div>
+            <div className="animate-spin rounded-full h-5 w-5 md:h-6 md:w-6 border-t-2 border-b-2 border-[#4F959D] mb-2"></div>
             <p className="text-gray-600 text-xs">Sedang membuat jadwal...</p>
           </div>
         ) : (
           <>
             {filteredJadwal.length > 0 ? (
               <div className="w-full">
-                <table className="w-full border-collapse text-[8px] xs:text-[9px] sm:text-xs">
+                <table className="w-full border-collapse text-xs md:text-sm">
                   <thead>
                     <tr className="bg-[#F5F5F5]">
-                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-4 sm:w-6">
+                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-4 md:w-6">
                         No
                       </th>
-                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8 sm:w-12">
+                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8 md:w-12">
                         Hari
                       </th>
                       <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
@@ -253,12 +253,12 @@ const GenerateJadwal = () => {
                       <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
                         Ruang
                       </th>
-                      <th className="p-1 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-5 sm:w-8">
+                      <th className="p-1 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-5 md:w-8">
                         Aksi
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="text-gray-700">
+                  <tbody className="text-gray-700 md:text-sm">
                     {filteredJadwal.map((item, index) => (
                       <tr
                         key={item.id}
@@ -346,11 +346,11 @@ const GenerateJadwal = () => {
 
       {/* Info Cards - Made more responsive */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mt-2 sm:mt-3">
-        <div className="bg-white p-2 sm:p-3 rounded-lg shadow-md">
-          <h3 className="text-[#4F959D] text-xs sm:text-sm font-semibold mb-1 flex items-center">
+        <div className="bg-white p-2 md:p-4 rounded-lg shadow-md">
+          <h3 className="text-[#4F959D] text-xs md:text-base font-semibold mb-1 md:mb-2 flex items-center">
             <FaCalendarAlt className="mr-1" /> Statistik Jadwal
           </h3>
-          <div className="text-gray-700 text-xs">
+          <div className="text-gray-700 text-xs md:text-sm">
             <p className="flex justify-between py-0.5 border-b">
               <span>Total Jadwal:</span>
               <span className="font-medium">{jadwal.length}</span>
@@ -370,12 +370,12 @@ const GenerateJadwal = () => {
           </div>
         </div>
 
-        <div className="bg-white p-2 sm:p-3 rounded-lg shadow-md">
-          <h3 className="text-[#4F959D] text-xs sm:text-sm font-semibold mb-1 flex items-center">
+        <div className="bg-white p-2 md:p-3 rounded-lg shadow-md">
+          <h3 className="text-[#4F959D] text-xs md:text-sm font-semibold mb-1 flex items-center">
             <FaCalendarAlt className="mr-1" /> Distribusi Hari
           </h3>
           {jadwal.length > 0 ? (
-            <div className="text-gray-700 text-xs">
+            <div className="text-gray-700 text-xs md:text-sm">
               {days.map((day) => {
                 const count = jadwal.filter((item) => item.hari === day).length;
                 const percentage =
@@ -400,17 +400,17 @@ const GenerateJadwal = () => {
               })}
             </div>
           ) : (
-            <p className="text-gray-500 text-xs italic">
+            <p className="text-gray-500 text-xs md:text-sm italic md:pt-2">
               Belum ada data jadwal
             </p>
           )}
         </div>
 
-        <div className="bg-white p-2 sm:p-3 rounded-lg shadow-md sm:col-span-2 lg:col-span-1">
-          <h3 className="text-[#4F959D] text-xs sm:text-sm font-semibold mb-1 flex items-center">
+        <div className="bg-white p-2 md:p-3 rounded-lg shadow-md md:col-span-2 lg:col-span-1">
+          <h3 className="text-[#4F959D] text-xs md:text-base font-semibold mb-1 flex items-center">
             <FaCalendarAlt className="mr-1" /> Panduan Penggunaan
           </h3>
-          <ul className="text-gray-700 text-xs space-y-0.5">
+          <ul className="text-gray-700 text-xs md:text-sm space-y-0.5 text-justify px-2 md:py-2">
             <li className="flex items-start">
               <span className="text-[#4F959D] mr-1">1.</span>
               <span>
