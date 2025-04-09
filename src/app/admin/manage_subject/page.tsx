@@ -105,20 +105,20 @@ const KelolaMataKuliah = () => {
               Mengelola data mata kuliah untuk sistem penjadwalan
             </p>
           </div>
-          <div className="flex flex-col xs:flex-row w-full sm:w-auto gap-2">
-            <div className="relative w-full xs:w-auto">
+          <div className="flex flex-col md:flex-row w-full md:w-auto md:space-x-3 gap-y-2">
+            <div className="relative">
               <input
                 type="text"
                 placeholder="Cari..."
-                className="pl-8 pr-2 py-1.5 text-xs sm:text-sm border rounded-lg focus:outline-none ring-1 ring-gray-400 focus:ring-1 focus:ring-[#4F959D] w-full text-gray-600"
+                className="pl-8 pr-2 py-1.5 md:pl-10 md:pr-4 md:py-2 border border-white rounded-lg focus:outline-none ring-1 ring-gray-400 focus:ring-1 focus:ring-[#4F959D] w-full md:w-64 text-gray-600 text-sm md:text-base"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <FaSearch className="absolute left-2.5 top-2 text-gray-400 text-xs" />
+              <FaSearch className="absolute left-2.5 top-2.5 md:left-3 md:top-3 text-gray-400 text-xs md:text-base" />
             </div>
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              className="bg-[#4F959D] text-white px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center"
+              className="bg-[#4F959D] text-white px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center"
             >
               <FaPlus className="mr-1" /> Tambah MK
             </button>
