@@ -223,16 +223,16 @@ const GenerateJadwal = () => {
 
           <div className="hidden md:flex flex-row items-center gap-x-3">
             {/* Search bar - md*/}
-            <div className="flex flex-col gap-2 items-start">
-              <div className="relative w-full">
+            <div className="flex flex-col md:flex-row w-full md:w-auto md:space-x-3 gap-y-2 items-start py-2">
+              <div className="relative">
                 <input
                   type="text"
                   placeholder="Cari jadwal..."
-                  className="pl-7 pr-2 py-1 text-xs border rounded-lg focus:outline-none ring-1 ring-gray-500 focus:ring-1 focus:ring-[#4F959D] text-gray-600 w-full"
+                  className="pl-8 pr-2 py-1.5 md:pl-10 md:pr-4 md:py-1 border border-white rounded-lg focus:outline-none ring-1 ring-gray-400 focus:ring-1 focus:ring-[#4F959D] w-full md:w-64 text-gray-600 text-xs md:text-sm"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <FaSearch className="absolute left-2 top-1.5 text-gray-400 text-xs" />
+                <FaSearch className="absolute left-2.5 top-2.5 md:left-3 md:top-2 text-gray-400 text-xs md:text-sm" />
               </div>
             </div>
 
