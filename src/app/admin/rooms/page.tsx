@@ -3,12 +3,7 @@
 import React, { useState } from "react";
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaDoorOpen } from "react-icons/fa";
 import { useRoomStore } from "../_store/ruangan";
-
-type RuanganItem = {
-  id: string;
-  nama: string;
-  kapasitas: string;
-};
+import { RuanganItem } from "../_scheme/room";
 
 const KelolaRuangan = () => {
   const ruanganList = useRoomStore((state) => state.data);

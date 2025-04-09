@@ -3,12 +3,8 @@
 import React, { useState } from "react";
 import { useDosenStore } from "../_store/dosen";
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaUserTie } from "react-icons/fa";
+import { LecturerTempInputData } from "../_scheme/lecturers";
 
-type TempInputData = {
-  id?: string;
-  nama: string;
-  nip: string;
-};
 
 const KelolaDosen = () => {
   const dosenList = useDosenStore((state) => state.data);
@@ -16,13 +12,13 @@ const KelolaDosen = () => {
   const updateDosen = useDosenStore((state) => state.updateData);
   const deleteDosen = useDosenStore((state) => state.deleteData);
 
-  const [tempInput, setTempInput] = useState<TempInputData>({
+  const [tempInput, setTempInput] = useState<LecturerTempInputData>({
     nama: "",
     nip: "",
   });
 
   const [editPopup, setEditPopup] = useState(false);
-  const [selectedDosen, setSelectedDosen] = useState<TempInputData | null>(
+  const [selectedDosen, setSelectedDosen] = useState<LecturerTempInputData | null>(
     null
   );
   const [showAddForm, setShowAddForm] = useState(false);
@@ -47,7 +43,7 @@ const KelolaDosen = () => {
     setShowAddForm(false);
   };
 
-  const handleEditClick = (dosen: TempInputData) => {
+  const handleEditClick = (dosen: LecturerTempInputData) => {
     setSelectedDosen(dosen);
     setEditPopup(true);
   };
