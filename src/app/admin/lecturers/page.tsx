@@ -82,7 +82,7 @@ const KelolaDosen = () => {
               Mengelola data dosen untuk sistem penjadwalan
             </p>
           </div>
-          <div className="flex flex-col md:flex-row w-full md:w-auto space-x-3 gap-y-2">
+          <div className="flex flex-col md:flex-row w-full md:w-auto md:space-x-3 gap-y-2">
             <div className="relative">
               <input
                 type="text"
