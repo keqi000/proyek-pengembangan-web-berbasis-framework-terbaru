@@ -14,16 +14,16 @@ export default function SignInPage() {
       <div className="absolute inset-0 bg-[url('/background-login.jpg')] bg-cover bg-center opacity-20"></div>
 
       {/* Card Container */}
-      <div className="relative bg-white shadow-lg rounded-xl p-8 md:p-12 w-full max-w-3xl border border-gray-200 flex flex-col items-center">
+      <div className="relative bg-white shadow-lg rounded-xl m-8 md:m-0 p-8 md:p-12 w-full max-w-3xl border border-gray-200 flex flex-col items-center">
         {/* Title */}
-        <h2 className="text-center text-2xl font-semibold mb-4">
+        <h2 className="text-center text-lg md:text-2xl font-semibold mb-4 ">
           <span className="text-black">Working</span>{" "}
           <span className="text-[#4F959D]">Sign In</span>
         </h2>
 
         <div className="flex w-full items-center">
           {/* Illustration */}
-          <div className="w-1/2 flex justify-center">
+          <div className="hidden md:w-1/2 md:flex justify-center">
             <Image
               src="/login-ilustrator.png"
               alt="Person working"
@@ -33,24 +33,24 @@ export default function SignInPage() {
           </div>
 
           {/* Form */}
-          <div className="w-1/2 p-6">
+          <div className="w-full md:w-1/2 p-6">
             <form>
-              <div className="mb-4">
+              <div className="flex flex-col mb-4 gap-y-2">
                 <label className="block text-gray-700">Name</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
+                  className="w-full px-3 py-2 md:px-4 md:py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter your name"
                 />
               </div>
 
-              <div className="mb-4">
+              <div className="flex flex-col mb-4 gap-y-2">
                 <label className="block text-gray-700">Password</label>
                 <input
                   type="password"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
+                  className="w-full px-3 py-2 md:px-4 md:py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
@@ -65,9 +65,9 @@ export default function SignInPage() {
               </button>
             </form>
 
-            <p className="text-center text-gray-600 mt-4">
+            <p className="flex flex-col md:flex-row text-sm md:text-base text-center text-gray-600 mt-4">
               Don&lsquo;t have an account?
-              <Link href="../" className="text-[#4F959D] font-semibold">
+              <Link href="../" className="px-2 md:px-1 text-[#4F959D] font-semibold">
                 Sign Up
               </Link>
             </p>
