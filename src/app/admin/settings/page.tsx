@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   User,
-  Lock,
   Bell,
   Globe,
   Shield,
