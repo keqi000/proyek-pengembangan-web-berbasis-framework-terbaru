@@ -159,7 +159,7 @@ const GenerateJadwal = () => {
             <button
               onClick={generateSchedule}
               disabled={isGenerating}
-              className={`bg-[#4F959D] text-white px-2 py-1 text-xs md:text-base rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center ${
+              className={`bg-[#4F959D] text-white px-2 py-1 md:px-3 md:py-2 text-xs md:text-base rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center ${
                 isGenerating ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
@@ -169,7 +169,7 @@ const GenerateJadwal = () => {
             <button
               onClick={exportToCSV}
               disabled={jadwal.length === 0}
-              className={`bg-[#2C3930] text-white px-2 py-1 text-xs rounded-lg hover:bg-[#1A2420] transition flex items-center justify-center ${
+              className={`bg-[#2C3930] text-white px-2 py-1 md:px-3 md:py-2 text-xs md:text-sm rounded-lg hover:bg-[#1A2420] transition flex items-center justify-center ${
                 jadwal.length === 0 ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
