@@ -412,7 +412,7 @@ const SettingsPage = () => {
                         name="language"
                         value={systemSettings.language}
                         onChange={handleSystemChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                       >
                         <option value="id">Bahasa Indonesia</option>
                         <option value="en">English</option>
@@ -430,7 +430,7 @@ const SettingsPage = () => {
                         name="theme"
                         value={systemSettings.theme}
                         onChange={handleSystemChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                       >
                         <option value="light">Terang</option>
                         <option value="dark">Gelap</option>
@@ -452,7 +452,7 @@ const SettingsPage = () => {
                         onChange={handleSystemChange}
                         min="5"
                         max="120"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                       />
                     </div>
                     <div>
@@ -467,7 +467,7 @@ const SettingsPage = () => {
                         name="dataBackup"
                         value={systemSettings.dataBackup}
                         onChange={handleSystemChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                       >
                         <option value="daily">Harian</option>
                         <option value="weekly">Mingguan</option>
@@ -546,7 +546,7 @@ const SettingsPage = () => {
                           name="sessionTimeout"
                           value={securitySettings.sessionTimeout}
                           onChange={handleSecurityChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                         >
                           <option value="15">15 menit</option>
                           <option value="30">30 menit</option>
@@ -566,7 +566,7 @@ const SettingsPage = () => {
                           name="passwordExpiry"
                           value={securitySettings.passwordExpiry}
                           onChange={handleSecurityChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D]"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#4F959D] focus:border-[#4F959D] text-gray-600"
                         >
                           <option value="30">30 hari</option>
                           <option value="60">60 hari</option>
