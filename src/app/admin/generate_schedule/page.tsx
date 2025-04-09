@@ -159,7 +159,7 @@ const GenerateJadwal = () => {
             <button
               onClick={generateSchedule}
               disabled={isGenerating}
-              className={`bg-[#4F959D] text-white px-2 py-1 text-xs rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center ${
+              className={`bg-[#4F959D] text-white px-2 py-1 text-xs md:text-base rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center ${
                 isGenerating ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
