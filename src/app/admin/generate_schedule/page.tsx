@@ -181,7 +181,7 @@ const GenerateJadwal = () => {
 
       {/* Filter and Search Section */}
       {jadwal.length > 0 && (
-        <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md mb-2 sm:mb-3">
+        <div className="bg-white p-2 md:p-3 lg:p-4 rounded-lg shadow-md mb-2 sm:mb-3">
           <div className="flex flex-col gap-2 items-start">
             <div className="relative w-full">
               <input
