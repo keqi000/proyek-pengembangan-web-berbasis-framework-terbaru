@@ -17,7 +17,7 @@ type JadwalItem = {
   id: number;
   namaDosen: string;
   mataKuliah: string;
-  semester: string; // Added semester property
+  semester: string;
   ruangan: string;
   waktu: string;
   hari: string;
@@ -72,7 +72,7 @@ const GenerateJadwal = () => {
           id: id++,
           namaDosen: randomDosen.nama,
           mataKuliah: mataKuliah.nama,
-          semester: mataKuliah.semester || "-", // Include semester from mata kuliah
+          semester: mataKuliah.semester || "-",
           ruangan: randomRoom.nama,
           waktu: randomTimeSlot,
           hari: randomDay,
@@ -104,7 +104,7 @@ const GenerateJadwal = () => {
       "Semester",
       "Dosen",
       "Ruangan",
-    ]; // Added Semester to headers
+    ];
     const csvContent = [
       headers.join(","),
       ...jadwal.map((item, index) =>
@@ -143,37 +143,37 @@ const GenerateJadwal = () => {
   });
 
   return (
-    <div className="p-2 sm:p-4 bg-[#F2F2F2] min-h-screen">
+    <div className="w-full max-w-full p-1 sm:p-2 md:p-4 bg-[#F2F2F2] min-h-screen">
       {/* Header Section */}
-      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-4 sm:mb-6">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-4 md:mb-0 text-center md:text-left">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#2C3930]">
+      <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md mb-2 sm:mb-3">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
+          <div className="text-center sm:text-left">
+            <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#2C3930]">
               Generate <span className="text-[#4F959D]">Jadwal</span>
             </h1>
-            <p className="text-gray-600 mt-1 text-sm sm:text-base">
+            <p className="text-gray-600 mt-0.5 text-xs sm:text-sm">
               Buat jadwal perkuliahan secara otomatis
             </p>
           </div>
-          <div className="flex flex-wrap gap-2 sm:gap-3 justify-center w-full md:w-auto">
+          <div className="flex flex-wrap gap-2 justify-center w-full sm:w-auto">
             <button
               onClick={generateSchedule}
               disabled={isGenerating}
-              className={`bg-[#4F959D] text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-[#3C7A85] transition flex items-center text-sm sm:text-base ${
+              className={`bg-[#4F959D] text-white px-2 py-1 text-xs rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center ${
                 isGenerating ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
-              <FaRandom className="mr-1 sm:mr-2" />
-              {isGenerating ? "Generating..." : "Generate Jadwal"}
+              <FaRandom className="mr-1" />
+              {isGenerating ? "Generating..." : "Generate"}
             </button>
             <button
               onClick={exportToCSV}
               disabled={jadwal.length === 0}
-              className={`bg-[#2C3930] text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-[#1A2420] transition flex items-center text-sm sm:text-base ${
+              className={`bg-[#2C3930] text-white px-2 py-1 text-xs rounded-lg hover:bg-[#1A2420] transition flex items-center justify-center ${
                 jadwal.length === 0 ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
-              <FaFileExport className="mr-1 sm:mr-2" /> Export CSV
+              <FaFileExport className="mr-1" /> Export
             </button>
           </div>
         </div>
@@ -181,24 +181,24 @@ const GenerateJadwal = () => {
 
       {/* Filter and Search Section */}
       {jadwal.length > 0 && (
-        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-4 sm:mb-6">
-          <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
-            <div className="relative w-full sm:w-auto">
+        <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md mb-2 sm:mb-3">
+          <div className="flex flex-col gap-2 items-start">
+            <div className="relative w-full">
               <input
                 type="text"
                 placeholder="Cari jadwal..."
-                className="pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 border rounded-lg focus:outline-none ring-1 ring-gray-500 focus:ring-1 focus:ring-[#4F959D] text-gray-600 w-full sm:w-64 text-sm"
+                className="pl-7 pr-2 py-1 text-xs border rounded-lg focus:outline-none ring-1 ring-gray-500 focus:ring-1 focus:ring-[#4F959D] text-gray-600 w-full"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <FaSearch className="absolute left-2 sm:left-3 top-2.5 sm:top-3 text-gray-400 text-sm" />
+              <FaSearch className="absolute left-2 top-1.5 text-gray-400 text-xs" />
             </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <FaFilter className="text-[#4F959D] text-sm" />
-              <span className="text-gray-700 text-sm">Filter:</span>
+            <div className="flex items-center gap-1 w-full">
+              <FaFilter className="text-[#4F959D] text-xs" />
+              <span className="text-gray-700 text-xs">Filter:</span>
               <select
-                className="border rounded-lg px-2 sm:px-3 py-2 focus:outline-none ring-1 ring-gray-500 focus:ring-1 focus:ring-[#4F959D] text-gray-600 text-sm w-full sm:w-auto"
+                className="border rounded-lg px-1 py-1 text-xs focus:outline-none ring-1 ring-gray-500 focus:ring-1 focus:ring-[#4F959D] text-gray-600 w-full"
                 value={filterDay || ""}
                 onChange={(e) => setFilterDay(e.target.value || null)}
               >
@@ -215,121 +215,104 @@ const GenerateJadwal = () => {
       )}
 
       {/* Jadwal Table */}
-      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
-        <h2 className="text-[#4F959D] text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center">
-          <FaCalendarAlt className="mr-2" /> Hasil Jadwal
+      <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md">
+        <h2 className="text-[#4F959D] text-sm sm:text-base font-semibold mb-2 flex items-center">
+          <FaCalendarAlt className="mr-1.5" /> Hasil Jadwal
         </h2>
 
         {isGenerating ? (
-          <div className="flex flex-col items-center justify-center py-8 sm:py-12">
-            <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-t-2 border-b-2 border-[#4F959D] mb-3 sm:mb-4"></div>
-            <p className="text-gray-600 text-sm sm:text-base">
-              Sedang membuat jadwal...
-            </p>
+          <div className="flex flex-col items-center justify-center py-4 sm:py-6">
+            <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-t-2 border-b-2 border-[#4F959D] mb-2"></div>
+            <p className="text-gray-600 text-xs">Sedang membuat jadwal...</p>
           </div>
         ) : (
           <>
-            <div className="overflow-x-auto -mx-4 sm:mx-0">
-              <div className="inline-block min-w-full align-middle">
-                <table className="min-w-full border-collapse text-xs sm:text-sm md:text-base">
+            {filteredJadwal.length > 0 ? (
+              <div className="w-full">
+                <table className="w-full border-collapse text-[8px] xs:text-[9px] sm:text-xs">
                   <thead>
                     <tr className="bg-[#F5F5F5]">
-                      <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8 sm:w-12">
+                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-4 sm:w-6">
                         No
                       </th>
-                      <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-16 sm:w-24">
+                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8 sm:w-12">
                         Hari
                       </th>
-                      <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                        Waktu
+                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                        Jam
                       </th>
-                      <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                        Mata Kuliah
+                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                        MK
                       </th>
-                      <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                        Semester
+                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                        Sem
                       </th>
-                      <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
                         Dosen
                       </th>
-                      <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                        Ruangan
+                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                        Ruang
                       </th>
-                      <th className="px-2 sm:px-4 py-2 sm:py-3 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-10 sm:w-16">
+                      <th className="p-1 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-5 sm:w-8">
                         Aksi
                       </th>
                     </tr>
                   </thead>
                   <tbody className="text-gray-700">
-                    {filteredJadwal.length > 0 ? (
-                      filteredJadwal.map((item, index) => (
-                        <tr
-                          key={item.id}
-                          className="hover:bg-gray-50 border-b border-gray-200 transition-colors"
-                        >
-                          <td className="px-2 sm:px-4 py-2 sm:py-3">
-                            {index + 1}
-                          </td>
-                          <td className="px-2 sm:px-4 py-2 sm:py-3 font-medium">
-                            {item.hari}
-                          </td>
-                          <td className="px-2 sm:px-4 py-2 sm:py-3">
-                            {item.waktu}
-                          </td>
-                          <td className="px-2 sm:px-4 py-2 sm:py-3">
-                            {item.mataKuliah}
-                          </td>
-                          <td className="px-2 sm:px-4 py-2 sm:py-3">
-                            {item.semester ? `Semester ${item.semester}` : "-"}
-                          </td>
-                          <td className="px-2 sm:px-4 py-2 sm:py-3">
-                            {item.namaDosen}
-                          </td>
-                          <td className="px-2 sm:px-4 py-2 sm:py-3">
-                            {item.ruangan}
-                          </td>
-                          <td className="px-2 sm:px-4 py-2 sm:py-3">
-                            <div className="flex justify-center">
-                              <button
-                                className="text-red-600 hover:text-red-800 transition-colors"
-                                onClick={() => deleteJadwal(item.id)}
-                                title="Hapus"
-                              >
-                                <FaTrash size={14} />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan={8} // Updated from 7 to 8 to account for the new semester column
-                          className="px-4 sm:px-6 py-6 sm:py-8 text-center text-gray-500 bg-gray-50 text-xs sm:text-sm"
-                        >
-                          {jadwal.length > 0
-                            ? "Tidak ada hasil yang sesuai dengan filter"
-                            : "Belum ada jadwal dibuat. Klik tombol 'Generate Jadwal' untuk membuat jadwal baru."}
+                    {filteredJadwal.map((item, index) => (
+                      <tr
+                        key={item.id}
+                        className="hover:bg-gray-50 border-b border-gray-200 transition-colors"
+                      >
+                        <td className="p-1">{index + 1}</td>
+                        <td className="p-1 font-medium">{item.hari}</td>
+                        <td className="p-1">
+                          {item.waktu.replace(" - ", "-")}
+                        </td>
+                        <td className="p-1 truncate max-w-[40px] xs:max-w-[60px] sm:max-w-[100px]">
+                          {item.mataKuliah}
+                        </td>
+                        <td className="p-1">{item.semester}</td>
+                        <td className="p-1 truncate max-w-[40px] xs:max-w-[60px] sm:max-w-[100px]">
+                          {item.namaDosen}
+                        </td>
+                        <td className="p-1">{item.ruangan}</td>
+                        <td className="p-1">
+                          <div className="flex justify-center">
+                            <button
+                              className="text-red-600 hover:text-red-800 transition-colors"
+                              onClick={() => deleteJadwal(item.id)}
+                              title="Hapus"
+                            >
+                              <FaTrash size={10} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
-                    )}
+                    ))}
                   </tbody>
                 </table>
               </div>
-            </div>
+            ) : (
+              <div className="p-3 text-center text-gray-500 bg-gray-50 text-xs rounded-lg">
+                {jadwal.length > 0
+                  ? "Tidak ada hasil yang sesuai dengan filter"
+                  : "Belum ada jadwal dibuat. Klik tombol 'Generate' untuk membuat jadwal baru."}
+              </div>
+            )}
 
             {/* Table Footer with Stats */}
             {jadwal.length > 0 && (
-              <div className="mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+              <div className="mt-2 text-xs text-gray-600 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
                 <div>
                   Total:{" "}
                   <span className="font-medium">{filteredJadwal.length}</span>{" "}
                   dari <span className="font-medium">{jadwal.length}</span>{" "}
                   jadwal
                 </div>
-                <div className="flex gap-1 sm:gap-2 flex-wrap">
+                <div className="flex gap-1 flex-wrap">
                   {filterDay && (
-                    <span className="bg-[#E5F2F3] text-[#4F959D] px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                    <span className="bg-[#E5F2F3] text-[#4F959D] px-2 py-0.5 rounded-full text-xs font-medium flex items-center">
                       Hari: {filterDay}
                       <button
                         className="ml-1 text-[#4F959D] hover:text-[#3C7A85]"
@@ -340,10 +323,10 @@ const GenerateJadwal = () => {
                     </span>
                   )}
                   {searchTerm && (
-                    <span className="bg-[#E5F2F3] text-[#4F959D] px-2 py-1 rounded-full text-xs font-medium flex items-center">
-                      Pencarian: &quot;
-                      {searchTerm.length > 10
-                        ? searchTerm.substring(0, 10) + "..."
+                    <span className="bg-[#E5F2F3] text-[#4F959D] px-2 py-0.5 rounded-full text-xs font-medium flex items-center">
+                      Cari: &quot;
+                      {searchTerm.length > 8
+                        ? searchTerm.substring(0, 8) + "..."
                         : searchTerm}
                       &quot;
                       <button
@@ -362,53 +345,53 @@ const GenerateJadwal = () => {
       </div>
 
       {/* Info Cards - Made more responsive */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mt-4 sm:mt-6">
-        <div className="bg-white p-3 sm:p-5 rounded-lg shadow-md">
-          <h3 className="text-[#4F959D] text-sm sm:text-base font-semibold mb-2 flex items-center">
-            <FaCalendarAlt className="mr-2" /> Statistik Jadwal
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mt-2 sm:mt-3">
+        <div className="bg-white p-2 sm:p-3 rounded-lg shadow-md">
+          <h3 className="text-[#4F959D] text-xs sm:text-sm font-semibold mb-1 flex items-center">
+            <FaCalendarAlt className="mr-1" /> Statistik Jadwal
           </h3>
-          <div className="text-gray-700 text-xs sm:text-sm">
-            <p className="flex justify-between py-1 border-b">
+          <div className="text-gray-700 text-xs">
+            <p className="flex justify-between py-0.5 border-b">
               <span>Total Jadwal:</span>
               <span className="font-medium">{jadwal.length}</span>
             </p>
-            <p className="flex justify-between py-1 border-b">
+            <p className="flex justify-between py-0.5 border-b">
               <span>Total Dosen:</span>
               <span className="font-medium">{dosenList.length}</span>
             </p>
-            <p className="flex justify-between py-1 border-b">
+            <p className="flex justify-between py-0.5 border-b">
               <span>Total Ruangan:</span>
               <span className="font-medium">{ruanganList.length}</span>
             </p>
-            <p className="flex justify-between py-1">
+            <p className="flex justify-between py-0.5">
               <span>Mata Kuliah:</span>
               <span className="font-medium">{mataKuliahList.length}</span>
             </p>
           </div>
         </div>
 
-        <div className="bg-white p-3 sm:p-5 rounded-lg shadow-md">
-          <h3 className="text-[#4F959D] text-sm sm:text-base font-semibold mb-2 flex items-center">
-            <FaCalendarAlt className="mr-2" /> Distribusi Hari
+        <div className="bg-white p-2 sm:p-3 rounded-lg shadow-md">
+          <h3 className="text-[#4F959D] text-xs sm:text-sm font-semibold mb-1 flex items-center">
+            <FaCalendarAlt className="mr-1" /> Distribusi Hari
           </h3>
           {jadwal.length > 0 ? (
-            <div className="text-gray-700 text-xs sm:text-sm">
+            <div className="text-gray-700 text-xs">
               {days.map((day) => {
                 const count = jadwal.filter((item) => item.hari === day).length;
                 const percentage =
                   Math.round((count / jadwal.length) * 100) || 0;
 
                 return (
-                  <div key={day} className="mb-1.5 sm:mb-2">
-                    <div className="flex justify-between text-xs sm:text-sm mb-0.5 sm:mb-1">
+                  <div key={day} className="mb-1">
+                    <div className="flex justify-between text-xs mb-0.5">
                       <span>{day}</span>
                       <span>
-                        {count} jadwal ({percentage}%)
+                        {count} ({percentage}%)
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-1.5 sm:h-2">
+                    <div className="w-full bg-gray-200 rounded-full h-1">
                       <div
-                        className="bg-[#4F959D] h-1.5 sm:h-2 rounded-full"
+                        className="bg-[#4F959D] h-1 rounded-full"
                         style={{ width: `${percentage}%` }}
                       ></div>
                     </div>
@@ -417,41 +400,41 @@ const GenerateJadwal = () => {
               })}
             </div>
           ) : (
-            <p className="text-gray-500 text-xs sm:text-sm italic">
+            <p className="text-gray-500 text-xs italic">
               Belum ada data jadwal
             </p>
           )}
         </div>
 
-        <div className="bg-white p-3 sm:p-5 rounded-lg shadow-md sm:col-span-2 lg:col-span-1">
-          <h3 className="text-[#4F959D] text-sm sm:text-base font-semibold mb-2 flex items-center">
-            <FaCalendarAlt className="mr-2" /> Panduan Penggunaan
+        <div className="bg-white p-2 sm:p-3 rounded-lg shadow-md sm:col-span-2 lg:col-span-1">
+          <h3 className="text-[#4F959D] text-xs sm:text-sm font-semibold mb-1 flex items-center">
+            <FaCalendarAlt className="mr-1" /> Panduan Penggunaan
           </h3>
-          <ul className="text-gray-700 text-xs sm:text-sm space-y-1 sm:space-y-2">
+          <ul className="text-gray-700 text-xs space-y-0.5">
             <li className="flex items-start">
-              <span className="text-[#4F959D] mr-1 sm:mr-2">1.</span>
+              <span className="text-[#4F959D] mr-1">1.</span>
               <span>
                 Pastikan data dosen, ruangan, dan mata kuliah sudah tersedia
               </span>
             </li>
             <li className="flex items-start">
-              <span className="text-[#4F959D] mr-1 sm:mr-2">2.</span>
+              <span className="text-[#4F959D] mr-1">2.</span>
               <span>
-                Klik tombol &quot;Generate Jadwal&quot; untuk membuat jadwal otomatis
+                Klik tombol &quot;Generate&quot; untuk membuat jadwal otomatis
               </span>
             </li>
             <li className="flex items-start">
-              <span className="text-[#4F959D] mr-1 sm:mr-2">3.</span>
+              <span className="text-[#4F959D] mr-1">3.</span>
               <span>Gunakan filter untuk melihat jadwal berdasarkan hari</span>
             </li>
             <li className="flex items-start">
-              <span className="text-[#4F959D] mr-1 sm:mr-2">4.</span>
+              <span className="text-[#4F959D] mr-1">4.</span>
               <span>Gunakan pencarian untuk menemukan jadwal spesifik</span>
             </li>
             <li className="flex items-start">
-              <span className="text-[#4F959D] mr-1 sm:mr-2">5.</span>
+              <span className="text-[#4F959D] mr-1">5.</span>
               <span>
-                Klik &quot;Export CSV&quot; untuk mengunduh jadwal dalam format CSV
+                Klik &quot;Export&quot; untuk mengunduh jadwal dalam format CSV
               </span>
             </li>
           </ul>
