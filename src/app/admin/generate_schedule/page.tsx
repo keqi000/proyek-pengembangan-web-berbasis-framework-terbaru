@@ -336,7 +336,7 @@ const GenerateJadwal = () => {
                 </table>
               </div>
             ) : (
-              <div className="p-3 text-center text-gray-500 bg-gray-50 text-xs rounded-lg">
+              <div className="p-3 md:px-4 md:py-6 text-center text-gray-500 bg-gray-50 text-xs md:text-sm rounded-lg">
                 {jadwal.length > 0
                   ? "Tidak ada hasil yang sesuai dengan filter"
                   : "Belum ada jadwal dibuat. Klik tombol 'Generate' untuk membuat jadwal baru."}
@@ -392,7 +392,7 @@ const GenerateJadwal = () => {
           <h3 className="text-[#4F959D] text-xs md:text-base font-semibold mb-1 md:mb-2 flex items-center">
             <FaCalendarAlt className="mr-1" /> Statistik Jadwal
           </h3>
-          <div className="text-gray-700 text-xs md:text-sm">
+          <div className="flex flex-col text-gray-700 text-xs md:text-sm md:gap-y-1">
             <p className="flex justify-between py-0.5 border-b">
               <span>Total Jadwal:</span>
               <span className="font-medium">{jadwal.length}</span>
@@ -417,7 +417,7 @@ const GenerateJadwal = () => {
             <FaCalendarAlt className="mr-1" /> Distribusi Hari
           </h3>
           {jadwal.length > 0 ? (
-            <div className="text-gray-700 text-xs md:text-sm">
+            <div className="flex flex-col text-gray-700 text-xs md:text-sm md:gap-y-2">
               {days.map((day) => {
                 const count = jadwal.filter((item) => item.hari === day).length;
                 const percentage =
@@ -425,7 +425,7 @@ const GenerateJadwal = () => {
 
                 return (
                   <div key={day} className="mb-1">
-                    <div className="flex justify-between text-xs mb-0.5">
+                    <div className="flex justify-between text-xs md:text-sm mb-0.5">
                       <span>{day}</span>
                       <span>
                         {count} ({percentage}%)
@@ -452,7 +452,7 @@ const GenerateJadwal = () => {
           <h3 className="text-[#4F959D] text-xs md:text-base font-semibold mb-1 flex items-center">
             <FaCalendarAlt className="mr-1" /> Panduan Penggunaan
           </h3>
-          <ul className="text-gray-700 text-xs md:text-sm space-y-0.5 text-justify px-2 md:py-2">
+          <ul className="flex flex-col text-gray-700 text-xs md:text-sm space-y-0.5 text-justify px-2 md:py-2 md:gap-y-2">
             <li className="flex items-start">
               <span className="text-[#4F959D] mr-1">1.</span>
               <span>
