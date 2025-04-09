@@ -110,7 +110,7 @@ const KelolaMataKuliah = () => {
               <input
                 type="text"
                 placeholder="Cari..."
-                className="pl-8 pr-2 py-1.5 text-xs sm:text-sm border rounded-lg focus:outline-none ring-1 ring-gray-400 focus:ring-1 focus:ring-[#4F959D] w-full"
+                className="pl-8 pr-2 py-1.5 text-xs sm:text-sm border rounded-lg focus:outline-none ring-1 ring-gray-400 focus:ring-1 focus:ring-[#4F959D] w-full text-gray-600"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
