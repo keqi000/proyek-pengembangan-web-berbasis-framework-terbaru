@@ -32,8 +32,18 @@ const notificationTypes = {
   info: { icon: Info, color: "text-green-500", bgColor: "bg-green-100" },
 };
 
+type NotificationItem = {
+  id: number;
+  type: "jadwal" | "sistem" | "info" | "peringatan";
+  title: string;
+  message: string;
+  time: string;
+  date: string;
+  read: boolean;
+}
+
 // Mock notifications data
-const initialNotifications = [
+const initialNotifications: NotificationItem[] = [
   {
     id: 1,
     type: "jadwal",
