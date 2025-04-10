@@ -291,7 +291,7 @@ const GenerateJadwal = () => {
           <>
             {filteredJadwal.length > 0 ? (
               <div className="w-full">
-                <table className="w-full border-collapse text-xs md:text-sm">
+                <table className="w-full border-collapse text-[8px] md:text-sm">
                   <thead>
                     <tr className="bg-[#F5F5F5]">
                       <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-4 md:w-6">
@@ -320,7 +320,7 @@ const GenerateJadwal = () => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="text-gray-700 md:text-sm">
+                  <tbody className="text-gray-700 text-[8px] md:text-sm">
                     {filteredJadwal.map((item, index) => (
                       <tr
                         key={item.id}
@@ -346,7 +346,7 @@ const GenerateJadwal = () => {
                               onClick={() => deleteJadwal(item.id)}
                               title="Hapus"
                             >
-                              <FaTrash className="w-3 h-3 md:w-4 md:h-4" />
+                              <FaTrash className="w-3 h-2 md:w-4 md:h-4" />
                             </button>
                           </div>
                         </td>
