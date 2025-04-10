@@ -203,7 +203,7 @@ const KelolaMataKuliah = () => {
   };
 
   return (
-    <div className="w-full max-w-full overflow-hidden p-2 sm:p-4 bg-[#F2F2F2] min-h-screen">
+    <div className="w-full max-w-full overflow-hidden p-2 sm:p-4 bg-[#F2F2F2]">
       {/* Header Section */}
       <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md mb-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">

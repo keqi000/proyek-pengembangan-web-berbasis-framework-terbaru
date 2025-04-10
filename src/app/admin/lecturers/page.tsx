@@ -96,7 +96,7 @@ const KelolaDosen = () => {
   );
 
   return (
-    <div className="container mx-auto p-4 bg-[#F2F2F2] min-h-screen">
+    <div className="container mx-auto p-4 bg-[#F2F2F2] ">
       {/* Header Section */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-6">
         <div className="flex flex-col md:flex-row justify-between items-center">
