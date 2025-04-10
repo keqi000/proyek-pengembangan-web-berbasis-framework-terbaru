@@ -1,8 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMataKuliahStore } from "../_store/matakuliah";
-import { FaEdit, FaTrash, FaPlus, FaSearch, FaBook } from "react-icons/fa";
+import { useDosenStore } from "../_store/dosen";
+import { useDosenMatakuliahStore } from "../_store/dosenMatakuliah";
+import {
+  FaEdit,
+  FaTrash,
+  FaPlus,
+  FaSearch,
+  FaBook,
+  FaUserTie,
+  FaCheck,
+} from "react-icons/fa";
 import { CourseTempInputData } from "../_scheme/course";
 
 const KelolaMataKuliah = () => {
@@ -10,6 +20,13 @@ const KelolaMataKuliah = () => {
   const addMataKuliah = useMataKuliahStore((state) => state.addData);
   const updateMataKuliah = useMataKuliahStore((state) => state.updateData);
   const deleteMataKuliah = useMataKuliahStore((state) => state.deleteData);
+
+  const dosenList = useDosenStore((state) => state.data);
+
+  // Dosen-Matakuliah assignment store
+  const dosenMatakuliahStore = useDosenMatakuliahStore();
+  const { addAssignment, removeAssignment, getDosenByMataKuliah } =
+    dosenMatakuliahStore;
 
   const [tempInput, setTempInput] = useState<CourseTempInputData>({
     kode: "",
@@ -23,6 +40,22 @@ const KelolaMataKuliah = () => {
     useState<CourseTempInputData | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
+  // New state for lecturer assignment popup
+  const [showDosenAssignmentPopup, setShowDosenAssignmentPopup] =
+    useState(false);
+  const [currentMataKuliahId, setCurrentMataKuliahId] = useState<string | null>(
+    null
+  );
+  const [selectedDosens, setSelectedDosens] = useState<string[]>([]);
+
+  // Load selected dosens when opening the assignment popup
+  useEffect(() => {
+    if (currentMataKuliahId) {
+      const assignedDosens = getDosenByMataKuliah(currentMataKuliahId);
+      setSelectedDosens(assignedDosens);
+    }
+  }, [currentMataKuliahId, getDosenByMataKuliah]);
 
   const handleSubmit = () => {
     if (
@@ -86,11 +119,64 @@ const KelolaMataKuliah = () => {
     setEditPopup(false);
   };
 
+  // New function to open dosen assignment popup
+  const handleAssignDosen = (mataKuliahId: string) => {
+    setCurrentMataKuliahId(mataKuliahId);
+    setShowDosenAssignmentPopup(true);
+  };
+
+  // Toggle dosen selection
+  const toggleDosenSelection = (dosenId: string) => {
+    setSelectedDosens((prev) => {
+      if (prev.includes(dosenId)) {
+        return prev.filter((id) => id !== dosenId);
+      } else {
+        return [...prev, dosenId];
+      }
+    });
+  };
+
+  // Save dosen assignments
+  const saveDosenAssignments = () => {
+    if (!currentMataKuliahId) return;
+
+    // Get current assignments for this mata kuliah
+    const currentAssignments = getDosenByMataKuliah(currentMataKuliahId);
+
+    // Remove assignments that are no longer selected
+    currentAssignments.forEach((dosenId) => {
+      if (!selectedDosens.includes(dosenId)) {
+        removeAssignment(dosenId, currentMataKuliahId);
+      }
+    });
+
+    // Add new assignments
+    selectedDosens.forEach((dosenId) => {
+      if (!currentAssignments.includes(dosenId)) {
+        addAssignment(dosenId, currentMataKuliahId);
+      }
+    });
+
+    setShowDosenAssignmentPopup(false);
+  };
+
   const filteredMataKuliah = mataKuliahList.filter(
     (mataKuliah) =>
       mataKuliah.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
       mataKuliah.kode.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Get dosen names for a mata kuliah
+  const getDosenNamesForMataKuliah = (mataKuliahId: string) => {
+    const dosenIds = getDosenByMataKuliah(mataKuliahId);
+    return dosenIds
+      .map((id) => {
+        const dosen = dosenList.find((d) => d.id === id);
+        return dosen ? dosen.nama : "";
+      })
+      .filter((name) => name !== "")
+      .join(", ");
+  };
 
   return (
     <div className="w-full max-w-full overflow-hidden p-2 sm:p-4 bg-[#F2F2F2] min-h-screen">
@@ -243,7 +329,10 @@ const KelolaMataKuliah = () => {
                 <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
                   SKS
                 </th>
-                <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-16">
+                <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                  Dosen Pengampu
+                </th>
+                <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-24">
                   Aksi
                 </th>
               </tr>
@@ -262,6 +351,13 @@ const KelolaMataKuliah = () => {
                       {mataKuliah.semester}
                     </td>
                     <td className="px-2 py-2 text-center">{mataKuliah.sks}</td>
+                    <td className="px-2 py-2 text-sm">
+                      {getDosenNamesForMataKuliah(mataKuliah.id || "") || (
+                        <span className="text-gray-400 italic">
+                          Belum ada dosen
+                        </span>
+                      )}
+                    </td>
                     <td className="px-2 py-2">
                       <div className="flex justify-center gap-2">
                         <button
@@ -270,6 +366,14 @@ const KelolaMataKuliah = () => {
                           title="Edit"
                         >
                           <FaEdit size={14} />
+                        </button>
+                        <button
+                          className="text-green-600 hover:text-green-800 transition-colors p-1"
+                          onClick={() => handleAssignDosen(mataKuliah.id || "")}
+                          title="Pilih Dosen"
+                          disabled={!mataKuliah.id}
+                        >
+                          <FaUserTie size={14} />
                         </button>
                         <button
                           className="text-red-600 hover:text-red-800 transition-colors p-1"
@@ -293,7 +397,7 @@ const KelolaMataKuliah = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={7}
                     className="px-2 py-4 text-center text-gray-500 bg-gray-50 text-xs sm:text-sm"
                   >
                     {searchTerm
@@ -421,6 +525,83 @@ const KelolaMataKuliah = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Popup Assign Dosen */}
+      {showDosenAssignmentPopup && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-2 z-50">
+          <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-lg w-full max-w-md animate-fadeIn">
+            <h2 className="text-[#4F959D] text-base sm:text-lg font-semibold mb-3 flex items-center">
+              <FaUserTie className="mr-2" /> Pilih Dosen Pengampu
+            </h2>
+
+            <div className="mb-4">
+              <p className="text-sm text-gray-600 mb-2">
+                Mata Kuliah:{" "}
+                <span className="font-medium">
+                  {mataKuliahList.find((mk) => mk.id === currentMataKuliahId)
+                    ?.nama || ""}
+                </span>
+              </p>
+              <p className="text-xs text-gray-500">
+                Pilih dosen yang akan mengajar mata kuliah ini
+              </p>
+            </div>
+
+            <div className="max-h-60 overflow-y-auto border rounded-lg divide-y">
+              {dosenList.length > 0 ? (
+                dosenList.map((dosen) => (
+                  <div
+                    key={dosen.id}
+                    className={`p-3 flex items-center hover:bg-gray-50 cursor-pointer ${
+                      selectedDosens.includes(dosen.id || "")
+                        ? "bg-blue-50"
+                        : ""
+                    }`}
+                    onClick={() => toggleDosenSelection(dosen.id || "")}
+                  >
+                    <div
+                      className={`w-5 h-5 rounded border flex items-center justify-center mr-3 ${
+                        selectedDosens.includes(dosen.id || "")
+                          ? "bg-[#4F959D] border-[#4F959D]"
+                          : "border-gray-300"
+                      }`}
+                    >
+                      {selectedDosens.includes(dosen.id || "") && (
+                        <FaCheck className="text-white text-xs" />
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-800">{dosen.nama}</p>
+                      <p className="text-xs text-gray-500">NIP: {dosen.nip}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="p-4 text-center text-gray-500">
+                  Belum ada data dosen. Silakan tambahkan dosen terlebih dahulu.
+                </div>
+              )}
+            </div>
+
+            <div className="flex space-x-2 mt-4">
+              <button
+                type="button"
+                className="bg-gray-300 text-gray-800 px-3 py-2 text-sm w-1/2 rounded-lg hover:bg-gray-400 transition"
+                onClick={() => setShowDosenAssignmentPopup(false)}
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                className="bg-[#4F959D] text-white px-3 py-2 text-sm w-1/2 rounded-lg hover:bg-[#3C7A85] transition"
+                onClick={saveDosenAssignments}
+              >
+                Simpan
+              </button>
+            </div>
           </div>
         </div>
       )}
