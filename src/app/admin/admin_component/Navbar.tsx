@@ -8,10 +8,8 @@ import {
   Building,
   Calendar,
   LogOut,
-  Menu,
   X,
   Settings,
-  Bell,
   HelpCircle,
   BookOpen,
 } from "lucide-react";
@@ -76,8 +74,6 @@ export default function NavigationBar({
   isSidebarOpen,
   setSidebarOpen,
   userName = "Yonatan Sihotang",
-  toggleNotifications,
-  unreadCount = 0,
 }: NavbarProps) {
   const currentPath = usePathname();
   const [isMobile, setIsMobile] = useState(false);
