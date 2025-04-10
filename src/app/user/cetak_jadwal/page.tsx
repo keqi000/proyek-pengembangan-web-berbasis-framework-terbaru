@@ -19,8 +19,6 @@ import {
   FileText,
   Info,
 } from "lucide-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 
 type JadwalItem = {
   id: string;
@@ -304,7 +302,7 @@ const CetakJadwalPage: FC = () => {
               </button>
 
               <button
-                onClick={(e) => handlePrint()}
+                onClick={() => handlePrint()}
                 className="w-full py-2.5 px-4 bg-[#2C3930] text-white rounded-md flex items-center justify-center hover:bg-[#3F4F44] transition"
                 disabled={selectedJadwal.length === 0}
               >
