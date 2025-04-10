@@ -166,9 +166,9 @@ const GenerateJadwal = () => {
     <div className="w-full max-w-full p-1 sm:p-2 md:p-4 bg-[#F2F2F2] min-h-screen">
       {/* Header Section */}
       <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md mb-2 sm:mb-3">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
-          <div className="text-center sm:text-left">
-            <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#2C3930]">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-2">
+          <div className="text-center md:text-left">
+            <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-[#2C3930]">
               Generate <span className="text-[#4F959D]">Jadwal</span>
             </h1>
             <p className="text-gray-600 mt-0.5 text-xs sm:text-sm">
@@ -179,7 +179,7 @@ const GenerateJadwal = () => {
             <button
               onClick={generateSchedule}
               disabled={isGenerating}
-              className={`bg-[#4F959D] text-white px-2 py-1 text-xs rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center ${
+              className={`bg-[#4F959D] text-white px-2 py-1 md:px-3 md:py-2 text-xs md:text-base rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center ${
                 isGenerating ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
@@ -189,7 +189,7 @@ const GenerateJadwal = () => {
             <button
               onClick={exportToCSV}
               disabled={jadwal.length === 0}
-              className={`bg-[#2C3930] text-white px-2 py-1 text-xs rounded-lg hover:bg-[#1A2420] transition flex items-center justify-center ${
+              className={`bg-[#2C3930] text-white px-2 py-1 md:px-3 md:py-2 text-xs md:text-sm rounded-lg hover:bg-[#1A2420] transition flex items-center justify-center ${
                 jadwal.length === 0 ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
@@ -201,7 +201,7 @@ const GenerateJadwal = () => {
 
       {/* Filter and Search Section */}
       {jadwal.length > 0 && (
-        <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md mb-2 sm:mb-3">
+        <div className="md:hidden bg-white p-2 md:p-3 lg:p-4 rounded-lg shadow-md mb-2 sm:mb-3">
           <div className="flex flex-col gap-2 items-start">
             <div className="relative w-full">
               <input
@@ -214,7 +214,7 @@ const GenerateJadwal = () => {
               <FaSearch className="absolute left-2 top-1.5 text-gray-400 text-xs" />
             </div>
 
-            <div className="flex items-center gap-1 w-full">
+            <div className="flex items-center gap-1 w-full md:hidden">
               <FaFilter className="text-[#4F959D] text-xs" />
               <span className="text-gray-700 text-xs">Filter:</span>
               <select
@@ -236,26 +236,68 @@ const GenerateJadwal = () => {
 
       {/* Jadwal Table */}
       <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md">
-        <h2 className="text-[#4F959D] text-sm sm:text-base font-semibold mb-2 flex items-center">
-          <FaCalendarAlt className="mr-1.5" /> Hasil Jadwal
-        </h2>
+        <div className="flex flex-row justify-between">
+          <h2 className="text-[#4F959D] text-sm md:text-base font-semibold mb-2 flex items-center">
+            <FaCalendarAlt className="mr-1.5" /> Hasil Jadwal
+          </h2>
+
+          <div className="hidden md:flex flex-row items-center gap-x-3">
+            {/* Search bar - md*/}
+            <div className="flex flex-col md:flex-row w-full md:w-auto md:space-x-3 gap-y-2 items-start py-2">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Cari jadwal..."
+                  className="pl-8 pr-2 py-1.5 md:pl-10 md:pr-4 md:py-1 border border-white rounded-lg focus:outline-none ring-1 ring-gray-400 focus:ring-1 focus:ring-[#4F959D] w-full md:w-64 text-gray-600 text-xs md:text-sm"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <FaSearch className="absolute left-2.5 top-2.5 md:left-3 md:top-2 text-gray-400 text-xs md:text-sm" />
+              </div>
+            </div>
+
+            {/* Filter - md */}
+            <div className="hidden md:flex flex-row items-center gap-x-2 py-2">
+              <div className="flex flex-row gap-x-1">
+                {/* <FaFilter className="text-[#4F959D] text-base" /> */}
+                <span className="text-gray-700 text-xs">Filter:</span>
+              </div>
+
+              {/* Filter Option */}
+              <div className="flex flex-col">
+                <select
+                  className="border rounded-lg px-1 py-1 md:px-2 text-xs md:text-sm focus:outline-none ring-1 ring-gray-500 focus:ring-1 focus:ring-[#4F959D] text-gray-600 w-full"
+                  value={filterDay || ""}
+                  onChange={(e) => setFilterDay(e.target.value || null)}
+                >
+                  <option value="">Semua Hari</option>
+                  {days.map((day) => (
+                    <option key={day} value={day}>
+                      {day}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {isGenerating ? (
           <div className="flex flex-col items-center justify-center py-4 sm:py-6">
-            <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-t-2 border-b-2 border-[#4F959D] mb-2"></div>
+            <div className="animate-spin rounded-full h-5 w-5 md:h-6 md:w-6 border-t-2 border-b-2 border-[#4F959D] mb-2"></div>
             <p className="text-gray-600 text-xs">Sedang membuat jadwal...</p>
           </div>
         ) : (
           <>
             {filteredJadwal.length > 0 ? (
               <div className="w-full">
-                <table className="w-full border-collapse text-[8px] xs:text-[9px] sm:text-xs">
+                <table className="w-full border-collapse text-xs md:text-sm">
                   <thead>
                     <tr className="bg-[#F5F5F5]">
-                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-4 sm:w-6">
+                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-4 md:w-6">
                         No
                       </th>
-                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8 sm:w-12">
+                      <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8 md:w-12">
                         Hari
                       </th>
                       <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
@@ -273,12 +315,12 @@ const GenerateJadwal = () => {
                       <th className="p-1 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
                         Ruang
                       </th>
-                      <th className="p-1 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-5 sm:w-8">
+                      <th className="p-1 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-5 md:w-8">
                         Aksi
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="text-gray-700">
+                  <tbody className="text-gray-700 md:text-sm">
                     {filteredJadwal.map((item, index) => (
                       <tr
                         key={item.id}
@@ -304,7 +346,7 @@ const GenerateJadwal = () => {
                               onClick={() => deleteJadwal(item.id)}
                               title="Hapus"
                             >
-                              <FaTrash size={10} />
+                              <FaTrash className="w-3 h-3 md:w-4 md:h-4" />
                             </button>
                           </div>
                         </td>
@@ -314,7 +356,7 @@ const GenerateJadwal = () => {
                 </table>
               </div>
             ) : (
-              <div className="p-3 text-center text-gray-500 bg-gray-50 text-xs rounded-lg">
+              <div className="p-3 md:px-4 md:py-6 text-center text-gray-500 bg-gray-50 text-xs md:text-sm rounded-lg">
                 {jadwal.length > 0
                   ? "Tidak ada hasil yang sesuai dengan filter"
                   : "Belum ada jadwal dibuat. Klik tombol 'Generate' untuk membuat jadwal baru."}
@@ -366,11 +408,11 @@ const GenerateJadwal = () => {
 
       {/* Info Cards - Made more responsive */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mt-2 sm:mt-3">
-        <div className="bg-white p-2 sm:p-3 rounded-lg shadow-md">
-          <h3 className="text-[#4F959D] text-xs sm:text-sm font-semibold mb-1 flex items-center">
+        <div className="bg-white p-2 md:p-4 rounded-lg shadow-md">
+          <h3 className="text-[#4F959D] text-xs md:text-base font-semibold mb-1 md:mb-2 flex items-center">
             <FaCalendarAlt className="mr-1" /> Statistik Jadwal
           </h3>
-          <div className="text-gray-700 text-xs">
+          <div className="flex flex-col text-gray-700 text-xs md:text-sm md:gap-y-1">
             <p className="flex justify-between py-0.5 border-b">
               <span>Total Jadwal:</span>
               <span className="font-medium">{jadwal.length}</span>
@@ -390,12 +432,12 @@ const GenerateJadwal = () => {
           </div>
         </div>
 
-        <div className="bg-white p-2 sm:p-3 rounded-lg shadow-md">
-          <h3 className="text-[#4F959D] text-xs sm:text-sm font-semibold mb-1 flex items-center">
+        <div className="bg-white p-2 md:p-3 rounded-lg shadow-md">
+          <h3 className="text-[#4F959D] text-xs md:text-sm font-semibold mb-1 flex items-center">
             <FaCalendarAlt className="mr-1" /> Distribusi Hari
           </h3>
           {jadwal.length > 0 ? (
-            <div className="text-gray-700 text-xs">
+            <div className="flex flex-col text-gray-700 text-xs md:text-sm md:gap-y-2">
               {days.map((day) => {
                 const count = jadwal.filter((item) => item.hari === day).length;
                 const percentage =
@@ -403,7 +445,7 @@ const GenerateJadwal = () => {
 
                 return (
                   <div key={day} className="mb-1">
-                    <div className="flex justify-between text-xs mb-0.5">
+                    <div className="flex justify-between text-xs md:text-sm mb-0.5">
                       <span>{day}</span>
                       <span>
                         {count} ({percentage}%)
@@ -420,17 +462,17 @@ const GenerateJadwal = () => {
               })}
             </div>
           ) : (
-            <p className="text-gray-500 text-xs italic">
+            <p className="text-gray-500 text-xs md:text-sm italic md:pt-2">
               Belum ada data jadwal
             </p>
           )}
         </div>
 
-        <div className="bg-white p-2 sm:p-3 rounded-lg shadow-md sm:col-span-2 lg:col-span-1">
-          <h3 className="text-[#4F959D] text-xs sm:text-sm font-semibold mb-1 flex items-center">
+        <div className="bg-white p-2 md:p-3 rounded-lg shadow-md md:col-span-2 lg:col-span-1">
+          <h3 className="text-[#4F959D] text-xs md:text-base font-semibold mb-1 flex items-center">
             <FaCalendarAlt className="mr-1" /> Panduan Penggunaan
           </h3>
-          <ul className="text-gray-700 text-xs space-y-0.5">
+          <ul className="flex flex-col text-gray-700 text-xs md:text-sm space-y-0.5 text-justify px-2 md:py-2 md:gap-y-2">
             <li className="flex items-start">
               <span className="text-[#4F959D] mr-1">1.</span>
               <span>
