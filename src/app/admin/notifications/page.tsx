@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ElementType } from "react";
 import {
   Bell,
   CheckCircle,
@@ -15,6 +15,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { cn } from "../lib/utils";
 
 // Define notification types with their respective icons and colors
 const notificationTypes = {
@@ -145,6 +146,51 @@ const initialNotifications: NotificationItem[] = [
     read: true,
   },
 ];
+
+type NotificationSettingItem = {
+  icon: ElementType;
+  title: string;
+  iconColor: string;
+}
+
+function NotificationSettingCard({icon, title, iconColor}: NotificationSettingItem){
+  const Icon = icon;
+  return (
+    <div className="flex items-center justify-between p-2 sm:p-3 border rounded-md">
+      <div className="flex items-center">
+        <div className={cn("p-1.5 sm:p-2 bg-blue-100 text-blue-500 rounded-md mr-2 sm:mr-3", `bg-${iconColor}-100`, `text-${iconColor}-500`)}>
+            <Icon size={14} className="sm:w-4 sm:h-4" />
+          
+        </div>
+        <span className="text-xs sm:text-sm text-gray-700">
+          {title}
+        </span>
+      </div>
+      <label className="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" className="sr-only peer" defaultChecked />
+        <div className="w-9 h-5 sm:w-11 sm:h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 sm:after:h-5 sm:after:w-5 after:transition-all peer-checked:bg-[#4F959D]"></div>
+      </label>
+    </div>
+  )
+}
+
+const notificationSettingData: NotificationSettingItem[] = [{
+  title: "Notifikasi Email",
+  icon: Bell,
+  iconColor: "blue"
+}, {
+  title: "Notifikasi Sistem",
+  icon: Settings,
+  iconColor: "purple"
+}, {
+  title: "Notifikasi Jadwal",
+  icon: Calendar,
+  iconColor: "green",
+}, {
+  title: "Notifikasi Peringatan",
+  icon: AlertTriangle,
+  iconColor: "yellow"
+}]
 
 export default function NotificationsPage() {
   const [isClient, setIsClient] = useState(false);
@@ -574,65 +620,14 @@ export default function NotificationsPage() {
           Pengaturan Notifikasi
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4">
-          <div className="flex items-center justify-between p-2 sm:p-3 border rounded-md">
-            <div className="flex items-center">
-              <div className="p-1.5 sm:p-2 bg-blue-100 text-blue-500 rounded-md mr-2 sm:mr-3">
-                <Bell size={14} className="sm:w-4 sm:h-4" />
-              </div>
-              <span className="text-xs sm:text-sm text-gray-700">
-                Notifikasi Email
-              </span>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" defaultChecked />
-              <div className="w-9 h-5 sm:w-11 sm:h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 sm:after:h-5 sm:after:w-5 after:transition-all peer-checked:bg-[#4F959D]"></div>
-            </label>
-          </div>
-
-          <div className="flex items-center justify-between p-2 sm:p-3 border rounded-md">
-            <div className="flex items-center">
-              <div className="p-1.5 sm:p-2 bg-purple-100 text-purple-500 rounded-md mr-2 sm:mr-3">
-                <Settings size={14} className="sm:w-4 sm:h-4" />
-              </div>
-              <span className="text-xs sm:text-sm text-gray-700">
-                Notifikasi Sistem
-              </span>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" defaultChecked />
-              <div className="w-9 h-5 sm:w-11 sm:h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 sm:after:h-5 sm:after:w-5 after:transition-all peer-checked:bg-[#4F959D]"></div>
-            </label>
-          </div>
-
-          <div className="flex items-center justify-between p-2 sm:p-3 border rounded-md">
-            <div className="flex items-center">
-              <div className="p-1.5 sm:p-2 bg-green-100 text-green-500 rounded-md mr-2 sm:mr-3">
-                <Calendar size={14} className="sm:w-4 sm:h-4" />
-              </div>
-              <span className="text-xs sm:text-sm text-gray-700">
-                Notifikasi Jadwal
-              </span>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" defaultChecked />
-              <div className="w-9 h-5 sm:w-11 sm:h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 sm:after:h-5 sm:after:w-5 after:transition-all peer-checked:bg-[#4F959D]"></div>
-            </label>
-          </div>
-
-          <div className="flex items-center justify-between p-2 sm:p-3 border rounded-md">
-            <div className="flex items-center">
-              <div className="p-1.5 sm:p-2 bg-yellow-100 text-yellow-500 rounded-md mr-2 sm:mr-3">
-                <AlertTriangle size={14} className="sm:w-4 sm:h-4" />
-              </div>
-              <span className="text-xs sm:text-sm text-gray-700">
-                Notifikasi Peringatan
-              </span>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" defaultChecked />
-              <div className="w-9 h-5 sm:w-11 sm:h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 sm:after:h-5 sm:after:w-5 after:transition-all peer-checked:bg-[#4F959D]"></div>
-            </label>
-          </div>
+          {notificationSettingData.map((item, index) => 
+            <NotificationSettingCard 
+              key={index} 
+              icon={item.icon} 
+              title={item.title} 
+              iconColor={item.iconColor}             
+            />
+          )}
         </div>
       </div>
     </div>
