@@ -56,7 +56,7 @@ const Navbar: FC = () => {
   };
 
   return (
-    <nav className="bg-white py-3 sm:py-4 shadow-md relative">
+    <nav className="bg-white py-3 sm:py-4 shadow-md relative pl-4 pr-4">
       <div className="flex justify-between items-center px-4">
         <Link
           href="/user/home"

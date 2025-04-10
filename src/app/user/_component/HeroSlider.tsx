@@ -25,7 +25,7 @@ const slides = [
 
 const HeroSlider = () => {
   return (
-    <section className="relative w-full h-[90vh]">
+    <section className="relative w-full h-[93vh]">
       {/* Background Image (Tetap Statis) */}
       <div className="absolute inset-0">
         <Image
