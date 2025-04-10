@@ -19,7 +19,8 @@ import {
   FileText,
   Info,
 } from "lucide-react";
-
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 type JadwalItem = {
   id: string;
@@ -106,6 +107,7 @@ const CetakJadwalPage: FC = () => {
 
   const [showPreview, setShowPreview] = useState(false);
   const [shareOptions, setShareOptions] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
   const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
@@ -123,19 +125,62 @@ const CetakJadwalPage: FC = () => {
     setJadwalData(jadwalData.map((item) => ({ ...item, selected: select })));
   };
 
-  // Handle print functionality
+  // Handle print functionality - fixed implementation
   const handlePrint = useReactToPrint({
     documentTitle: "Jadwal Kuliah - Yonathan Hot Gabe Sihotang",
     onAfterPrint: () => console.log("Printed successfully!"),
-    content: () => printRef.current,
-    // Use type assertion as a last resort
-  } as any);   // eslint-disable-line  
+    contentRef: printRef,
+  });
 
-  // Function to download as PDF
+  // Function to download as PDF using jsPDF and html2canvas
+  // Alternative PDF generation approach
   const handleDownloadPDF = () => {
-    // In a real app, this would use a PDF generation library
-    // For now, we'll just use the print functionality
-    handlePrint();
+    if (!printRef.current) return;
+
+    try {
+      setIsGeneratingPDF(true);
+
+      // Use the print functionality to generate a PDF
+      const printWindow = window.open("", "_blank");
+      if (!printWindow) {
+        alert("Popup blocked. Please allow popups for this website.");
+        setIsGeneratingPDF(false);
+        return;
+      }
+
+      printWindow.document.write("<html><head><title>Jadwal Kuliah</title>");
+      printWindow.document.write("<style>");
+      printWindow.document.write(`
+      body { font-family: Arial, sans-serif; }
+      table { width: 100%; border-collapse: collapse; }
+      th { background-color: #2C3930; color: white; padding: 8px; text-align: left; }
+      td { padding: 8px; border-bottom: 1px solid #ddd; }
+      tr:nth-child(even) { background-color: #f2f2f2; }
+    `);
+      printWindow.document.write("</style>");
+      printWindow.document.write("</head><body>");
+
+      // Clone the content
+      if (printRef.current) {
+        printWindow.document.write(printRef.current.innerHTML);
+      }
+
+      printWindow.document.write("</body></html>");
+      printWindow.document.close();
+
+      // Wait for content to load
+      printWindow.onload = () => {
+        printWindow.print();
+        printWindow.onafterprint = () => {
+          printWindow.close();
+          setIsGeneratingPDF(false);
+        };
+      };
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Terjadi kesalahan saat mengunduh PDF. Silakan coba lagi.");
+      setIsGeneratingPDF(false);
+    }
   };
 
   // Get color based on jenis kuliah
@@ -252,14 +297,16 @@ const CetakJadwalPage: FC = () => {
               <button
                 onClick={() => setShowPreview(true)}
                 className="w-full py-2.5 px-4 bg-[#4F959D] text-white rounded-md flex items-center justify-center hover:bg-[#3F7F87] transition"
+                disabled={selectedJadwal.length === 0}
               >
                 <Eye className="w-5 h-5 mr-2" />
                 Pratinjau Jadwal
               </button>
 
               <button
-                onClick={() => handlePrint()}
+                onClick={(e) => handlePrint()}
                 className="w-full py-2.5 px-4 bg-[#2C3930] text-white rounded-md flex items-center justify-center hover:bg-[#3F4F44] transition"
+                disabled={selectedJadwal.length === 0}
               >
                 <Printer className="w-5 h-5 mr-2" />
                 Cetak Jadwal
@@ -268,15 +315,26 @@ const CetakJadwalPage: FC = () => {
               <button
                 onClick={handleDownloadPDF}
                 className="w-full py-2.5 px-4 bg-[#A27B5C] text-white rounded-md flex items-center justify-center hover:bg-[#8A6A4F] transition"
+                disabled={selectedJadwal.length === 0 || isGeneratingPDF}
               >
-                <Download className="w-5 h-5 mr-2" />
-                Unduh PDF
+                {isGeneratingPDF ? (
+                  <>
+                    <span className="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
+                    Menyiapkan PDF...
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-5 h-5 mr-2" />
+                    Unduh PDF
+                  </>
+                )}
               </button>
 
               <div className="relative">
                 <button
                   onClick={() => setShareOptions(!shareOptions)}
                   className="w-full py-2.5 px-4 bg-gray-200 text-gray-700 rounded-md flex items-center justify-center hover:bg-gray-300 transition"
+                  disabled={selectedJadwal.length === 0}
                 >
                   <Share2 className="w-5 h-5 mr-2" />
                   Bagikan
@@ -613,6 +671,23 @@ const CetakJadwalPage: FC = () => {
                       <Printer className="w-5 h-5 mr-2" />
                       Cetak
                     </button>
+                    <button
+                      onClick={handleDownloadPDF}
+                      className="px-4 py-2 bg-[#A27B5C] text-white rounded-md flex items-center hover:bg-[#8A6A4F] transition"
+                      disabled={isGeneratingPDF}
+                    >
+                      {isGeneratingPDF ? (
+                        <>
+                          <span className="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
+                          Menyiapkan...
+                        </>
+                      ) : (
+                        <>
+                          <Download className="w-5 h-5 mr-2" />
+                          Unduh PDF
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -623,5 +698,4 @@ const CetakJadwalPage: FC = () => {
     </div>
   );
 };
-
 export default CetakJadwalPage;
