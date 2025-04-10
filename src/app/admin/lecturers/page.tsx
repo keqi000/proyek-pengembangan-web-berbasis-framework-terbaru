@@ -2,9 +2,15 @@
 
 import React, { useState } from "react";
 import { useDosenStore } from "../_store/dosen";
-import { FaEdit, FaTrash, FaPlus, FaSearch, FaUserTie } from "react-icons/fa";
+import {
+  FaEdit,
+  FaTrash,
+  FaPlus,
+  FaSearch,
+  FaUserTie,
+  FaExclamationTriangle,
+} from "react-icons/fa";
 import { LecturerTempInputData } from "../_scheme/lecturers";
-
 
 const KelolaDosen = () => {
   const dosenList = useDosenStore((state) => state.data);
@@ -18,11 +24,13 @@ const KelolaDosen = () => {
   });
 
   const [editPopup, setEditPopup] = useState(false);
-  const [selectedDosen, setSelectedDosen] = useState<LecturerTempInputData | null>(
-    null
-  );
+  const [selectedDosen, setSelectedDosen] =
+    useState<LecturerTempInputData | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [dosenToDelete, setDosenToDelete] = useState<string | null>(null);
 
   const handleSubmit = () => {
     if (!tempInput.nama || !tempInput.nip) {
@@ -61,6 +69,24 @@ const KelolaDosen = () => {
 
   const handleCancelEdit = () => {
     setEditPopup(false);
+  };
+
+  const handleDeleteClick = (id: string) => {
+    setDosenToDelete(id);
+    setDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (dosenToDelete) {
+      deleteDosen(dosenToDelete);
+      setDeleteModal(false);
+      setDosenToDelete(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteModal(false);
+    setDosenToDelete(null);
   };
 
   const filteredDosen = dosenList.filter(
@@ -204,13 +230,7 @@ const KelolaDosen = () => {
                         </button>
                         <button
                           className="text-red-600 hover:text-red-800 transition-colors"
-                          onClick={() => {
-                            if (
-                              window.confirm("Yakin ingin menghapus dosen ini?")
-                            ) {
-                              deleteDosen(dosen.id);
-                            }
-                          }}
+                          onClick={() => handleDeleteClick(dosen.id)}
                           title="Hapus"
                         >
                           <FaTrash size={18} />
@@ -305,6 +325,39 @@ const KelolaDosen = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {deleteModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96 max-w-md animate-fadeIn">
+            <div className="text-center mb-4">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <FaExclamationTriangle className="h-6 w-6 text-red-600" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Konfirmasi Hapus
+              </h3>
+              <p className="text-sm text-gray-500">
+                Apakah Anda yakin ingin menghapus dosen ini? Tindakan ini tidak
+                dapat dibatalkan.
+              </p>
+            </div>
+            <div className="flex justify-center space-x-3 mt-4">
+              <button
+                onClick={handleCancelDelete}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              >
+                Hapus
+              </button>
+            </div>
           </div>
         </div>
       )}
