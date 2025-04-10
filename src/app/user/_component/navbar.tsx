@@ -57,7 +57,7 @@ const Navbar: FC = () => {
 
   return (
     <nav className="bg-white py-3 sm:py-4 shadow-md relative">
-      <div className="container flex justify-between items-center px-4">
+      <div className="flex justify-between items-center px-4">
         <Link
           href="/user/home"
           className="text-xl sm:text-2xl md:text-4xl font-bold text-black flex items-center font-bebas"
