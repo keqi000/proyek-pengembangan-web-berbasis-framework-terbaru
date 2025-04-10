@@ -37,8 +37,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         } pt-14 lg:pt-0 ${isSidebarOpen ? "lg:filter-none filter" : ""}`} // Tambahkan padding top untuk mobile
       >
         {/* Top Navbar - Hanya tampil di desktop */}
-        <nav className="bg-[#2C3930] text-white shadow-md h-16 hidden lg:flex items-center px-4 sticky top-0 z-10">
-          <div className="container flex justify-between items-center">
+        <nav className="bg-[#2C3930] text-white shadow-md h-16 hidden lg:flex lg:flex-col lg:justify-center items-center px-4 sticky top-0 z-10">
+          <div className="flex justify-between items-center w-full px-8">
             {/* Tombol Sidebar */}
             <button
               className="text-white focus:outline-none"
