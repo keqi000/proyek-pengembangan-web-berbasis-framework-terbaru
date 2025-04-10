@@ -131,6 +131,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const userName = "Yonatan Sihotang"; // Bisa diambil dari context/state global
   const notificationRef = useRef<HTMLDivElement>(null);
   const [notifications, setNotifications] = useState(initialNotifications);
+  const mobileNotificationRef = useRef<HTMLDivElement>(null);
 
   // Add effect to prevent scrolling when sidebar is open on mobile
   useEffect(() => {
@@ -150,7 +151,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         notificationRef.current &&
-        !notificationRef.current.contains(event.target as Node)
+        !notificationRef.current.contains(event.target as Node) &&
+        mobileNotificationRef.current &&
+        !mobileNotificationRef.current.contains(event.target as Node)
       ) {
         setIsNotificationsOpen(false);
       }
@@ -187,11 +190,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-gray-100 w-full max-w-full overflow-hidden">
-      {/* Navbar Component */}
+      {/* Navbar Component - pass the notification props */}
       <NavigationBar
         isSidebarOpen={isSidebarOpen}
         setSidebarOpen={setSidebarOpen}
         userName={userName}
+        toggleNotifications={toggleNotifications}
+        unreadCount={unreadCount}
       />
 
       {/* Konten utama yang bergeser - Tambahkan padding top untuk mobile */}
@@ -353,6 +358,123 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </nav>
+
+        {/* Top Navbar for mobile */}
+        <div className="fixed top-0 left-0 right-0 bg-[#2C3930] text-white h-14 flex items-center justify-between px-4 lg:hidden z-20">
+          <button
+            onClick={() => setSidebarOpen(!isSidebarOpen)}
+            className="text-white focus:outline-none"
+          >
+            ☰
+          </button>
+          <div className="text-lg font-semibold">Sistem Penjadwalan</div>
+          <div className="flex items-center space-x-3">
+            <div className="relative" ref={mobileNotificationRef}>
+              <button
+                className="relative p-1 text-white rounded-full hover:bg-[#3F4F44] transition-colors"
+                onClick={toggleNotifications}
+                aria-label="Notifikasi"
+              >
+                <Bell size={20} />
+                {unreadCount > 0 && (
+                  <span className="absolute top-0 right-0 h-4 w-4 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Notification dropdown for mobile */}
+              {isNotificationsOpen && (
+                <div className="absolute right-0 mt-2 w-70 bg-white rounded-md shadow-lg overflow-hidden z-20">
+                  <div className="py-2 px-3 bg-[#2C3930] text-white font-medium flex justify-between items-center">
+                    <span>Notifikasi ({notifications.length})</span>
+                    {unreadCount > 0 && (
+                      <button
+                        className="text-xs text-[#4F959D] hover:text-[#6AABB3]"
+                        onClick={markAllAsRead}
+                      >
+                        Tandai semua sudah dibaca
+                      </button>
+                    )}
+                  </div>
+                  <div className="max-h-96 overflow-y-auto">
+                    {notifications.length > 0 ? (
+                      notifications.slice(0, 3).map((notification) => {
+                        const TypeIcon =
+                          notificationTypes[
+                            notification.type as keyof typeof notificationTypes
+                          ].icon;
+                        const typeColor =
+                          notificationTypes[
+                            notification.type as keyof typeof notificationTypes
+                          ].color;
+                        const typeBgColor =
+                          notificationTypes[
+                            notification.type as keyof typeof notificationTypes
+                          ].bgColor;
+
+                        return (
+                          <div
+                            key={notification.id}
+                            className={`p-3 border-b hover:bg-gray-50 cursor-pointer ${
+                              !notification.read ? "bg-blue-50" : ""
+                            }`}
+                            onClick={() => markAsRead(notification.id)}
+                          >
+                            <div className="flex">
+                              <div
+                                className={`${typeBgColor} ${typeColor} p-2 rounded-full mr-3 self-start`}
+                              >
+                                <TypeIcon size={16} />
+                              </div>
+                              <div>
+                                <div className="flex justify-between items-start">
+                                  <h4 className="font-medium text-gray-800">
+                                    {notification.title}
+                                    {!notification.read && (
+                                      <span className="ml-2 inline-block w-2 h-2 bg-blue-500 rounded-full"></span>
+                                    )}
+                                  </h4>
+                                  <span className="text-xs text-gray-500">
+                                    {notification.time}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-600 mt-1">
+                                  {notification.message.length > 60
+                                    ? `${notification.message.substring(
+                                        0,
+                                        60
+                                      )}...`
+                                    : notification.message}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="p-4 text-center text-gray-500">
+                        Tidak ada notifikasi
+                      </div>
+                    )}
+                  </div>
+                  <div className="py-2 px-3 bg-gray-50 text-center">
+                    <Link
+                      href="/admin/notifications"
+                      className="text-sm text-[#4F959D] hover:text-[#6AABB3] block w-full"
+                      onClick={() => setIsNotificationsOpen(false)}
+                    >
+                      Lihat semua notifikasi
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="h-8 w-8 rounded-full bg-[#4F959D] flex items-center justify-center text-white font-bold">
+              {userName.charAt(0)}
+            </div>
+          </div>
+        </div>
 
         {/* Konten utama */}
         <main
