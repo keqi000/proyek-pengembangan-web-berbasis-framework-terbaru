@@ -219,7 +219,7 @@ const KelolaMataKuliah = () => {
             <FaBook className="mr-2" /> Tambah Data Mata Kuliah
           </h2>
 
-          <form className="grid grid-cols-1 gap-3">
+          <form className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-[#4F959D] text-xs sm:text-sm font-medium mb-1">
                 Kode Mata Kuliah
@@ -284,7 +284,7 @@ const KelolaMataKuliah = () => {
                 }
               />
             </div>
-            <div className="flex justify-end space-x-2">
+            <div className="flex justify-start space-x-2">
               <button
                 type="button"
                 className="bg-gray-300 text-gray-800 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-gray-400 transition"
