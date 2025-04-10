@@ -27,22 +27,8 @@ jobs:
         run: npm run lint -- --format json --output-file eslint-report.json
         continue-on-error: true
 
-      # Check if ESLint encountered any errors (exit code 1)
-      - name: Check ESLint exit code
-        id: check_exit_code
-        run: |
-          if [[ $? -ne 0 ]]; then
-            echo "ESLint found errors, proceed with commenting."
-            echo "lint_errors=true" >> $GITHUB_ENV
-          else
-            echo "No ESLint errors, skipping commenting."
-            echo "lint_errors=false" >> $GITHUB_ENV
-          fi
-      
       - name: Comment on lint issue
         uses:  actions/github-script@e7aeb8c663f696059ebb5f9ab1425ed2ef511bdb
-        # Only run if there were lint errors
-        if: env.lint_errors == 'true' 
         with:
           script: |
             const fs = require('fs');
