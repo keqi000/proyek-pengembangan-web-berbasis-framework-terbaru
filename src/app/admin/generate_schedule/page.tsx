@@ -105,12 +105,6 @@ const GenerateJadwal = () => {
     }, 1500);
   };
 
-  const deleteJadwal = (id: number) => {
-    if (window.confirm("Apakah Anda yakin ingin menghapus jadwal ini?")) {
-      setJadwal(jadwal.filter((item) => item.id !== id));
-    }
-  };
-
   const exportToCSV = () => {
     if (jadwal.length === 0) {
       alert("Tidak ada jadwal untuk diekspor.");
