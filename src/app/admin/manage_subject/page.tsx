@@ -3,14 +3,7 @@
 import React, { useState } from "react";
 import { useMataKuliahStore } from "../_store/matakuliah";
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaBook } from "react-icons/fa";
-
-type TempInputData = {
-  id?: string;
-  kode: string;
-  nama: string;
-  semester: string;
-  sks: string;
-};
+import { CourseTempInputData } from "../_scheme/course";
 
 const KelolaMataKuliah = () => {
   const mataKuliahList = useMataKuliahStore((state) => state.data);
@@ -18,7 +11,7 @@ const KelolaMataKuliah = () => {
   const updateMataKuliah = useMataKuliahStore((state) => state.updateData);
   const deleteMataKuliah = useMataKuliahStore((state) => state.deleteData);
 
-  const [tempInput, setTempInput] = useState<TempInputData>({
+  const [tempInput, setTempInput] = useState<CourseTempInputData>({
     kode: "",
     nama: "",
     semester: "",
@@ -27,7 +20,7 @@ const KelolaMataKuliah = () => {
 
   const [editPopup, setEditPopup] = useState(false);
   const [selectedMataKuliah, setSelectedMataKuliah] =
-    useState<TempInputData | null>(null);
+    useState<CourseTempInputData | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -62,7 +55,7 @@ const KelolaMataKuliah = () => {
     setShowAddForm(false);
   };
 
-  const handleEditClick = (mataKuliah: TempInputData) => {
+  const handleEditClick = (mataKuliah: CourseTempInputData) => {
     setSelectedMataKuliah(mataKuliah);
     setEditPopup(true);
   };
@@ -100,34 +93,34 @@ const KelolaMataKuliah = () => {
   );
 
   return (
-    <div className="container mx-auto p-4 bg-[#F2F2F2] min-h-screen">
+    <div className="w-full max-w-full overflow-hidden p-2 sm:p-4 bg-[#F2F2F2] min-h-screen">
       {/* Header Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-4 md:mb-0">
-            <h1 className="text-2xl md:text-3xl font-bold text-[#2C3930]">
+      <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md mb-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div className="w-full sm:w-auto">
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-[#2C3930]">
               Kelola <span className="text-[#4F959D]">Mata Kuliah</span>
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-gray-600 mt-1 text-xs sm:text-sm">
               Mengelola data mata kuliah untuk sistem penjadwalan
             </p>
           </div>
-          <div className="flex space-x-3">
+          <div className="flex flex-col md:flex-row w-full md:w-auto md:space-x-3 gap-y-2">
             <div className="relative">
               <input
                 type="text"
-                placeholder="Cari mata kuliah atau kode..."
-                className="pl-10 pr-4 py-2 border border-white rounded-lg focus:outline-none ring-1 ring-gray-400 focus:ring-1 focus:ring-[#4F959D] w-full md:w-64 text-gray-600"
+                placeholder="Cari..."
+                className="pl-8 pr-2 py-1.5 md:pl-10 md:pr-4 md:py-2 border border-white rounded-lg focus:outline-none ring-1 ring-gray-400 focus:ring-1 focus:ring-[#4F959D] w-full md:w-64 text-gray-600 text-sm md:text-base"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <FaSearch className="absolute left-3 top-3 text-gray-400" />
+              <FaSearch className="absolute left-2.5 top-2.5 md:left-3 md:top-3 text-gray-400 text-xs md:text-base" />
             </div>
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              className="bg-[#4F959D] text-white px-4 py-2 rounded-lg hover:bg-[#3C7A85] transition flex items-center"
+              className="bg-[#4F959D] text-white px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center"
             >
-              <FaPlus className="mr-2" /> Tambah Mata Kuliah
+              <FaPlus className="mr-1" /> Tambah MK
             </button>
           </div>
         </div>
@@ -135,19 +128,19 @@ const KelolaMataKuliah = () => {
 
       {/* Form Tambah Mata Kuliah (Collapsible) */}
       {showAddForm && (
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6 transition-all duration-300">
-          <h2 className="text-[#4F959D] text-lg font-semibold mb-4 flex items-center">
+        <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md mb-4 transition-all duration-300">
+          <h2 className="text-[#4F959D] text-base sm:text-lg font-semibold mb-3 flex items-center">
             <FaBook className="mr-2" /> Tambah Data Mata Kuliah
           </h2>
 
-          <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form className="grid grid-cols-1 gap-3">
             <div>
-              <label className="block text-[#4F959D] font-medium mb-2">
+              <label className="block text-[#4F959D] text-xs sm:text-sm font-medium mb-1">
                 Kode Mata Kuliah
               </label>
               <input
                 type="text"
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
+                className="w-full p-2 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
                 placeholder="Masukkan kode mata kuliah"
                 value={tempInput.kode}
                 onChange={(e) =>
@@ -156,12 +149,12 @@ const KelolaMataKuliah = () => {
               />
             </div>
             <div>
-              <label className="block text-[#4F959D] font-medium mb-2">
+              <label className="block text-[#4F959D] text-xs sm:text-sm font-medium mb-1">
                 Nama Mata Kuliah
               </label>
               <input
                 type="text"
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
+                className="w-full p-2 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
                 placeholder="Masukkan nama mata kuliah"
                 value={tempInput.nama}
                 onChange={(e) =>
@@ -170,11 +163,11 @@ const KelolaMataKuliah = () => {
               />
             </div>
             <div>
-              <label className="block text-[#4F959D] font-medium mb-2">
+              <label className="block text-[#4F959D] text-xs sm:text-sm font-medium mb-1">
                 Semester
               </label>
               <select
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
+                className="w-full p-2 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
                 value={tempInput.semester}
                 onChange={(e) =>
                   setTempInput({ ...tempInput, semester: e.target.value })
@@ -192,12 +185,12 @@ const KelolaMataKuliah = () => {
               </select>
             </div>
             <div>
-              <label className="block text-[#4F959D] font-medium mb-2">
+              <label className="block text-[#4F959D] text-xs sm:text-sm font-medium mb-1">
                 SKS
               </label>
               <input
                 type="number"
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
+                className="w-full p-2 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
                 placeholder="Masukkan jumlah SKS"
                 value={tempInput.sks}
                 onChange={(e) =>
@@ -205,17 +198,17 @@ const KelolaMataKuliah = () => {
                 }
               />
             </div>
-            <div className="md:col-span-2 flex justify-end space-x-3">
+            <div className="flex justify-end space-x-2">
               <button
                 type="button"
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+                className="bg-gray-300 text-gray-800 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-gray-400 transition"
                 onClick={() => setShowAddForm(false)}
               >
                 Batal
               </button>
               <button
                 type="button"
-                className="bg-[#4F959D] text-white px-6 py-2 rounded-lg hover:bg-[#3C7A85] transition"
+                className="bg-[#4F959D] text-white px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-[#3C7A85] transition"
                 onClick={handleSubmit}
               >
                 Simpan
@@ -226,31 +219,31 @@ const KelolaMataKuliah = () => {
       )}
 
       {/* Tabel Data Mata Kuliah */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-[#4F959D] text-lg font-semibold mb-4 flex items-center">
+      <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md">
+        <h2 className="text-[#4F959D] text-base sm:text-lg font-semibold mb-3 flex items-center">
           <FaBook className="mr-2" /> Daftar Mata Kuliah
         </h2>
 
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-sm md:text-base">
+        <div className="overflow-x-auto w-full">
+          <table className="w-full border-collapse text-xs sm:text-sm">
             <thead>
               <tr className="bg-[#F5F5F5]">
-                <th className="px-4 py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-16">
+                <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8">
                   No
                 </th>
-                <th className="px-4 py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
                   Kode
                 </th>
-                <th className="px-4 py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                  Nama Mata Kuliah
+                <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                  Nama MK
                 </th>
-                <th className="px-4 py-3 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                  Semester
+                <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                  Sem
                 </th>
-                <th className="px-4 py-3 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
                   SKS
                 </th>
-                <th className="px-4 py-3 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-24">
+                <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-16">
                   Aksi
                 </th>
               </tr>
@@ -262,24 +255,24 @@ const KelolaMataKuliah = () => {
                     key={mataKuliah.id}
                     className="hover:bg-gray-50 border-b border-gray-200 transition-colors"
                   >
-                    <td className="px-4 py-4">{index + 1}</td>
-                    <td className="px-4 py-4">{mataKuliah.kode}</td>
-                    <td className="px-4 py-4 font-medium">{mataKuliah.nama}</td>
-                    <td className="px-4 py-4 text-center">
-                      Semester {mataKuliah.semester}
+                    <td className="px-2 py-2">{index + 1}</td>
+                    <td className="px-2 py-2">{mataKuliah.kode}</td>
+                    <td className="px-2 py-2 font-medium">{mataKuliah.nama}</td>
+                    <td className="px-2 py-2 text-center">
+                      {mataKuliah.semester}
                     </td>
-                    <td className="px-4 py-4 text-center">{mataKuliah.sks}</td>
-                    <td className="px-4 py-4">
-                      <div className="flex justify-center gap-4">
+                    <td className="px-2 py-2 text-center">{mataKuliah.sks}</td>
+                    <td className="px-2 py-2">
+                      <div className="flex justify-center gap-2">
                         <button
-                          className="text-blue-600 hover:text-blue-800 transition-colors"
+                          className="text-blue-600 hover:text-blue-800 transition-colors p-1"
                           onClick={() => handleEditClick(mataKuliah)}
                           title="Edit"
                         >
-                          <FaEdit size={18} />
+                          <FaEdit size={14} />
                         </button>
                         <button
-                          className="text-red-600 hover:text-red-800 transition-colors"
+                          className="text-red-600 hover:text-red-800 transition-colors p-1"
                           onClick={() => {
                             if (
                               window.confirm(
@@ -291,7 +284,7 @@ const KelolaMataKuliah = () => {
                           }}
                           title="Hapus"
                         >
-                          <FaTrash size={18} />
+                          <FaTrash size={14} />
                         </button>
                       </div>
                     </td>
@@ -301,7 +294,7 @@ const KelolaMataKuliah = () => {
                 <tr>
                   <td
                     colSpan={6}
-                    className="px-6 py-8 text-center text-gray-500 bg-gray-50"
+                    className="px-2 py-4 text-center text-gray-500 bg-gray-50 text-xs sm:text-sm"
                   >
                     {searchTerm
                       ? "Tidak ada hasil yang sesuai dengan pencarian"
@@ -314,15 +307,15 @@ const KelolaMataKuliah = () => {
         </div>
 
         {/* Table Footer with Stats */}
-        <div className="mt-4 text-sm text-gray-600 flex justify-between items-center">
+        <div className="mt-3 text-xs text-gray-600 flex flex-col xs:flex-row justify-between items-start xs:items-center gap-1">
           <div>
             Total:{" "}
             <span className="font-medium">{filteredMataKuliah.length}</span>{" "}
             mata kuliah
           </div>
           {searchTerm && (
-            <div>
-              Hasil pencarian untuk:{" "}
+            <div className="truncate max-w-full">
+              Hasil pencarian:{" "}
               <span className="font-medium">&quot;{searchTerm}&quot;</span>
             </div>
           )}
@@ -331,20 +324,20 @@ const KelolaMataKuliah = () => {
 
       {/* Popup Edit */}
       {editPopup && selectedMataKuliah && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96 max-w-md animate-fadeIn">
-            <h2 className="text-[#4F959D] text-lg font-semibold mb-4 flex items-center">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-2 z-50">
+          <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-lg w-full max-w-xs sm:max-w-sm animate-fadeIn">
+            <h2 className="text-[#4F959D] text-base sm:text-lg font-semibold mb-3 flex items-center">
               <FaBook className="mr-2" /> Edit Data Mata Kuliah
             </h2>
 
-            <form className="space-y-4">
+            <form className="space-y-3">
               <div>
-                <label className="block text-[#4F959D] font-medium mb-2">
+                <label className="block text-[#4F959D] text-xs sm:text-sm font-medium mb-1">
                   Kode Mata Kuliah
                 </label>
                 <input
                   type="text"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
+                  className="w-full p-2 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
                   value={selectedMataKuliah.kode}
                   onChange={(e) =>
                     setSelectedMataKuliah({
@@ -355,12 +348,12 @@ const KelolaMataKuliah = () => {
                 />
               </div>
               <div>
-                <label className="block text-[#4F959D] font-medium mb-2">
+                <label className="block text-[#4F959D] text-xs sm:text-sm font-medium mb-1">
                   Nama Mata Kuliah
                 </label>
                 <input
                   type="text"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
+                  className="w-full p-2 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
                   value={selectedMataKuliah.nama}
                   onChange={(e) =>
                     setSelectedMataKuliah({
@@ -371,11 +364,11 @@ const KelolaMataKuliah = () => {
                 />
               </div>
               <div>
-                <label className="block text-[#4F959D] font-medium mb-2">
+                <label className="block text-[#4F959D] text-xs sm:text-sm font-medium mb-1">
                   Semester
                 </label>
                 <select
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
+                  className="w-full p-2 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
                   value={selectedMataKuliah.semester}
                   onChange={(e) =>
                     setSelectedMataKuliah({
@@ -396,12 +389,12 @@ const KelolaMataKuliah = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-[#4F959D] font-medium mb-2">
+                <label className="block text-[#4F959D] text-xs sm:text-sm font-medium mb-1">
                   SKS
                 </label>
                 <input
                   type="number"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
+                  className="w-full p-2 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
                   value={selectedMataKuliah.sks}
                   onChange={(e) =>
                     setSelectedMataKuliah({
@@ -411,17 +404,17 @@ const KelolaMataKuliah = () => {
                   }
                 />
               </div>
-              <div className="flex space-x-3 pt-2">
+              <div className="flex space-x-2 pt-2">
                 <button
                   type="button"
-                  className="bg-gray-300 text-gray-800 px-4 py-2 w-1/2 rounded-lg hover:bg-gray-400 transition"
+                  className="bg-gray-300 text-gray-800 px-3 py-1.5 text-xs sm:text-sm w-1/2 rounded-lg hover:bg-gray-400 transition"
                   onClick={handleCancelEdit}
                 >
                   Batal
                 </button>
                 <button
                   type="button"
-                  className="bg-[#4F959D] text-white px-4 py-2 w-1/2 rounded-lg hover:bg-[#3C7A85] transition"
+                  className="bg-[#4F959D] text-white px-3 py-1.5 text-xs sm:text-sm w-1/2 rounded-lg hover:bg-[#3C7A85] transition"
                   onClick={handleConfirmEdit}
                 >
                   Simpan
