@@ -359,13 +359,13 @@ const KelolaMataKuliah = () => {
                       )}
                     </td>
                     <td className="px-2 py-2">
-                      <div className="flex justify-center gap-2">
+                      <div className="flex justify-center gap-1 md:gap-2">
                         <button
                           className="text-blue-600 hover:text-blue-800 transition-colors p-1"
                           onClick={() => handleEditClick(mataKuliah)}
                           title="Edit"
                         >
-                          <FaEdit className="h-3 w-3" />
+                          <FaEdit className="h-3 w-3 md:h-4 md:w-4" />
                         </button>
                         <button
                           className="text-green-600 hover:text-green-800 transition-colors p-1"
@@ -373,7 +373,7 @@ const KelolaMataKuliah = () => {
                           title="Pilih Dosen"
                           disabled={!mataKuliah.id}
                         >
-                          <FaUserTie size={14} />
+                          <FaUserTie className="h-3 w-3 md:h-4 md:w-4" />
                         </button>
                         <button
                           className="text-red-600 hover:text-red-800 transition-colors p-1"
@@ -388,7 +388,7 @@ const KelolaMataKuliah = () => {
                           }}
                           title="Hapus"
                         >
-                          <FaTrash size={14} />
+                          <FaTrash className="h-3 w-3 md:h-4 md:w-4" />
                         </button>
                       </div>
                     </td>
