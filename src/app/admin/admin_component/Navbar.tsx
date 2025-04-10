@@ -8,10 +8,8 @@ import {
   Building,
   Calendar,
   LogOut,
-  Menu,
   X,
   Settings,
-  Bell,
   HelpCircle,
   BookOpen,
 } from "lucide-react";
@@ -22,6 +20,8 @@ type NavbarProps = {
   isSidebarOpen: boolean;
   setSidebarOpen: (isOpen: boolean) => void;
   userName: string;
+  toggleNotifications?: () => void;
+  unreadCount?: number;
 };
 
 type LinkItemType = {
@@ -251,25 +251,6 @@ export default function NavigationBar({
           </div>
         </motion.div>
       </AnimatePresence>
-
-      {/* Top Navbar for mobile */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-[#2C3930] flex items-center justify-between px-4 z-30">
-        <button
-          onClick={() => setSidebarOpen(true)}
-          className="text-white focus:outline-none"
-        >
-          <Menu size={24} />
-        </button>
-        <div className="flex items-center">
-          <Calendar className="h-6 w-6 text-white mr-2" />
-          <h1 className="text-lg font-bold text-white">Sistem Penjadwalan</h1>
-        </div>
-        <div className="flex items-center space-x-3">
-          <button className="text-white">
-            <Bell size={20} />
-          </button>
-        </div>
-      </div>
     </>
   );
 }
