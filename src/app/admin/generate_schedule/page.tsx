@@ -12,6 +12,7 @@ import {
 import { useDosenStore } from "../_store/dosen";
 import { useRoomStore } from "../_store/ruangan";
 import { useMataKuliahStore } from "../_store/matakuliah";
+import { useDosenMatakuliahStore } from "../_store/dosenMatakuliah"; // Import the dosen-matakuliah store
 
 type JadwalItem = {
   id: number;
@@ -27,6 +28,9 @@ const GenerateJadwal = () => {
   const dosenList = useDosenStore((state) => state.data);
   const ruanganList = useRoomStore((state) => state.data);
   const mataKuliahList = useMataKuliahStore((state) => state.data);
+  // Get the dosen-matakuliah assignments
+  const { getDosenByMataKuliah } = useDosenMatakuliahStore();
+
   const [jadwal, setJadwal] = useState<JadwalItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDay, setFilterDay] = useState<string | null>(null);
@@ -59,23 +63,39 @@ const GenerateJadwal = () => {
 
       // Generate schedule based on mata kuliah list
       mataKuliahList.forEach((mataKuliah) => {
-        // Randomly assign a day, time slot, dosen, and room
-        const randomDay = days[Math.floor(Math.random() * days.length)];
-        const randomTimeSlot =
-          timeSlots[Math.floor(Math.random() * timeSlots.length)];
-        const randomRoom =
-          ruanganList[Math.floor(Math.random() * ruanganList.length)];
-        const randomDosen =
-          dosenList[Math.floor(Math.random() * dosenList.length)];
+        // Get assigned dosens for this mata kuliah
+        const assignedDosenIds = getDosenByMataKuliah(mataKuliah.id || "");
 
-        generatedJadwal.push({
-          id: id++,
-          namaDosen: randomDosen.nama,
-          mataKuliah: mataKuliah.nama,
-          semester: mataKuliah.semester || "-",
-          ruangan: randomRoom.nama,
-          waktu: randomTimeSlot,
-          hari: randomDay,
+        // If no dosen is assigned, skip this mata kuliah or use a placeholder
+        if (assignedDosenIds.length === 0) {
+          console.log(`No dosen assigned for ${mataKuliah.nama}`);
+          // You can either skip or use a placeholder like:
+          // assignedDosenIds.push("placeholder");
+          return; // Skip this mata kuliah
+        }
+
+        // For each assigned dosen, create a schedule
+        assignedDosenIds.forEach((dosenId) => {
+          // Find the dosen object
+          const dosen = dosenList.find((d) => d.id === dosenId);
+          if (!dosen) return; // Skip if dosen not found
+
+          // Randomly assign a day, time slot, and room
+          const randomDay = days[Math.floor(Math.random() * days.length)];
+          const randomTimeSlot =
+            timeSlots[Math.floor(Math.random() * timeSlots.length)];
+          const randomRoom =
+            ruanganList[Math.floor(Math.random() * ruanganList.length)];
+
+          generatedJadwal.push({
+            id: id++,
+            namaDosen: dosen.nama,
+            mataKuliah: mataKuliah.nama,
+            semester: mataKuliah.semester || "-",
+            ruangan: randomRoom.nama,
+            waktu: randomTimeSlot,
+            hari: randomDay,
+          });
         });
       });
 
