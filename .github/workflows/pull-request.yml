@@ -24,7 +24,41 @@ jobs:
         run: npm ci
 
       - name: Run lint check
-        run: npm run lint
+        run: npm run lint -- --format json --output-file eslint-report.json
+      
+      - name: Comment on lint issue
+        uses:  actions/github-script@e7aeb8c663f696059ebb5f9ab1425ed2ef511bdb
+        with:
+          script: |
+            const fs = require('fs');
+            const path = './eslint-report.json';
+            const report = JSON.parse(fs.readFileSync(path, 'utf8'));
+
+            // Loop through the lint errors
+            for (const file of report) {
+              if (file.messages) {
+                for (const message of file.messages) {
+                  // Determine if it's a warning or error
+                  // 1 = Warning, 2 = Error
+                  const severity = message.severity; 
+                  const prNumber = process.env.GITHUB_REF.split('/')[2]; // Get PR number from the ref
+                  const lineNumber = message.line;
+
+                  // Customize the comment based on the severity
+                  const commentBody = `:${severity === 2 ? 'x' : 'warning'}: Lint ${severity === 2 ? 'error' : 'warning'} on line ${lineNumber}: ${message.message} (${message.ruleId})`;
+
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: prNumber,
+                    body: commentBody,
+                  });
+                }
+              }
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
     
         # Ref: https://nextjs.org/docs/pages/building-your-application/deploying/ci-build-caching#github-actions
       - name: Cache node modules
