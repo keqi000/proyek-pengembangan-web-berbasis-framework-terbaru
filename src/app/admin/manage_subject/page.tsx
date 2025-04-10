@@ -311,7 +311,7 @@ const KelolaMataKuliah = () => {
         </h2>
 
         <div className="overflow-x-auto w-full">
-          <table className="w-full border-collapse text-xs sm:text-sm">
+          <table className="w-full border-collapse text-[8px] sm:text-sm">
             <thead>
               <tr className="bg-[#F5F5F5]">
                 <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8">
@@ -342,7 +342,7 @@ const KelolaMataKuliah = () => {
                 filteredMataKuliah.map((mataKuliah, index) => (
                   <tr
                     key={mataKuliah.id}
-                    className="hover:bg-gray-50 border-b border-gray-200 transition-colors"
+                    className="hover:bg-gray-50 border-b border-gray-200 transition-colors text-[8px] md:text-base"
                   >
                     <td className="px-2 py-2">{index + 1}</td>
                     <td className="px-2 py-2">{mataKuliah.kode}</td>
@@ -351,7 +351,7 @@ const KelolaMataKuliah = () => {
                       {mataKuliah.semester}
                     </td>
                     <td className="px-2 py-2 text-center">{mataKuliah.sks}</td>
-                    <td className="px-2 py-2 text-sm">
+                    <td className="px-2 py-2 text-[8px] md:text-sm">
                       {getDosenNamesForMataKuliah(mataKuliah.id || "") || (
                         <span className="text-gray-400 italic">
                           Belum ada dosen
@@ -365,7 +365,7 @@ const KelolaMataKuliah = () => {
                           onClick={() => handleEditClick(mataKuliah)}
                           title="Edit"
                         >
-                          <FaEdit size={14} />
+                          <FaEdit className="h-3 w-3" />
                         </button>
                         <button
                           className="text-green-600 hover:text-green-800 transition-colors p-1"
