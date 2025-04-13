@@ -8,6 +8,7 @@ import {
   FaSearch,
   FaFileExport,
   FaFilter,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 import { useDosenStore } from "../_store/dosen";
 import { useRoomStore } from "../_store/ruangan";
@@ -104,12 +105,6 @@ const GenerateJadwal = () => {
     }, 1500);
   };
 
-  const deleteJadwal = (id: number) => {
-    if (window.confirm("Apakah Anda yakin ingin menghapus jadwal ini?")) {
-      setJadwal(jadwal.filter((item) => item.id !== id));
-    }
-  };
-
   const exportToCSV = () => {
     if (jadwal.length === 0) {
       alert("Tidak ada jadwal untuk diekspor.");
@@ -162,8 +157,29 @@ const GenerateJadwal = () => {
     return matchesSearch && matchesDay;
   });
 
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [jadwalToDelete, setJadwalToDelete] = useState<number | null>(null);
+
+  const handleDeleteClick = (id: number) => {
+    setJadwalToDelete(id);
+    setDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (jadwalToDelete !== null) {
+      setJadwal(jadwal.filter((item) => item.id !== jadwalToDelete));
+      setDeleteModal(false);
+      setJadwalToDelete(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteModal(false);
+    setJadwalToDelete(null);
+  };
+
   return (
-    <div className="w-full max-w-full p-1 sm:p-2 md:p-4 bg-[#F2F2F2] min-h-screen">
+    <div className="w-full max-w-full p-1 sm:p-2 md:p-4 bg-[#F2F2F2]">
       {/* Header Section */}
       <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md mb-2 sm:mb-3">
         <div className="flex flex-col md:flex-row justify-between items-center gap-2">
@@ -343,10 +359,10 @@ const GenerateJadwal = () => {
                           <div className="flex justify-center">
                             <button
                               className="text-red-600 hover:text-red-800 transition-colors"
-                              onClick={() => deleteJadwal(item.id)}
+                              onClick={() => handleDeleteClick(item.id)}
                               title="Hapus"
                             >
-                              <FaTrash className="w-3 h-2 md:w-4 md:h-4" />
+                              <FaTrash className="h-2 w-2 md:h-3 md:w-3" />
                             </button>
                           </div>
                         </td>
@@ -502,6 +518,39 @@ const GenerateJadwal = () => {
           </ul>
         </div>
       </div>
+
+      {deleteModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 z-50">
+          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-sm animate-fadeIn">
+            <div className="text-center mb-4">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <FaExclamationTriangle className="h-6 w-6 text-red-600" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Konfirmasi Hapus
+              </h3>
+              <p className="text-sm text-gray-500">
+                Apakah Anda yakin ingin menghapus jadwal ini? Tindakan ini tidak
+                dapat dibatalkan.
+              </p>
+            </div>
+            <div className="flex justify-center space-x-3 mt-4">
+              <button
+                onClick={handleCancelDelete}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              >
+                Hapus
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
