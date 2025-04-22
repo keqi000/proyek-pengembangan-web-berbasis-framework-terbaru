@@ -33,7 +33,7 @@ type MataKuliahStore = {
   ) => Promise<void>;
 };
 
-export const useMataKuliahStore = create<MataKuliahStore>((set, get) => ({
+export const useMataKuliahStore = create<MataKuliahStore>((set) => ({
   data: [],
   loading: false,
   error: null,
