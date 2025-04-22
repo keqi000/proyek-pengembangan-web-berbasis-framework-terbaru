@@ -16,6 +16,7 @@ import {
   FaSpinner,
 } from "react-icons/fa";
 import { CourseTempInputData } from "../_scheme/course";
+import { fetchDosen } from "../../services/api";
 import axios from "axios";
 
 // API Service untuk mata kuliah
@@ -140,6 +141,35 @@ const KelolaMataKuliah = () => {
     }
   }, [currentMataKuliahId, getDosenByMataKuliah]);
 
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        // Load dosen data if not already loaded
+        if (dosenList.length === 0) {
+          const dosenData = await fetchDosen();
+          useDosenStore.getState().setData(dosenData);
+        }
+
+        // Load all lecturer-course assignments for each course
+        const loadAssignments = async () => {
+          for (const course of mataKuliahList) {
+            if (course.id) {
+              await useDosenMatakuliahStore
+                .getState()
+                .loadAssignmentsForCourse(course.id);
+            }
+          }
+        };
+
+        loadAssignments();
+      } catch (error) {
+        console.error("Error loading initial data:", error);
+      }
+    };
+
+    loadData();
+  }, [mataKuliahList, dosenList.length]);
+
   const handleSubmit = async () => {
     if (
       !tempInput.kode ||
@@ -253,8 +283,21 @@ const KelolaMataKuliah = () => {
   };
 
   // New function to open dosen assignment popup
-  const handleAssignDosen = (mataKuliahId: string) => {
+  const handleAssignDosen = async (mataKuliahId: string) => {
     setCurrentMataKuliahId(mataKuliahId);
+
+    // Load fresh data for this specific course
+    try {
+      await useDosenMatakuliahStore
+        .getState()
+        .loadAssignmentsForCourse(mataKuliahId);
+      // After loading, get the updated assignments
+      const assignedDosens = getDosenByMataKuliah(mataKuliahId);
+      setSelectedDosens(assignedDosens);
+    } catch (error) {
+      console.error("Error loading assignments:", error);
+    }
+
     setShowDosenAssignmentPopup(true);
   };
 
