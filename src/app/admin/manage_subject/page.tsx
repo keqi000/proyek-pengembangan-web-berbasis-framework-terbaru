@@ -13,11 +13,65 @@ import {
   FaUserTie,
   FaCheck,
   FaExclamationTriangle,
+  FaSpinner,
 } from "react-icons/fa";
 import { CourseTempInputData } from "../_scheme/course";
+import axios from "axios";
+
+// API Service untuk mata kuliah
+const API_URL = "http://localhost:8000/api";
+
+const fetchMataKuliahFromAPI = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/course`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    throw error;
+  }
+};
+
+const createMataKuliahAPI = async (data: {
+  kode: string;
+  nama: string;
+  semester: string;
+  sks: string;
+}) => {
+  try {
+    const response = await axios.post(`${API_URL}/course`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating course:", error);
+    throw error;
+  }
+};
+
+const updateMataKuliahAPI = async (
+  id: string,
+  data: { kode: string; nama: string; semester: string; sks: string }
+) => {
+  try {
+    const response = await axios.patch(`${API_URL}/course/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating course:", error);
+    throw error;
+  }
+};
+
+const deleteMataKuliahAPI = async (id: string) => {
+  try {
+    const response = await axios.delete(`${API_URL}/course/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting course:", error);
+    throw error;
+  }
+};
 
 const KelolaMataKuliah = () => {
   const mataKuliahList = useMataKuliahStore((state) => state.data);
+  const setMataKuliahList = useMataKuliahStore((state) => state.setData);
   const addMataKuliah = useMataKuliahStore((state) => state.addData);
   const updateMataKuliah = useMataKuliahStore((state) => state.updateData);
   const deleteMataKuliah = useMataKuliahStore((state) => state.deleteData);
@@ -55,6 +109,29 @@ const KelolaMataKuliah = () => {
     null
   );
 
+  // Loading state
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch data from API on component mount
+  useEffect(() => {
+    const loadMataKuliah = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await fetchMataKuliahFromAPI();
+        setMataKuliahList(data);
+      } catch (err) {
+        setError("Gagal memuat data mata kuliah");
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadMataKuliah();
+  }, [setMataKuliahList]);
+
   // Load selected dosens when opening the assignment popup
   useEffect(() => {
     if (currentMataKuliahId) {
@@ -63,7 +140,7 @@ const KelolaMataKuliah = () => {
     }
   }, [currentMataKuliahId, getDosenByMataKuliah]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (
       !tempInput.kode ||
       !tempInput.nama ||
@@ -74,24 +151,53 @@ const KelolaMataKuliah = () => {
       return;
     }
 
-    if (tempInput.id) {
-      updateMataKuliah(
-        tempInput.id,
-        tempInput.kode,
-        tempInput.nama,
-        tempInput.semester,
-        tempInput.sks
-      );
-    } else {
-      addMataKuliah({
-        kode: tempInput.kode,
-        nama: tempInput.nama,
-        semester: tempInput.semester,
-        sks: tempInput.sks,
-      });
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      if (tempInput.id) {
+        // Update existing mata kuliah
+        const updatedData = await updateMataKuliahAPI(tempInput.id, {
+          kode: tempInput.kode,
+          nama: tempInput.nama,
+          semester: tempInput.semester,
+          sks: tempInput.sks,
+        });
+
+        // Update local state with API response
+        updateMataKuliah(
+          tempInput.id,
+          updatedData.kode,
+          updatedData.nama,
+          updatedData.semester,
+          updatedData.sks
+        );
+      } else {
+        // Create new mata kuliah
+        const newData = await createMataKuliahAPI({
+          kode: tempInput.kode,
+          nama: tempInput.nama,
+          semester: tempInput.semester,
+          sks: tempInput.sks,
+        });
+
+        // Add new data to local state
+        addMataKuliah({
+          kode: newData.kode,
+          nama: newData.nama,
+          semester: newData.semester,
+          sks: newData.sks,
+        });
+      }
+
+      setTempInput({ kode: "", nama: "", semester: "", sks: "" });
+      setShowAddForm(false);
+    } catch (err) {
+      setError("Gagal menyimpan data mata kuliah");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
-    setTempInput({ kode: "", nama: "", semester: "", sks: "" });
-    setShowAddForm(false);
   };
 
   const handleEditClick = (mataKuliah: CourseTempInputData) => {
@@ -99,7 +205,7 @@ const KelolaMataKuliah = () => {
     setEditPopup(true);
   };
 
-  const handleConfirmEdit = () => {
+  const handleConfirmEdit = async () => {
     if (selectedMataKuliah !== null && selectedMataKuliah.id) {
       if (
         !selectedMataKuliah.kode ||
@@ -110,15 +216,36 @@ const KelolaMataKuliah = () => {
         alert("Harap isi semua field!");
         return;
       }
-      updateMataKuliah(
-        selectedMataKuliah.id,
-        selectedMataKuliah.kode,
-        selectedMataKuliah.nama,
-        selectedMataKuliah.semester,
-        selectedMataKuliah.sks
-      );
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        // Update via API
+        const updatedData = await updateMataKuliahAPI(selectedMataKuliah.id, {
+          kode: selectedMataKuliah.kode,
+          nama: selectedMataKuliah.nama,
+          semester: selectedMataKuliah.semester,
+          sks: selectedMataKuliah.sks,
+        });
+
+        // Update local state
+        updateMataKuliah(
+          selectedMataKuliah.id,
+          updatedData.kode,
+          updatedData.nama,
+          updatedData.semester,
+          updatedData.sks
+        );
+
+        setEditPopup(false);
+      } catch (err) {
+        setError("Gagal memperbarui data mata kuliah");
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
     }
-    setEditPopup(false);
   };
 
   const handleCancelEdit = () => {
@@ -171,11 +298,26 @@ const KelolaMataKuliah = () => {
     setDeleteModal(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (mataKuliahToDelete) {
-      deleteMataKuliah(mataKuliahToDelete);
-      setDeleteModal(false);
-      setMataKuliahToDelete(null);
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        // Delete via API
+        await deleteMataKuliahAPI(mataKuliahToDelete);
+
+        // Update local state
+        deleteMataKuliah(mataKuliahToDelete);
+
+        setDeleteModal(false);
+        setMataKuliahToDelete(null);
+      } catch (err) {
+        setError("Gagal menghapus data mata kuliah");
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -202,8 +344,40 @@ const KelolaMataKuliah = () => {
       .join(", ");
   };
 
+  // Loading indicator component
+  const LoadingIndicator = () => (
+    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
+      <div className="bg-white p-4 rounded-lg shadow-lg flex items-center space-x-3">
+        <FaSpinner className="animate-spin text-[#4F959D] text-xl" />
+        <p className="text-gray-600">Memproses...</p>
+      </div>
+    </div>
+  );
+
+  // Error notification component
+  const ErrorNotification = ({ message }: { message: string }) => (
+    <div className="fixed top-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md z-50">
+      <div className="flex items-center">
+        <FaExclamationTriangle className="mr-2" />
+        <p>{message}</p>
+      </div>
+      <button
+        className="absolute top-1 right-1 text-red-500 hover:text-red-700"
+        onClick={() => setError(null)}
+      >
+        &times;
+      </button>
+    </div>
+  );
+
   return (
     <div className="w-full max-w-full overflow-hidden p-2 sm:p-4 bg-[#F2F2F2]">
+      {/* Loading indicator */}
+      {isLoading && <LoadingIndicator />}
+
+      {/* Error notification */}
+      {error && <ErrorNotification message={error} />}
+
       {/* Header Section */}
       <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md mb-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -229,6 +403,7 @@ const KelolaMataKuliah = () => {
             <button
               onClick={() => setShowAddForm(!showAddForm)}
               className="bg-[#4F959D] text-white px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center"
+              disabled={isLoading}
             >
               <FaPlus className="mr-1" /> Tambah MK
             </button>
@@ -256,6 +431,7 @@ const KelolaMataKuliah = () => {
                 onChange={(e) =>
                   setTempInput({ ...tempInput, kode: e.target.value })
                 }
+                disabled={isLoading}
               />
             </div>
             <div>
@@ -270,6 +446,7 @@ const KelolaMataKuliah = () => {
                 onChange={(e) =>
                   setTempInput({ ...tempInput, nama: e.target.value })
                 }
+                disabled={isLoading}
               />
             </div>
             <div>
@@ -282,6 +459,7 @@ const KelolaMataKuliah = () => {
                 onChange={(e) =>
                   setTempInput({ ...tempInput, semester: e.target.value })
                 }
+                disabled={isLoading}
               >
                 <option value="">Pilih Semester</option>
                 <option value="1">Semester 1</option>
@@ -306,6 +484,7 @@ const KelolaMataKuliah = () => {
                 onChange={(e) =>
                   setTempInput({ ...tempInput, sks: e.target.value })
                 }
+                disabled={isLoading}
               />
             </div>
             <div className="flex justify-start space-x-2">
@@ -313,6 +492,7 @@ const KelolaMataKuliah = () => {
                 type="button"
                 className="bg-gray-300 text-gray-800 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-gray-400 transition"
                 onClick={() => setShowAddForm(false)}
+                disabled={isLoading}
               >
                 Batal
               </button>
@@ -320,8 +500,16 @@ const KelolaMataKuliah = () => {
                 type="button"
                 className="bg-[#4F959D] text-white px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-[#3C7A85] transition"
                 onClick={handleSubmit}
+                disabled={isLoading}
               >
-                Simpan
+                {isLoading ? (
+                  <span className="flex items-center">
+                    <FaSpinner className="animate-spin mr-2" />
+                    Menyimpan...
+                  </span>
+                ) : (
+                  "Simpan"
+                )}
               </button>
             </div>
           </form>
@@ -334,97 +522,114 @@ const KelolaMataKuliah = () => {
           <FaBook className="mr-2" /> Daftar Mata Kuliah
         </h2>
 
-        <div className="overflow-x-auto w-full">
-          <table className="w-full border-collapse text-[8px] sm:text-sm">
-            <thead>
-              <tr className="bg-[#F5F5F5]">
-                <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8">
-                  No
-                </th>
-                <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                  Kode
-                </th>
-                <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                  Nama MK
-                </th>
-                <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                  Sem
-                </th>
-                <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                  SKS
-                </th>
-                <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                  Dosen Pengampu
-                </th>
-                <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-24">
-                  Aksi
-                </th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-700">
-              {filteredMataKuliah.length > 0 ? (
-                filteredMataKuliah.map((mataKuliah, index) => (
-                  <tr
-                    key={mataKuliah.id}
-                    className="hover:bg-gray-50 border-b border-gray-200 transition-colors text-[8px] md:text-base"
-                  >
-                    <td className="px-2 py-2">{index + 1}</td>
-                    <td className="px-2 py-2">{mataKuliah.kode}</td>
-                    <td className="px-2 py-2 font-medium">{mataKuliah.nama}</td>
-                    <td className="px-2 py-2 text-center">
-                      {mataKuliah.semester}
-                    </td>
-                    <td className="px-2 py-2 text-center">{mataKuliah.sks}</td>
-                    <td className="px-2 py-2 text-[8px] md:text-sm">
-                      {getDosenNamesForMataKuliah(mataKuliah.id || "") || (
-                        <span className="text-gray-400 italic">
-                          Belum ada dosen
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-2 py-2">
-                      <div className="flex justify-center gap-1 md:gap-2">
-                        <button
-                          className="text-blue-600 hover:text-blue-800 transition-colors p-1"
-                          onClick={() => handleEditClick(mataKuliah)}
-                          title="Edit"
-                        >
-                          <FaEdit className="h-3 w-3 md:h-4 md:w-4" />
-                        </button>
-                        <button
-                          className="text-green-600 hover:text-green-800 transition-colors p-1"
-                          onClick={() => handleAssignDosen(mataKuliah.id || "")}
-                          title="Pilih Dosen"
-                          disabled={!mataKuliah.id}
-                        >
-                          <FaUserTie className="h-3 w-3 md:h-4 md:w-4" />
-                        </button>
-                        <button
-                          className="text-red-600 hover:text-red-800 transition-colors p-1"
-                          onClick={() => handleDeleteClick(mataKuliah.id || "")}
-                          title="Hapus"
-                        >
-                          <FaTrash className="h-3 w-3 md:h-4 md:w-4" />
-                        </button>
-                      </div>
+        {isLoading && mataKuliahList.length === 0 ? (
+          <div className="py-8 text-center">
+            <FaSpinner className="animate-spin mx-auto text-2xl text-[#4F959D] mb-2" />
+            <p className="text-gray-500">Memuat data mata kuliah...</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto w-full">
+            <table className="w-full border-collapse text-[8px] sm:text-sm">
+              <thead>
+                <tr className="bg-[#F5F5F5]">
+                  <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8">
+                    No
+                  </th>
+                  <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                    Kode
+                  </th>
+                  <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                    Nama MK
+                  </th>
+                  <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                    Sem
+                  </th>
+                  <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                    SKS
+                  </th>
+                  <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                    Dosen Pengampu
+                  </th>
+                  <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-24">
+                    Aksi
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-700">
+                {filteredMataKuliah.length > 0 ? (
+                  filteredMataKuliah.map((mataKuliah, index) => (
+                    <tr
+                      key={mataKuliah.id}
+                      className="hover:bg-gray-50 border-b border-gray-200 transition-colors text-[8px] md:text-base"
+                    >
+                      <td className="px-2 py-2">{index + 1}</td>
+                      <td className="px-2 py-2">{mataKuliah.kode}</td>
+                      <td className="px-2 py-2 font-medium">
+                        {mataKuliah.nama}
+                      </td>
+                      <td className="px-2 py-2 text-center">
+                        {mataKuliah.semester}
+                      </td>
+                      <td className="px-2 py-2 text-center">
+                        {mataKuliah.sks}
+                      </td>
+                      <td className="px-2 py-2 text-[8px] md:text-sm">
+                        {getDosenNamesForMataKuliah(mataKuliah.id || "") || (
+                          <span className="text-gray-400 italic">
+                            Belum ada dosen
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-2 py-2">
+                        <div className="flex justify-center gap-1 md:gap-2">
+                          <button
+                            className="text-blue-600 hover:text-blue-800 transition-colors p-1"
+                            onClick={() => handleEditClick(mataKuliah)}
+                            title="Edit"
+                            disabled={isLoading}
+                          >
+                            <FaEdit className="h-3 w-3 md:h-4 md:w-4" />
+                          </button>
+                          <button
+                            className="text-green-600 hover:text-green-800 transition-colors p-1"
+                            onClick={() =>
+                              handleAssignDosen(mataKuliah.id || "")
+                            }
+                            title="Pilih Dosen"
+                            disabled={!mataKuliah.id || isLoading}
+                          >
+                            <FaUserTie className="h-3 w-3 md:h-4 md:w-4" />
+                          </button>
+                          <button
+                            className="text-red-600 hover:text-red-800 transition-colors p-1"
+                            onClick={() =>
+                              handleDeleteClick(mataKuliah.id || "")
+                            }
+                            title="Hapus"
+                            disabled={isLoading}
+                          >
+                            <FaTrash className="h-3 w-3 md:h-4 md:w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={7}
+                      className="px-2 py-4 text-center text-gray-500 bg-gray-50 text-xs sm:text-sm"
+                    >
+                      {searchTerm
+                        ? "Tidak ada hasil yang sesuai dengan pencarian"
+                        : "Belum ada data mata kuliah"}
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={7}
-                    className="px-2 py-4 text-center text-gray-500 bg-gray-50 text-xs sm:text-sm"
-                  >
-                    {searchTerm
-                      ? "Tidak ada hasil yang sesuai dengan pencarian"
-                      : "Belum ada data mata kuliah"}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         {/* Table Footer with Stats */}
         <div className="mt-3 text-xs text-gray-600 flex flex-col xs:flex-row justify-between items-start xs:items-center gap-1">
@@ -465,6 +670,7 @@ const KelolaMataKuliah = () => {
                       kode: e.target.value,
                     })
                   }
+                  disabled={isLoading}
                 />
               </div>
               <div>
@@ -481,6 +687,7 @@ const KelolaMataKuliah = () => {
                       nama: e.target.value,
                     })
                   }
+                  disabled={isLoading}
                 />
               </div>
               <div>
@@ -496,6 +703,7 @@ const KelolaMataKuliah = () => {
                       semester: e.target.value,
                     })
                   }
+                  disabled={isLoading}
                 >
                   <option value="">Pilih Semester</option>
                   <option value="1">Semester 1</option>
@@ -522,6 +730,7 @@ const KelolaMataKuliah = () => {
                       sks: e.target.value,
                     })
                   }
+                  disabled={isLoading}
                 />
               </div>
               <div className="flex space-x-2 pt-2">
@@ -529,6 +738,7 @@ const KelolaMataKuliah = () => {
                   type="button"
                   className="bg-gray-300 text-gray-800 px-3 py-1.5 text-xs sm:text-sm w-1/2 rounded-lg hover:bg-gray-400 transition"
                   onClick={handleCancelEdit}
+                  disabled={isLoading}
                 >
                   Batal
                 </button>
@@ -536,8 +746,16 @@ const KelolaMataKuliah = () => {
                   type="button"
                   className="bg-[#4F959D] text-white px-3 py-1.5 text-xs sm:text-sm w-1/2 rounded-lg hover:bg-[#3C7A85] transition"
                   onClick={handleConfirmEdit}
+                  disabled={isLoading}
                 >
-                  Simpan
+                  {isLoading ? (
+                    <span className="flex items-center justify-center">
+                      <FaSpinner className="animate-spin mr-2" />
+                      Menyimpan...
+                    </span>
+                  ) : (
+                    "Simpan"
+                  )}
                 </button>
               </div>
             </form>
@@ -622,6 +840,7 @@ const KelolaMataKuliah = () => {
         </div>
       )}
 
+      {/* Delete Confirmation Modal */}
       {deleteModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 z-50">
           <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-sm animate-fadeIn">
@@ -641,14 +860,23 @@ const KelolaMataKuliah = () => {
               <button
                 onClick={handleCancelDelete}
                 className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+                disabled={isLoading}
               >
                 Batal
               </button>
               <button
                 onClick={handleConfirmDelete}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                disabled={isLoading}
               >
-                Hapus
+                {isLoading ? (
+                  <span className="flex items-center">
+                    <FaSpinner className="animate-spin mr-2" />
+                    Menghapus...
+                  </span>
+                ) : (
+                  "Hapus"
+                )}
               </button>
             </div>
           </div>

@@ -1,6 +1,12 @@
 "use client";
 
 import { create } from "zustand";
+import {
+  fetchMataKuliah,
+  createMataKuliah,
+  updateMataKuliah,
+  deleteMataKuliah,
+} from "../../services/api";
 
 type MataKuliahItem = {
   id: string;
@@ -12,60 +18,100 @@ type MataKuliahItem = {
 
 type MataKuliahStore = {
   data: MataKuliahItem[];
+  loading: boolean;
+  error: string | null;
+  fetchData: () => Promise<void>;
   setData: (data: MataKuliahItem[]) => void;
-  addData: (data: Omit<MataKuliahItem, "id">) => void;
-  deleteData: (id: MataKuliahItem["id"]) => void;
+  addData: (data: Omit<MataKuliahItem, "id">) => Promise<void>;
+  deleteData: (id: MataKuliahItem["id"]) => Promise<void>;
   updateData: (
     id: MataKuliahItem["id"],
     kode: MataKuliahItem["kode"],
     nama: MataKuliahItem["nama"],
     semester: MataKuliahItem["semester"],
     sks: MataKuliahItem["sks"]
-  ) => void;
+  ) => Promise<void>;
 };
 
-export const useMataKuliahStore = create<MataKuliahStore>((set) => ({
+export const useMataKuliahStore = create<MataKuliahStore>((set, get) => ({
   data: [],
-  setData: (data: MataKuliahItem[]) =>
-    set((state) => ({ ...state, data: data })),
-  addData: (data: Omit<MataKuliahItem, "id">) =>
-    set((state) => {
-      const _newId = state.data.length + 1;
-      return {
+  loading: false,
+  error: null,
+
+  fetchData: async () => {
+    set({ loading: true, error: null });
+    try {
+      const data = await fetchMataKuliah();
+      set({ data, loading: false });
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : "Unknown error",
+        loading: false,
+      });
+    }
+  },
+
+  setData: (data: MataKuliahItem[]) => set((state) => ({ ...state, data })),
+
+  addData: async (data: Omit<MataKuliahItem, "id">) => {
+    set({ loading: true, error: null });
+    try {
+      const newItem = await createMataKuliah(data);
+      set((state) => ({
         ...state,
-        data: [...state.data, { id: _newId.toString(), ...data }],
-      };
-    }),
-  deleteData: (id: MataKuliahItem["id"]) =>
-    set((state) => {
-      const newData = state.data.filter((item) => item.id !== id);
-      return {
+        data: [...state.data, newItem],
+        loading: false,
+      }));
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : "Unknown error",
+        loading: false,
+      });
+    }
+  },
+
+  deleteData: async (id: MataKuliahItem["id"]) => {
+    set({ loading: true, error: null });
+    try {
+      await deleteMataKuliah(id);
+      set((state) => ({
         ...state,
-        data: newData,
-      };
-    }),
-  updateData: (
+        data: state.data.filter((item) => item.id !== id),
+        loading: false,
+      }));
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : "Unknown error",
+        loading: false,
+      });
+    }
+  },
+
+  updateData: async (
     id: MataKuliahItem["id"],
     kode: MataKuliahItem["kode"],
     nama: MataKuliahItem["nama"],
     semester: MataKuliahItem["semester"],
     sks: MataKuliahItem["sks"]
-  ) =>
-    set((state) => {
-      const newData = state.data.map((item) =>
-        item.id !== id
-          ? item
-          : {
-              ...item,
-              kode: kode,
-              nama: nama,
-              semester: semester,
-              sks: sks,
-            }
-      );
-      return {
+  ) => {
+    set({ loading: true, error: null });
+    try {
+      const updatedItem = await updateMataKuliah(id, {
+        kode,
+        nama,
+        semester,
+        sks,
+      });
+      set((state) => ({
         ...state,
-        data: newData,
-      };
-    }),
+        data: state.data.map((item) => (item.id !== id ? item : updatedItem)),
+        loading: false,
+      }));
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : "Unknown error",
+        loading: false,
+      });
+    }
+  },
 }));
