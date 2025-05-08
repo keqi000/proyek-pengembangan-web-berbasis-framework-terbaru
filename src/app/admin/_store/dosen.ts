@@ -1,6 +1,12 @@
 "use client";
 
 import { create } from "zustand";
+import {
+  fetchDosen,
+  createDosen,
+  updateDosen,
+  deleteDosen,
+} from "../../services/api";
 
 type DosenItem = {
   id: string;
@@ -10,6 +16,9 @@ type DosenItem = {
 
 type DosenStore = {
   data: DosenItem[];
+  loading: boolean;
+  error: string | null;
+  fetchData: () => Promise<void>;
   setData: (data: DosenItem[]) => void;
   addData: (data: DosenItem) => void;
   deleteData: (id: DosenItem["id"]) => void;
@@ -22,16 +31,32 @@ type DosenStore = {
 
 export const useDosenStore = create<DosenStore>((set) => ({
   data: [],
+  loading: false,
+  error: null,
+
+  fetchData: async () => {
+    set({ loading: true, error: null });
+    try {
+      const data = await fetchDosen();
+      set({ data, loading: false });
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : "Unknown error",
+        loading: false,
+      });
+    }
+  },
+
   setData: (data: DosenItem[]) => set((state) => ({ ...state, data: data })),
-  addData: (data: Omit<DosenItem, "id">) =>
+
+  addData: (data: DosenItem) =>
     set((state) => {
-      // TODO: handle de-duplication
-      const _newId = state.data.length + 1;
       return {
         ...state,
-        data: [...state.data, { id: _newId.toString(), ...data }],
+        data: [...state.data, data],
       };
     }),
+
   deleteData: (id: DosenItem["id"]) =>
     set((state) => {
       const newData = state.data.filter((item) => item.id !== id);
@@ -40,6 +65,7 @@ export const useDosenStore = create<DosenStore>((set) => ({
         data: newData,
       };
     }),
+
   updateData: (
     id: DosenItem["id"],
     nama: DosenItem["nama"],
