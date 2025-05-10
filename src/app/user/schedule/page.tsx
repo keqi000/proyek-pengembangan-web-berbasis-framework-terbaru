@@ -194,7 +194,7 @@ const JadwalKuliahPage: FC = () => {
       </div>
 
       {/* Jadwal Content */}
-      <div className="space-y-6">
+      <div className="gap-y-6 flex flex-col md:grid md:grid-cols-3  gap-x-2">
         {days
           .filter((day) => (filterDay ? day === filterDay : true))
           .map((day) => {
@@ -204,13 +204,13 @@ const JadwalKuliahPage: FC = () => {
             return (
               <div
                 key={day}
-                className="bg-white rounded-lg shadow-md overflow-hidden font-poppins"
+                className="bg-white rounded-lg shadow-md overflow-hidden font-poppins md:h-[35ch]"
               >
                 <div className="bg-[#A27B5C] text-white p-4 flex items-center">
                   <Calendar className="w-5 h-5 mr-2" />
                   <h2 className="text-xl font-semibold font-bebas">{day}</h2>
                 </div>
-                <div className="divide-y divide-gray-200">
+                <div className="flex flex-col divide-y divide-gray-200">
                   {dayJadwal.map((jadwal) => (
                     <div key={jadwal.id} className="p-4 hover:bg-gray-50">
                       <div className="flex flex-col md:flex-row md:items-center justify-between mb-2">
@@ -225,7 +225,7 @@ const JadwalKuliahPage: FC = () => {
                           </span>
                         </div>
                         <div
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getJenisKuliahColor(
+                          className={`flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getJenisKuliahColor(
                             jadwal.jenisKuliah
                           )}`}
                         >
