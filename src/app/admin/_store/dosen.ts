@@ -1,12 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import {
-  fetchDosen,
-  createDosen,
-  updateDosen,
-  deleteDosen,
-} from "../../services/api";
+import { fetchDosen } from "../../services/api";
 
 type DosenItem = {
   id: string;
