@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaTrash,
   FaCalendarAlt,
@@ -9,41 +9,88 @@ import {
   FaFileExport,
   FaFilter,
   FaExclamationTriangle,
+  FaSpinner,
 } from "react-icons/fa";
 import { useDosenStore } from "../_store/dosen";
 import { useRoomStore } from "../_store/ruangan";
 import { useMataKuliahStore } from "../_store/matakuliah";
-import { useDosenMatakuliahStore } from "../_store/dosenMatakuliah"; // Import the dosen-matakuliah store
-
-type JadwalItem = {
-  id: number;
-  namaDosen: string;
-  mataKuliah: string;
-  semester: string;
-  ruangan: string;
-  waktu: string;
-  hari: string;
-};
+import { useDosenMatakuliahStore } from "../_store/dosenMatakuliah";
+import { useJadwalStore } from "../_store/jadwal";
+import { exportJadwalToCsv } from "../../services/api";
 
 const GenerateJadwal = () => {
   const dosenList = useDosenStore((state) => state.data);
   const ruanganList = useRoomStore((state) => state.data);
   const mataKuliahList = useMataKuliahStore((state) => state.data);
-  // Get the dosen-matakuliah assignments
   const { getDosenByMataKuliah } = useDosenMatakuliahStore();
 
-  const [jadwal, setJadwal] = useState<JadwalItem[]>([]);
+  // Gunakan store jadwal
+  const {
+    data: jadwal,
+    filteredData: filteredJadwal,
+    loading: isGenerating,
+    error,
+    generateData,
+    deleteData,
+    filterByDay,
+    searchData,
+    fetchData,
+  } = useJadwalStore();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDay, setFilterDay] = useState<string | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [jadwalToDelete, setJadwalToDelete] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"];
-  const timeSlots = [
-    "08:00 - 09:40",
-    "09:50 - 11:30",
-    "13:00 - 14:40",
-    "14:50 - 16:30",
-  ];
+
+  // Fetch initial data
+  useEffect(() => {
+    const loadInitialData = async () => {
+      // Load dosen, ruangan, and matakuliah data if not already loaded
+      if (dosenList.length === 0) {
+        await useDosenStore.getState().fetchData();
+      }
+      if (ruanganList.length === 0) {
+        await useRoomStore.getState().fetchData();
+      }
+      if (mataKuliahList.length === 0) {
+        await useMataKuliahStore.getState().fetchData();
+      }
+
+      // Load existing schedules
+      await fetchData();
+    };
+
+    loadInitialData();
+  }, [dosenList.length, ruanganList.length, mataKuliahList.length, fetchData]);
+
+  // Handle search
+  useEffect(() => {
+    const delaySearch = setTimeout(() => {
+      if (searchTerm) {
+        searchData(searchTerm);
+      } else {
+        // If search is cleared, apply only day filter if it exists
+        if (filterDay) {
+          filterByDay(filterDay);
+        } else {
+          // If no filters, show all data
+          useJadwalStore
+            .getState()
+            .setFilteredData(useJadwalStore.getState().data);
+        }
+      }
+    }, 300);
+
+    return () => clearTimeout(delaySearch);
+  }, [searchTerm, filterDay, searchData, filterByDay]);
+
+  // Handle day filter
+  useEffect(() => {
+    filterByDay(filterDay);
+  }, [filterDay, filterByDay]);
 
   const generateSchedule = () => {
     if (
@@ -55,119 +102,34 @@ const GenerateJadwal = () => {
       return;
     }
 
-    setIsGenerating(true);
-
-    // Simulate loading
-    setTimeout(() => {
-      const generatedJadwal: JadwalItem[] = [];
-      let id = 1;
-
-      // Generate schedule based on mata kuliah list
-      mataKuliahList.forEach((mataKuliah) => {
-        // Get assigned dosens for this mata kuliah
-        const assignedDosenIds = getDosenByMataKuliah(mataKuliah.id || "");
-
-        // If no dosen is assigned, skip this mata kuliah or use a placeholder
-        if (assignedDosenIds.length === 0) {
-          console.log(`No dosen assigned for ${mataKuliah.nama}`);
-          // You can either skip or use a placeholder like:
-          // assignedDosenIds.push("placeholder");
-          return; // Skip this mata kuliah
-        }
-
-        // For each assigned dosen, create a schedule
-        assignedDosenIds.forEach((dosenId) => {
-          // Find the dosen object
-          const dosen = dosenList.find((d) => d.id === dosenId);
-          if (!dosen) return; // Skip if dosen not found
-
-          // Randomly assign a day, time slot, and room
-          const randomDay = days[Math.floor(Math.random() * days.length)];
-          const randomTimeSlot =
-            timeSlots[Math.floor(Math.random() * timeSlots.length)];
-          const randomRoom =
-            ruanganList[Math.floor(Math.random() * ruanganList.length)];
-
-          generatedJadwal.push({
-            id: id++,
-            namaDosen: dosen.nama,
-            mataKuliah: mataKuliah.nama,
-            semester: mataKuliah.semester || "-",
-            ruangan: randomRoom.nama,
-            waktu: randomTimeSlot,
-            hari: randomDay,
-          });
-        });
-      });
-
-      setJadwal(generatedJadwal);
-      setIsGenerating(false);
-    }, 1500);
+    generateData(true); // Clear existing schedules
   };
 
-  const exportToCSV = () => {
+  const exportToCSV = async () => {
     if (jadwal.length === 0) {
       alert("Tidak ada jadwal untuk diekspor.");
       return;
     }
 
-    const headers = [
-      "No",
-      "Hari",
-      "Waktu",
-      "Mata Kuliah",
-      "Semester",
-      "Dosen",
-      "Ruangan",
-    ];
-    const csvContent = [
-      headers.join(","),
-      ...jadwal.map((item, index) =>
-        [
-          index + 1,
-          item.hari,
-          item.waktu,
-          item.mataKuliah,
-          item.semester,
-          item.namaDosen,
-          item.ruangan,
-        ].join(",")
-      ),
-    ].join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", "jadwal_kuliah.csv");
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    setIsExporting(true);
+    try {
+      await exportJadwalToCsv();
+    } catch (err) {
+      console.error("Error exporting to CSV:", err);
+      alert("Gagal mengekspor jadwal ke CSV.");
+    } finally {
+      setIsExporting(false);
+    }
   };
 
-  const filteredJadwal = jadwal.filter((item) => {
-    const matchesSearch =
-      item.namaDosen.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.mataKuliah.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.ruangan.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesDay = filterDay ? item.hari === filterDay : true;
-
-    return matchesSearch && matchesDay;
-  });
-
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [jadwalToDelete, setJadwalToDelete] = useState<number | null>(null);
-
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = (id: string) => {
     setJadwalToDelete(id);
     setDeleteModal(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (jadwalToDelete !== null) {
-      setJadwal(jadwal.filter((item) => item.id !== jadwalToDelete));
+  const handleConfirmDelete = async () => {
+    if (jadwalToDelete) {
+      await deleteData(jadwalToDelete);
       setDeleteModal(false);
       setJadwalToDelete(null);
     }
@@ -178,8 +140,27 @@ const GenerateJadwal = () => {
     setJadwalToDelete(null);
   };
 
+  // Error notification component
+  const ErrorNotification = ({ message }: { message: string }) => (
+    <div className="fixed top-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md z-50">
+      <div className="flex items-center">
+        <FaExclamationTriangle className="mr-2" />
+        <p>{message}</p>
+      </div>
+      <button
+        className="absolute top-1 right-1 text-red-500 hover:text-red-700"
+        onClick={() => useJadwalStore.setState({ error: null })}
+      >
+        &times;
+      </button>
+    </div>
+  );
+
   return (
     <div className="w-full max-w-full p-1 sm:p-2 md:p-4 bg-[#F2F2F2]">
+      {/* Error notification */}
+      {error && <ErrorNotification message={error} />}
+
       {/* Header Section */}
       <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md mb-2 sm:mb-3">
         <div className="flex flex-col md:flex-row justify-between items-center gap-2">
@@ -199,17 +180,37 @@ const GenerateJadwal = () => {
                 isGenerating ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
-              <FaRandom className="mr-1" />
-              {isGenerating ? "Generating..." : "Generate"}
+              {isGenerating ? (
+                <>
+                  <FaSpinner className="animate-spin mr-1" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <FaRandom className="mr-1" />
+                  Generate
+                </>
+              )}
             </button>
             <button
               onClick={exportToCSV}
-              disabled={jadwal.length === 0}
+              disabled={jadwal.length === 0 || isExporting}
               className={`bg-[#2C3930] text-white px-2 py-1 md:px-3 md:py-2 text-xs md:text-sm rounded-lg hover:bg-[#1A2420] transition flex items-center justify-center ${
-                jadwal.length === 0 ? "opacity-70 cursor-not-allowed" : ""
+                jadwal.length === 0 || isExporting
+                  ? "opacity-70 cursor-not-allowed"
+                  : ""
               }`}
             >
-              <FaFileExport className="mr-1" /> Export
+              {isExporting ? (
+                <>
+                  <FaSpinner className="animate-spin mr-1" />
+                  Exporting...
+                </>
+              ) : (
+                <>
+                  <FaFileExport className="mr-1" /> Export
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -275,7 +276,6 @@ const GenerateJadwal = () => {
             {/* Filter - md */}
             <div className="hidden md:flex flex-row items-center gap-x-2 py-2">
               <div className="flex flex-row gap-x-1">
-                {/* <FaFilter className="text-[#4F959D] text-base" /> */}
                 <span className="text-gray-700 text-xs">Filter:</span>
               </div>
 
@@ -361,6 +361,7 @@ const GenerateJadwal = () => {
                               className="text-red-600 hover:text-red-800 transition-colors"
                               onClick={() => handleDeleteClick(item.id)}
                               title="Hapus"
+                              disabled={isGenerating}
                             >
                               <FaTrash className="h-2 w-2 md:h-3 md:w-3" />
                             </button>
@@ -519,6 +520,7 @@ const GenerateJadwal = () => {
         </div>
       </div>
 
+      {/* Delete Confirmation Modal */}
       {deleteModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 z-50">
           <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-sm animate-fadeIn">
@@ -538,14 +540,23 @@ const GenerateJadwal = () => {
               <button
                 onClick={handleCancelDelete}
                 className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+                disabled={isGenerating}
               >
                 Batal
               </button>
               <button
                 onClick={handleConfirmDelete}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                disabled={isGenerating}
               >
-                Hapus
+                {isGenerating ? (
+                  <span className="flex items-center">
+                    <FaSpinner className="animate-spin mr-2" />
+                    Menghapus...
+                  </span>
+                ) : (
+                  "Hapus"
+                )}
               </button>
             </div>
           </div>
