@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaEdit,
   FaTrash,
@@ -8,15 +8,23 @@ import {
   FaSearch,
   FaDoorOpen,
   FaExclamationTriangle,
+  FaSpinner,
 } from "react-icons/fa";
 import { useRoomStore } from "../_store/ruangan";
 import { RuanganItem } from "../_scheme/room";
+import {
+  fetchRuangan,
+  createRuangan,
+  updateRuangan,
+  deleteRuangan,
+} from "../../services/api";
 
 const KelolaRuangan = () => {
   const ruanganList = useRoomStore((state) => state.data);
+  const setRuanganList = useRoomStore((state) => state.setData);
   const addRuangan = useRoomStore((state) => state.addData);
-  const updateRuangan = useRoomStore((state) => state.updateData);
-  const deleteRuangan = useRoomStore((state) => state.deleteData);
+  const updateRuanganStore = useRoomStore((state) => state.updateData);
+  const deleteRuanganStore = useRoomStore((state) => state.deleteData);
 
   const [tempInput, setTempInput] = useState<RuanganItem>({
     id: "",
@@ -34,23 +42,63 @@ const KelolaRuangan = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [roomToDelete, setRoomToDelete] = useState<string | null>(null);
 
-  const handleSubmit = () => {
+  // Loading and error states
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch data from API on component mount
+  useEffect(() => {
+    const loadRuangan = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await fetchRuangan();
+        setRuanganList(data);
+      } catch (err) {
+        setError("Gagal memuat data ruangan");
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadRuangan();
+  }, [setRuanganList]);
+
+  const handleSubmit = async () => {
     if (!tempInput.nama || !tempInput.kapasitas) {
       alert("Harap isi semua field!");
       return;
     }
 
-    addRuangan({
-      nama: tempInput.nama,
-      kapasitas: tempInput.kapasitas,
-    });
+    setIsLoading(true);
+    setError(null);
 
-    setTempInput({
-      id: "",
-      nama: "",
-      kapasitas: "",
-    });
-    setShowAddForm(false);
+    try {
+      // Create new room
+      const newData = await createRuangan({
+        nama: tempInput.nama,
+        kapasitas: tempInput.kapasitas,
+      });
+
+      // Add new data to local state
+      addRuangan({
+        nama: newData.nama,
+        kapasitas: newData.kapasitas,
+      });
+
+      setTempInput({
+        id: "",
+        nama: "",
+        kapasitas: "",
+      });
+      setShowAddForm(false);
+    } catch (err) {
+      setError("Gagal menyimpan data ruangan");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleEditClick = (ruangan: RuanganItem) => {
@@ -58,19 +106,37 @@ const KelolaRuangan = () => {
     setEditPopup(true);
   };
 
-  const handleConfirmEdit = () => {
-    if (selectedRuangan?.id) {
+  const handleConfirmEdit = async () => {
+    if (selectedRuangan !== null && selectedRuangan.id) {
       if (!selectedRuangan.nama || !selectedRuangan.kapasitas) {
         alert("Harap isi semua field!");
         return;
       }
-      updateRuangan(
-        selectedRuangan.id,
-        selectedRuangan.nama,
-        selectedRuangan.kapasitas
-      );
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        // Update via API
+        const updatedData = await updateRuangan(selectedRuangan.id, {
+          nama: selectedRuangan.nama,
+          kapasitas: selectedRuangan.kapasitas,
+        });
+
+        // Update local state
+        updateRuanganStore(
+          selectedRuangan.id,
+          updatedData.nama,
+          updatedData.kapasitas
+        );
+        setEditPopup(false);
+      } catch (err) {
+        setError("Gagal memperbarui data ruangan");
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
     }
-    setEditPopup(false);
   };
 
   const handleCancelEdit = () => {
@@ -82,11 +148,26 @@ const KelolaRuangan = () => {
     setDeleteModal(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (roomToDelete) {
-      deleteRuangan(roomToDelete);
-      setDeleteModal(false);
-      setRoomToDelete(null);
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        // Delete via API
+        await deleteRuangan(roomToDelete);
+
+        // Update local state
+        deleteRuanganStore(roomToDelete);
+
+        setDeleteModal(false);
+        setRoomToDelete(null);
+      } catch (err) {
+        setError("Gagal menghapus data ruangan");
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -101,8 +182,40 @@ const KelolaRuangan = () => {
       ruangan.kapasitas.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Loading indicator component
+  const LoadingIndicator = () => (
+    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
+      <div className="bg-white p-4 rounded-lg shadow-lg flex items-center space-x-3">
+        <FaSpinner className="animate-spin text-[#4F959D] text-xl" />
+        <p className="text-gray-600">Memproses...</p>
+      </div>
+    </div>
+  );
+
+  // Error notification component
+  const ErrorNotification = ({ message }: { message: string }) => (
+    <div className="fixed top-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md z-50">
+      <div className="flex items-center">
+        <FaExclamationTriangle className="mr-2" />
+        <p>{message}</p>
+      </div>
+      <button
+        className="absolute top-1 right-1 text-red-500 hover:text-red-700"
+        onClick={() => setError(null)}
+      >
+        &times;
+      </button>
+    </div>
+  );
+
   return (
     <div className="w-full max-w-full overflow-hidden p-2 sm:p-4 bg-[#F2F2F2]">
+      {/* Loading indicator */}
+      {isLoading && <LoadingIndicator />}
+
+      {/* Error notification */}
+      {error && <ErrorNotification message={error} />}
+
       {/* Header Section */}
       <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md mb-3 sm:mb-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -128,6 +241,7 @@ const KelolaRuangan = () => {
             <button
               onClick={() => setShowAddForm(!showAddForm)}
               className="bg-[#4F959D] text-white px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center"
+              disabled={isLoading}
             >
               <FaPlus className="mr-1" /> Tambah
             </button>
@@ -155,6 +269,7 @@ const KelolaRuangan = () => {
                 onChange={(e) =>
                   setTempInput({ ...tempInput, nama: e.target.value })
                 }
+                disabled={isLoading}
               />
             </div>
             <div>
@@ -169,6 +284,7 @@ const KelolaRuangan = () => {
                 onChange={(e) =>
                   setTempInput({ ...tempInput, kapasitas: e.target.value })
                 }
+                disabled={isLoading}
               />
             </div>
             <div className="flex justify-start space-x-2">
@@ -176,6 +292,7 @@ const KelolaRuangan = () => {
                 type="button"
                 className="bg-gray-300 text-gray-800 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-gray-400 transition"
                 onClick={() => setShowAddForm(false)}
+                disabled={isLoading}
               >
                 Batal
               </button>
@@ -183,8 +300,16 @@ const KelolaRuangan = () => {
                 type="button"
                 className="bg-[#4F959D] text-white px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-[#3C7A85] transition"
                 onClick={handleSubmit}
+                disabled={isLoading}
               >
-                Simpan
+                {isLoading ? (
+                  <span className="flex items-center">
+                    <FaSpinner className="animate-spin mr-2" />
+                    Menyimpan...
+                  </span>
+                ) : (
+                  "Simpan"
+                )}
               </button>
             </div>
           </form>
@@ -197,69 +322,78 @@ const KelolaRuangan = () => {
           <FaDoorOpen className="mr-2" /> Daftar Ruangan
         </h2>
 
-        <div className="overflow-x-auto w-full">
-          <table className="w-full border-collapse text-xs sm:text-sm">
-            <thead>
-              <tr className="bg-[#F5F5F5]">
-                <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8">
-                  No
-                </th>
-                <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                  Nama Ruangan
-                </th>
-                <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
-                  Kapasitas
-                </th>
-                <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-16">
-                  Aksi
-                </th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-700">
-              {filteredRuangan.length > 0 ? (
-                filteredRuangan.map((ruangan, index) => (
-                  <tr
-                    key={ruangan.id}
-                    className="hover:bg-gray-50 border-b border-gray-200 transition-colors"
-                  >
-                    <td className="px-2 py-2">{index + 1}</td>
-                    <td className="px-2 py-2 font-medium">{ruangan.nama}</td>
-                    <td className="px-2 py-2">{ruangan.kapasitas} orang</td>
-                    <td className="px-2 py-2">
-                      <div className="flex justify-center gap-2">
-                        <button
-                          className="text-blue-600 hover:text-blue-800 transition-colors p-1"
-                          onClick={() => handleEditClick(ruangan)}
-                          title="Edit"
-                        >
-                          <FaEdit size={14} />
-                        </button>
-                        <button
-                          className="text-red-600 hover:text-red-800 transition-colors"
-                          onClick={() => handleDeleteClick(ruangan.id)}
-                          title="Hapus"
-                        >
-                          <FaTrash size={14} />
-                        </button>
-                      </div>
+        {isLoading && ruanganList.length === 0 ? (
+          <div className="py-8 text-center">
+            <FaSpinner className="animate-spin mx-auto text-2xl text-[#4F959D] mb-2" />
+            <p className="text-gray-500">Memuat data ruangan...</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto w-full">
+            <table className="w-full border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr className="bg-[#F5F5F5]">
+                  <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8">
+                    No
+                  </th>
+                  <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                    Nama Ruangan
+                  </th>
+                  <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                    Kapasitas
+                  </th>
+                  <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-16">
+                    Aksi
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-700">
+                {filteredRuangan.length > 0 ? (
+                  filteredRuangan.map((ruangan, index) => (
+                    <tr
+                      key={ruangan.id}
+                      className="hover:bg-gray-50 border-b border-gray-200 transition-colors"
+                    >
+                      <td className="px-2 py-2">{index + 1}</td>
+                      <td className="px-2 py-2 font-medium">{ruangan.nama}</td>
+                      <td className="px-2 py-2">{ruangan.kapasitas} orang</td>
+                      <td className="px-2 py-2">
+                        <div className="flex justify-center gap-2">
+                          <button
+                            className="text-blue-600 hover:text-blue-800 transition-colors p-1"
+                            onClick={() => handleEditClick(ruangan)}
+                            title="Edit"
+                            disabled={isLoading}
+                          >
+                            <FaEdit size={14} />
+                          </button>
+                          <button
+                            className="text-red-600 hover:text-red-800 transition-colors"
+                            onClick={() => handleDeleteClick(ruangan.id)}
+                            title="Hapus"
+                            disabled={isLoading}
+                          >
+                            <FaTrash size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className="px-2 py-4 text-center text-gray-500 bg-gray-50 text-xs sm:text-sm"
+                    >
+                      {searchTerm
+                        ? "Tidak ada hasil yang sesuai dengan pencarian"
+                        : "Belum ada data ruangan"}
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={4}
-                    className="px-2 py-4 text-center text-gray-500 bg-gray-50 text-xs sm:text-sm"
-                  >
-                    {searchTerm
-                      ? "Tidak ada hasil yang sesuai dengan pencarian"
-                      : "Belum ada data ruangan"}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         {/* Table Footer with Stats */}
         <div className="mt-3 text-xs text-gray-600 flex flex-col xs:flex-row justify-between items-start xs:items-center gap-1">
@@ -299,6 +433,7 @@ const KelolaRuangan = () => {
                       nama: e.target.value,
                     })
                   }
+                  disabled={isLoading}
                 />
               </div>
               <div>
@@ -315,6 +450,7 @@ const KelolaRuangan = () => {
                       kapasitas: e.target.value,
                     })
                   }
+                  disabled={isLoading}
                 />
               </div>
               <div className="flex space-x-2 pt-2">
@@ -322,6 +458,7 @@ const KelolaRuangan = () => {
                   type="button"
                   className="bg-gray-300 text-gray-800 px-3 py-1.5 text-xs sm:text-sm w-1/2 rounded-lg hover:bg-gray-400 transition"
                   onClick={handleCancelEdit}
+                  disabled={isLoading}
                 >
                   Batal
                 </button>
@@ -329,8 +466,16 @@ const KelolaRuangan = () => {
                   type="button"
                   className="bg-[#4F959D] text-white px-3 py-1.5 text-xs sm:text-sm w-1/2 rounded-lg hover:bg-[#3C7A85] transition"
                   onClick={handleConfirmEdit}
+                  disabled={isLoading}
                 >
-                  Simpan
+                  {isLoading ? (
+                    <span className="flex items-center justify-center">
+                      <FaSpinner className="animate-spin mr-2" />
+                      Menyimpan...
+                    </span>
+                  ) : (
+                    "Simpan"
+                  )}
                 </button>
               </div>
             </form>
@@ -338,6 +483,7 @@ const KelolaRuangan = () => {
         </div>
       )}
 
+      {/* Delete Confirmation Modal */}
       {deleteModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96 max-w-md animate-fadeIn">
@@ -357,14 +503,23 @@ const KelolaRuangan = () => {
               <button
                 onClick={handleCancelDelete}
                 className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+                disabled={isLoading}
               >
                 Batal
               </button>
               <button
                 onClick={handleConfirmDelete}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                disabled={isLoading}
               >
-                Hapus
+                {isLoading ? (
+                  <span className="flex items-center">
+                    <FaSpinner className="animate-spin mr-2" />
+                    Menghapus...
+                  </span>
+                ) : (
+                  "Hapus"
+                )}
               </button>
             </div>
           </div>
