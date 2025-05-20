@@ -16,6 +16,7 @@ import { useRoomStore } from "../_store/ruangan";
 import { useMataKuliahStore } from "../_store/matakuliah";
 import { useDosenMatakuliahStore } from "../_store/dosenMatakuliah";
 import { useJadwalStore } from "../_store/jadwal";
+import { useGeneratedFileStore } from "../_store/generatedFiles";
 import { exportJadwalToCsv } from "../../services/api";
 
 const GenerateJadwal = () => {
@@ -36,6 +37,9 @@ const GenerateJadwal = () => {
     searchData,
     fetchData,
   } = useJadwalStore();
+
+  // Gunakan store generated files
+  const { addFile } = useGeneratedFileStore();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDay, setFilterDay] = useState<string | null>(null);
@@ -92,7 +96,7 @@ const GenerateJadwal = () => {
     filterByDay(filterDay);
   }, [filterDay, filterByDay]);
 
-  const generateSchedule = () => {
+  const generateSchedule = async () => {
     if (
       dosenList.length === 0 ||
       ruanganList.length === 0 ||
@@ -102,7 +106,19 @@ const GenerateJadwal = () => {
       return;
     }
 
-    generateData(true); // Clear existing schedules
+    try {
+      // Panggil API untuk generate jadwal dan cast hasilnya ke tipe any
+      await generateData(true);
+
+      // Ambil data terbaru dari API
+      await fetchData();
+
+      // Tampilkan pesan sukses
+      alert("Jadwal berhasil digenerate!");
+    } catch (err) {
+      console.error("Error generating schedule:", err);
+      alert("Gagal generate jadwal. Silakan coba lagi.");
+    }
   };
 
   const exportToCSV = async () => {
@@ -113,7 +129,16 @@ const GenerateJadwal = () => {
 
     setIsExporting(true);
     try {
-      await exportJadwalToCsv();
+      const response = await exportJadwalToCsv();
+
+      // Jika API mengembalikan informasi file yang digenerate
+      if (
+        response &&
+        typeof response === "object" &&
+        "generated_file" in response
+      ) {
+        addFile(response.generated_file);
+      }
     } catch (err) {
       console.error("Error exporting to CSV:", err);
       alert("Gagal mengekspor jadwal ke CSV.");

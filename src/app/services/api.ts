@@ -277,12 +277,16 @@ export const searchJadwal = async (query: string) => {
 
 export const exportJadwalToCsv = async () => {
   try {
-    const response = await axios.get(`${API_URL}/schedules/export`, {
-      responseType: "blob",
-    });
+    const response = await axios.get(`${API_URL}/schedules/export`);
 
-    // Create a download link for the CSV file
-    const url = window.URL.createObjectURL(new Blob([response.data]));
+    // Jika response berisi data file yang digenerate
+    if (response.data && response.data.generated_file) {
+      return response.data;
+    }
+
+    // Jika response adalah file CSV langsung
+    const blob = new Blob([response.data], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
     link.setAttribute("download", "jadwal_kuliah.csv");
@@ -290,9 +294,59 @@ export const exportJadwalToCsv = async () => {
     link.click();
     document.body.removeChild(link);
 
-    return true;
+    return { success: true };
   } catch (error) {
     console.error("Error exporting schedules to CSV:", error);
+    throw error;
+  }
+};
+
+// Generated Files API
+export type GeneratedFileResponse = {
+  id: string;
+  name: string;
+  date: string;
+  size: string;
+  status: string;
+  description?: string;
+};
+
+export const fetchGeneratedFiles = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/generated-files`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching generated files:", error);
+    throw error;
+  }
+};
+
+export const getGeneratedFileDetails = async (id: string) => {
+  try {
+    const response = await axios.get(`${API_URL}/generated-files/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching file details:", error);
+    throw error;
+  }
+};
+
+export const downloadGeneratedFile = async (id: string) => {
+  try {
+    window.open(`${API_URL}/generated-files/${id}/download`, "_blank");
+    return true;
+  } catch (error) {
+    console.error("Error downloading file:", error);
+    throw error;
+  }
+};
+
+export const deleteGeneratedFile = async (id: string) => {
+  try {
+    const response = await axios.delete(`${API_URL}/generated-files/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting file:", error);
     throw error;
   }
 };

@@ -70,36 +70,24 @@ export const useJadwalStore = create<JadwalStore>((set, get) => ({
     }
   },
 
-  generateData: async (clearExisting = true) => {
+  generateData: async (clearExisting: boolean = true) => {
     set({ loading: true, error: null });
     try {
-      const data = await generateJadwal(clearExisting);
-      set({ data, filteredData: data, loading: false });
-    } catch (error: any) {
-      // Type the error as 'any' to allow property access
-      console.error("Generate jadwal error:", error);
-      let errorMessage = "Unknown error";
-
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error("Error response data:", error.response.data);
-        errorMessage =
-          error.response.data.error ||
-          error.response.data.message ||
-          `Error ${error.response.status}: ${error.response.statusText}`;
-      } else if (error.request) {
-        // The request was made but no response was received
-        errorMessage = "No response from server. Please check your connection.";
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        errorMessage = error.message;
+      const response = await generateJadwal(clearExisting);
+      if (response && response.schedules) {
+        set({
+          data: response.schedules,
+          filteredData: response.schedules,
+          loading: false,
+        });
       }
-
+      return response; // Return response lengkap, termasuk generated_file
+    } catch (error) {
       set({
-        error: errorMessage,
+        error: error instanceof Error ? error.message : "Unknown error",
         loading: false,
       });
+      throw error;
     }
   },
 
