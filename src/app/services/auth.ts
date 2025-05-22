@@ -1,11 +1,15 @@
 import axios from "axios";
 
-type RegisterUserRequestDataType = {
+export interface LoginUserRequestDataType {
   username: string;
   password: string;
 }
 
-type LoginUserRequestDataType = RegisterUserRequestDataType
+export interface RegisterUserRequestDataType extends LoginUserRequestDataType{
+  username: string;
+  password: string;
+  role: string
+}
 
 // TODO: include role
 export async function registerUser(data: RegisterUserRequestDataType){
