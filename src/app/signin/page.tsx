@@ -36,13 +36,13 @@ export default function SignInPage() {
           <div className="w-full md:w-1/2 p-6">
             <form>
               <div className="flex flex-col mb-4 gap-y-2">
-                <label className="block text-gray-700">Name</label>
+                <label className="block text-gray-700">Username</label>
                 <input
                   type="text"
                   className="w-full px-3 py-2 md:px-4 md:py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your name"
+                  placeholder="Enter your username"
                 />
               </div>
 
