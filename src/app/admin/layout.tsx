@@ -204,14 +204,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                           )
                           .slice(0, 3)
                           .map((notification) => {
-                            const typeColor =
-                              notification.type === "jadwal"
-                                ? "text-blue-500"
-                                : notification.type === "peringatan"
-                                ? "text-yellow-500"
-                                : notification.type === "sistem"
-                                ? "text-purple-500"
-                                : "text-green-500";
+                            // const typeColor =
+                            //   notification.type === "jadwal"
+                            //     ? "text-blue-500"
+                            //     : notification.type === "peringatan"
+                            //     ? "text-yellow-500"
+                            //     : notification.type === "sistem"
+                            //     ? "text-purple-500"
+                            //     : "text-green-500";
 
                             const typeBgColor =
                               notification.type === "jadwal"
