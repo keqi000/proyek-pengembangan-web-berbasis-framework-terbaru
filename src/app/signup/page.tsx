@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 export default function SignUpPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("mahasiswa");
+  const [role, setRole] = useState<string>("mahasiswa");
   const [defaultPassword, setDefaultPassword] = useState("");
 
   const registerMutation = useRegisterMutation()
@@ -102,7 +102,7 @@ export default function SignUpPage() {
                 <button
                     type="button"
                     className="w-full bg-[#4F959D] text-white py-2 rounded-lg hover:bg-[#4F959D] transition"
-                    onClick={() => registerMutation.mutate({username: username, password: password, role: role}, {
+                    onClick={() => registerMutation.mutate({username: username, password: password, role: role ?? "mahasiswa"}, {
                         onSuccess: () => redirect('/signin'),
                         onError: (error) => console.error(error)
                     })}
