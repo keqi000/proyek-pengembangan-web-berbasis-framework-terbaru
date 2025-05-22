@@ -121,7 +121,7 @@ export default function Home() {
   ];
 
   // Function to handle notification click
-  const handleNotificationClick = (notification: any) => {
+  const handleNotificationClick = (notification: NotificationItem) => {
     if (!notification.read) {
       markAsRead(notification.id);
     }
