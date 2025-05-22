@@ -16,7 +16,7 @@ import {
 } from "react-icons/fa";
 import { useNotificationStore } from "../_store/notifications";
 import Link from "next/link";
-import { NotificationItem } from "@/app/services/api";
+import { NotificationItem } from "@/app/services/notification";
 
 const NotificationsPage = () => {
   const {

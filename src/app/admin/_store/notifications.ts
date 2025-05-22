@@ -9,7 +9,7 @@ import {
   deleteNotification,
   deleteAllNotifications,
   NotificationItem,
-} from "../../services/api";
+} from "../../services/notification";
 
 type NotificationStore = {
   data: NotificationItem[];
