@@ -1,8 +1,8 @@
 "use client";
 
 import { create } from "zustand";
-import { fetchGeneratedFiles, deleteGeneratedFile } from "../../services/api";
-import type { GeneratedFileResponse } from "../../services/api";
+import { fetchGeneratedFiles, deleteGeneratedFile } from "../../services/generatedFile";
+import type { GeneratedFileResponse } from "../../services/generatedFile";
 
 export type GeneratedFileItem = GeneratedFileResponse;
 
