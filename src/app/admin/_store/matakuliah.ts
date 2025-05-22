@@ -6,7 +6,7 @@ import {
   createMataKuliah,
   updateMataKuliah,
   deleteMataKuliah,
-} from "../../services/api";
+} from "../../services/course";
 
 type MataKuliahItem = {
   id: string;
