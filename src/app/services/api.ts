@@ -219,17 +219,17 @@ export const generateJadwal = async (clearExisting = true) => {
 
     console.log("Generate jadwal response:", response.data);
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error generating schedules:", error);
-    if (error.response) {
-      console.error("Error response status:", error.response.status);
-      console.error("Error response data:", error.response.data);
-      console.error("Error response headers:", error.response.headers);
-    } else if (error.request) {
-      console.error("Error request:", error.request);
-    } else {
-      console.error("Error message:", error.message);
-    }
+    // if (error.response) {
+    //   console.error("Error response status:", error.response.status);
+    //   console.error("Error response data:", error.response.data);
+    //   console.error("Error response headers:", error.response.headers);
+    // } else if (error.request) {
+    //   console.error("Error request:", error.request);
+    // } else {
+    //   console.error("Error message:", error.message);
+    // }
     throw error;
   }
 };
