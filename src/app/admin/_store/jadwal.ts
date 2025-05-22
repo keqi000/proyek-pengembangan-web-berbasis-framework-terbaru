@@ -8,7 +8,7 @@ import {
   deleteAllJadwal,
   filterJadwalByDay,
   searchJadwal,
-} from "../../services/api";
+} from "../../services/schedule";
 
 type JadwalItem = {
   id: string;
