@@ -445,7 +445,7 @@ export const deleteAllNotifications = async () => {
   }
 };
 
-export const createScheduleNotification = async (scheduleData: any) => {
+export const createScheduleNotification = async () => {
   try {
     const notificationData = {
       title: "Jadwal Baru Telah Digenerate",
