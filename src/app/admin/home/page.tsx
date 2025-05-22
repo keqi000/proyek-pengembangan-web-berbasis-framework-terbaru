@@ -26,7 +26,6 @@ import {
   getGeneratedFileDetails,
 } from "../../services/generatedFile";
 
-
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { NotificationItem } from "@/app/services/notification";
@@ -62,7 +61,8 @@ export default function Home() {
   const [, setIsLoading] = useState(false);
   const [, setError] = useState<string | null>(null);
   const [fileDetailModal, setFileDetailModal] = useState<boolean>(false);
-  const [selectedFile, setSelectedFile] = useState<GeneratedFileDetailsResponseType | null>(null);
+  const [selectedFile, setSelectedFile] =
+    useState<GeneratedFileDetailsResponseType | null>(null);
   const [deleteModal, setDeleteModal] = useState(false);
   const [fileToDelete, setFileToDelete] = useState<string | null>(null);
 
@@ -185,20 +185,26 @@ export default function Home() {
   const filteredFiles =
     activeTab === "recent" ? generatedFiles.slice(0, 5) : generatedFiles;
 
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
-    <div className="bg-gray-100 p-2 sm:p-4 min-h-screen font-poppins">
+    <div className="bg-gray-100 p-2 sm:p-3 md:p-4 min-h-screen font-poppins">
       {/* Header Section */}
-      <div className="mb-4 sm:mb-8">
+      <div className="mb-3 sm:mb-5 md:mb-6 lg:mb-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-[#2C3930] text-white p-3 sm:p-6 rounded-lg shadow-lg"
+          className="bg-[#2C3930] text-white p-3 sm:p-4 md:p-6 rounded-lg shadow-lg"
         >
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 sm:mb-2">
+          <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-1 sm:mb-2">
             Selamat Datang, Admin
           </h1>
-          <p className="text-gray-200 mt-2 font-poppins">
+          <p className="text-xs sm:text-sm md:text-base text-gray-200 mt-1 sm:mt-2 font-poppins">
             Kelola jadwal perkuliahan dengan mudah dan efisien melalui dashboard
             admin.
           </p>
@@ -210,27 +216,30 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
+        className="mb-3 sm:mb-5 md:mb-6 lg:mb-8"
       >
-        <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-[#2C3930] border-b-2 border-[#2C3930] pb-2">
+        <h2 className="text-base sm:text-lg md:text-xl font-bold mb-2 sm:mb-3 md:mb-4 text-[#2C3930] border-b-2 border-[#2C3930] pb-1 sm:pb-2">
           Ringkasan Sistem
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
           {summaryData.map((item, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3, delay: 0.1 * index }}
-              className={`${item.color} border p-3 sm:p-5 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg`}
+              className={`${item.color} border p-2 sm:p-3 md:p-4 lg:p-5 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg`}
             >
-              <div className="flex items-center justify-between mb-2 sm:mb-3">
-                <h2 className="text-base sm:text-lg font-semibold text-gray-700">
+              <div className="flex items-center justify-between mb-1 sm:mb-2 md:mb-3">
+                <h2 className="text-sm sm:text-base md:text-lg font-semibold text-gray-700">
                   {item.label}
                 </h2>
-                {item.icon}
+                <div className="text-sm sm:text-base md:text-lg lg:text-xl">
+                  {item.icon}
+                </div>
               </div>
-              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-[#2C3930]">
+              <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-[#2C3930]">
                 {item.value}
               </p>
             </motion.div>
@@ -243,23 +252,24 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="mb-6 sm:mb-8"
+        className="mb-3 sm:mb-5 md:mb-6 lg:mb-8"
       >
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-[#4F959D]">
-              <FaBell className="inline mr-2" /> Notifikasi Terbaru
+        <div className="bg-white p-3 sm:p-4 md:p-5 lg:p-6 rounded-lg shadow-md">
+          <div className="flex justify-between items-center mb-2 sm:mb-3 md:mb-4">
+            <h2 className="text-base sm:text-lg md:text-xl font-semibold text-[#4F959D]">
+              <FaBell className="inline mr-1 sm:mr-2 text-sm sm:text-base md:text-lg" />{" "}
+              Notifikasi Terbaru
             </h2>
             <Link
               href="/admin/notifications"
-              className="text-sm text-[#4F959D] hover:underline"
+              className="text-xs sm:text-sm text-[#4F959D] hover:underline"
             >
               Lihat Semua
             </Link>
           </div>
 
-          <div className="space-y-4">
-            {notifications.slice(0, 5).map((notification) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+            {notifications.slice(0, 6).map((notification, index) => {
               // Determine icon based on notification type
               let icon;
               let bgColor;
@@ -289,30 +299,34 @@ export default function Home() {
               return (
                 <div
                   key={notification.id}
-                  className={`p-3 rounded-lg ${
+                  className={`p-2 sm:p-3 rounded-lg ${
                     !notification.read ? "bg-blue-50" : "bg-gray-50"
-                  }`}
+                  } hover:shadow-md transition-shadow duration-200`}
                   onClick={() => handleNotificationClick(notification)}
                 >
                   <div className="flex items-start">
-                    <div className={`p-2 rounded-full ${bgColor} mr-3 mt-1`}>
-                      {icon}
+                    <div
+                      className={`p-1 sm:p-2 rounded-full ${bgColor} mr-2 sm:mr-3 mt-1 flex-shrink-0`}
+                    >
+                      <span className="text-xs sm:text-sm md:text-base">
+                        {icon}
+                      </span>
                     </div>
-                    <div>
-                      <h3 className="font-medium text-gray-800">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-xs sm:text-sm md:text-base font-medium text-gray-800 truncate">
                         {notification.title}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-xs sm:text-sm text-gray-600 mt-0.5 sm:mt-1 line-clamp-2">
                         {notification.message}
                       </p>
-                      <div className="flex justify-between items-center mt-2">
-                        <span className="text-xs text-gray-500">
+                      <div className="flex justify-between items-center mt-1 sm:mt-2">
+                        <span className="text-[10px] sm:text-xs text-gray-500">
                           {notification.time}
                         </span>
                         {!notification.read && (
                           <Link
                             href={`/admin/notifications`}
-                            className="text-xs text-blue-600 hover:underline"
+                            className="text-[10px] sm:text-xs text-blue-600 hover:underline"
                           >
                             Tandai Dibaca
                           </Link>
@@ -325,9 +339,11 @@ export default function Home() {
             })}
 
             {notifications.length === 0 && (
-              <div className="text-center py-4 text-gray-500">
-                <FaBell className="mx-auto text-2xl mb-2 text-gray-400" />
-                <p>Tidak ada notifikasi</p>
+              <div className="text-center py-3 sm:py-4 text-gray-500 col-span-2">
+                <FaBell className="mx-auto text-xl sm:text-2xl mb-1 sm:mb-2 text-gray-400" />
+                <p className="text-xs sm:text-sm md:text-base">
+                  Tidak ada notifikasi
+                </p>
               </div>
             )}
           </div>
@@ -339,75 +355,79 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="mb-6 sm:mb-8"
+        className="mb-3 sm:mb-5 md:mb-6 lg:mb-8"
       >
-        <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-[#2C3930] border-b-2 border-[#2C3930] pb-2">
+        <h2 className="text-base sm:text-lg md:text-xl font-bold mb-2 sm:mb-3 md:mb-4 text-[#2C3930] border-b-2 border-[#2C3930] pb-1 sm:pb-2">
           Aktivitas Terbaru
         </h2>
 
-        <div className="bg-white p-3 sm:p-4 rounded-lg shadow-md text-gray-600">
-          {generatedFiles.length > 0 && (
-            <div className="flex items-center p-2 sm:p-3 bg-green-50 rounded-md mb-2 sm:mb-3 border-l-4 border-green-500">
-              <FaCalendarAlt className="text-green-500 mr-2 sm:mr-3 text-sm sm:text-base" />
-              <div>
-                <p className="font-medium text-sm sm:text-base">
-                  {generatedFiles[0].name} berhasil digenerate
-                </p>
-                <p className="text-xs sm:text-sm text-gray-500">
-                  {generatedFiles[0].date}
-                </p>
+        <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md text-gray-600">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
+            {generatedFiles.length > 0 && (
+              <div className="flex items-center p-1.5 sm:p-2 md:p-3 bg-green-50 rounded-md border-l-4 border-green-500">
+                <FaCalendarAlt className="text-green-500 mr-1.5 sm:mr-2 md:mr-3 text-xs sm:text-sm md:text-base" />
+                <div>
+                  <p className="font-medium text-xs sm:text-sm md:text-base">
+                    {generatedFiles[0].name} berhasil digenerate
+                  </p>
+                  <p className="text-[10px] sm:text-xs md:text-sm text-gray-500">
+                    {generatedFiles[0].date}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {mataKuliahList.length > 0 && (
-            <div className="flex items-center p-2 sm:p-3 bg-blue-50 rounded-md mb-2 sm:mb-3 border-l-4 border-blue-500">
-              <FaFileAlt className="text-blue-500 mr-2 sm:mr-3 text-sm sm:text-base" />
-              <div>
-                <p className="font-medium text-sm sm:text-base">
-                  {mataKuliahList.length} mata kuliah telah ditambahkan
-                </p>
-                <p className="text-xs sm:text-sm text-gray-500">
-                  Terakhir: {mataKuliahList[0]?.nama || "Tidak ada data"}
-                </p>
+            {mataKuliahList.length > 0 && (
+              <div className="flex items-center p-1.5 sm:p-2 md:p-3 bg-blue-50 rounded-md border-l-4 border-blue-500">
+                <FaFileAlt className="text-blue-500 mr-1.5 sm:mr-2 md:mr-3 text-xs sm:text-sm md:text-base" />
+                <div>
+                  <p className="font-medium text-xs sm:text-sm md:text-base">
+                    {mataKuliahList.length} mata kuliah telah ditambahkan
+                  </p>
+                  <p className="text-[10px] sm:text-xs md:text-sm text-gray-500">
+                    Terakhir: {mataKuliahList[0]?.nama || "Tidak ada data"}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {dosenList.length > 0 && (
-            <div className="flex items-center p-2 sm:p-3 bg-purple-50 rounded-md mb-2 sm:mb-3 border-l-4 border-purple-500">
-              <FaUserTie className="text-purple-500 mr-2 sm:mr-3 text-sm sm:text-base" />
-              <div>
-                <p className="font-medium text-sm sm:text-base">
-                  {dosenList.length} dosen telah terdaftar
-                </p>
-                <p className="text-xs sm:text-sm text-gray-500">
-                  Terakhir: {dosenList[0]?.nama || "Tidak ada data"}
-                </p>
+            {dosenList.length > 0 && (
+              <div className="flex items-center p-1.5 sm:p-2 md:p-3 bg-purple-50 rounded-md border-l-4 border-purple-500">
+                <FaUserTie className="text-purple-500 mr-1.5 sm:mr-2 md:mr-3 text-xs sm:text-sm md:text-base" />
+                <div>
+                  <p className="font-medium text-xs sm:text-sm md:text-base">
+                    {dosenList.length} dosen telah terdaftar
+                  </p>
+                  <p className="text-[10px] sm:text-xs md:text-sm text-gray-500">
+                    Terakhir: {dosenList[0]?.nama || "Tidak ada data"}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {ruanganList.length > 0 && (
-            <div className="flex items-center p-2 sm:p-3 bg-amber-50 rounded-md border-l-4 border-amber-500">
-              <FaDoorOpen className="text-amber-500 mr-2 sm:mr-3 text-sm sm:text-base" />
-              <div>
-                <p className="font-medium text-sm sm:text-base">
-                  {ruanganList.length} ruangan telah ditambahkan
-                </p>
-                <p className="text-xs sm:text-sm text-gray-500">
-                  Terakhir: {ruanganList[0]?.nama || "Tidak ada data"}
-                </p>
+            {ruanganList.length > 0 && (
+              <div className="flex items-center p-1.5 sm:p-2 md:p-3 bg-amber-50 rounded-md border-l-4 border-amber-500">
+                <FaDoorOpen className="text-amber-500 mr-1.5 sm:mr-2 md:mr-3 text-xs sm:text-sm md:text-base" />
+                <div>
+                  <p className="font-medium text-xs sm:text-sm md:text-base">
+                    {ruanganList.length} ruangan telah ditambahkan
+                  </p>
+                  <p className="text-[10px] sm:text-xs md:text-sm text-gray-500">
+                    Terakhir: {ruanganList[0]?.nama || "Tidak ada data"}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {dosenList.length === 0 &&
             mataKuliahList.length === 0 &&
             ruanganList.length === 0 &&
             generatedFiles.length === 0 && (
-              <div className="text-center py-4 text-gray-500">
-                <p>Belum ada aktivitas terbaru</p>
+              <div className="text-center py-3 sm:py-4 text-gray-500">
+                <p className="text-xs sm:text-sm md:text-base">
+                  Belum ada aktivitas terbaru
+                </p>
               </div>
             )}
         </div>
@@ -419,68 +439,72 @@ export default function Home() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.5 }}
       >
-        <div className="bg-white p-3 sm:p-4 rounded-lg shadow-md">
-          <div className="flex justify-between items-center mb-3 sm:mb-4">
-            <h2 className="text-lg sm:text-xl font-bold text-[#2C3930]">
-              <FaFileAlt className="inline mr-2 text-[#4F959D]" /> File Jadwal
-              Digenerate
+        <div className="bg-white p-2 sm:p-3 md:p-4 rounded-lg shadow-md">
+          <div className="flex justify-between items-center mb-2 sm:mb-3 md:mb-4">
+            <h2 className="text-base sm:text-lg md:text-xl font-bold text-[#2C3930]">
+              <FaFileAlt className="inline mr-1 sm:mr-2 text-[#4F959D] text-xs sm:text-sm md:text-base" />{" "}
+              File Jadwal Digenerate
             </h2>
-            <div className="flex space-x-2">
-              <button
-                className={`px-2 py-1 text-xs sm:text-sm rounded-md ${
-                  activeTab === "recent"
-                    ? "bg-[#4F959D] text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                }`}
-                onClick={() => setActiveTab("recent")}
-              >
-                Terbaru
-              </button>
-              <button
-                className={`px-2 py-1 text-xs sm:text-sm rounded-md ${
-                  activeTab === "all"
-                    ? "bg-[#4F959D] text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                }`}
-                onClick={() => setActiveTab("all")}
-              >
-                Semua
-              </button>
-            </div>
+            {isMounted && (
+              <div className="flex space-x-1 sm:space-x-2">
+                <button
+                  className={`px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs md:text-sm rounded-md ${
+                    activeTab === "recent"
+                      ? "bg-[#4F959D] text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                  onClick={() => setActiveTab("recent")}
+                  suppressHydrationWarning
+                >
+                  Terbaru
+                </button>
+                <button
+                  className={`px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs md:text-sm rounded-md ${
+                    activeTab === "all"
+                      ? "bg-[#4F959D] text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                  onClick={() => setActiveTab("all")}
+                  suppressHydrationWarning
+                >
+                  Semua
+                </button>
+              </div>
+            )}
           </div>
 
           {filteredFiles.length > 0 ? (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
+              <table className="min-w-full divide-y divide-gray-200 table-fixed">
                 <thead className="bg-gray-50">
                   <tr>
                     <th
                       scope="col"
-                      className="px-2 sm:px-3 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-1 sm:px-1.5 md:px-2 lg:px-3 py-1 sm:py-1.5 md:py-2 lg:py-3 text-left text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider w-[30%] sm:w-[35%] md:w-[40%]"
                     >
                       Nama File
                     </th>
                     <th
                       scope="col"
-                      className="px-2 sm:px-3 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-1 sm:px-1.5 md:px-2 lg:px-3 py-1 sm:py-1.5 md:py-2 lg:py-3 text-left text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider w-[20%] sm:w-[20%] md:w-[20%]"
                     >
                       Tanggal
                     </th>
                     <th
                       scope="col"
-                      className="px-2 sm:px-3 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-1 sm:px-1.5 md:px-2 lg:px-3 py-1 sm:py-1.5 md:py-2 lg:py-3 text-left text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider w-[15%] sm:w-[15%] md:w-[15%]"
                     >
                       Ukuran
                     </th>
                     <th
                       scope="col"
-                      className="px-2 sm:px-3 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-1 sm:px-1.5 md:px-2 lg:px-3 py-1 sm:py-1.5 md:py-2 lg:py-3 text-left text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider w-[15%] sm:w-[15%] md:w-[15%]"
                     >
                       Status
                     </th>
                     <th
                       scope="col"
-                      className="px-2 sm:px-3 py-2 sm:py-3 text-right text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-1 sm:px-1.5 md:px-2 lg:px-3 py-1 sm:py-1.5 md:py-2 lg:py-3 text-right text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider w-[20%] sm:w-[15%] md:w-[10%]"
                     >
                       Aksi
                     </th>
@@ -489,23 +513,23 @@ export default function Home() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredFiles.map((file) => (
                     <tr key={file.id} className="hover:bg-gray-50">
-                      <td className="px-2 sm:px-3 py-2 sm:py-3 whitespace-nowrap">
+                      <td className="px-1 sm:px-1.5 md:px-2 lg:px-3 py-1 sm:py-1.5 md:py-2 lg:py-3 whitespace-nowrap">
                         <div className="flex items-center">
-                          <FaFileAlt className="text-[#4F959D] mr-2" />
-                          <div className="text-xs sm:text-sm font-medium text-gray-900 truncate max-w-[120px] sm:max-w-[200px]">
+                          <FaFileAlt className="text-[#4F959D] mr-1 sm:mr-1.5 md:mr-2 text-[8px] xs:text-[9px] sm:text-xs md:text-sm" />
+                          <div className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm font-medium text-gray-900 truncate max-w-[60px] xs:max-w-[70px] sm:max-w-[100px] md:max-w-[150px] lg:max-w-[200px]">
                             {file.name}
                           </div>
                         </div>
                       </td>
-                      <td className="px-2 sm:px-3 py-2 sm:py-3 whitespace-nowrap text-xs sm:text-sm text-gray-500">
+                      <td className="px-1 sm:px-1.5 md:px-2 lg:px-3 py-1 sm:py-1.5 md:py-2 lg:py-3 whitespace-nowrap text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm text-gray-500">
                         {file.date}
                       </td>
-                      <td className="px-2 sm:px-3 py-2 sm:py-3 whitespace-nowrap text-xs sm:text-sm text-gray-500">
+                      <td className="px-1 sm:px-1.5 md:px-2 lg:px-3 py-1 sm:py-1.5 md:py-2 lg:py-3 whitespace-nowrap text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm text-gray-500">
                         {file.size}
                       </td>
-                      <td className="px-2 sm:px-3 py-2 sm:py-3 whitespace-nowrap">
+                      <td className="px-1 sm:px-1.5 md:px-2 lg:px-3 py-1 sm:py-1.5 md:py-2 lg:py-3 whitespace-nowrap">
                         <span
-                          className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          className={`px-0.5 xs:px-1 sm:px-1.5 md:px-2 py-0.5 inline-flex text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs leading-4 sm:leading-5 font-semibold rounded-full ${
                             file.status === "success"
                               ? "bg-green-100 text-green-800"
                               : file.status === "pending"
@@ -520,28 +544,28 @@ export default function Home() {
                             : "Gagal"}
                         </span>
                       </td>
-                      <td className="px-2 sm:px-3 py-2 sm:py-3 whitespace-nowrap text-right text-xs sm:text-sm font-medium">
-                        <div className="flex justify-end space-x-2">
+                      <td className="px-1 sm:px-1.5 md:px-2 lg:px-3 py-1 sm:py-1.5 md:py-2 lg:py-3 whitespace-nowrap text-right text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm font-medium">
+                        <div className="flex justify-end space-x-0.5 xs:space-x-1 sm:space-x-1.5 md:space-x-2">
                           <button
                             onClick={() => handleViewFile(file.id)}
                             className="text-blue-600 hover:text-blue-900"
                             title="Lihat Detail"
                           >
-                            <FaEye />
+                            <FaEye className="text-[8px] xs:text-[9px] sm:text-xs md:text-sm" />
                           </button>
                           <button
                             onClick={() => handleDownloadFile(file.id)}
                             className="text-green-600 hover:text-green-900"
                             title="Download"
                           >
-                            <FaDownload />
+                            <FaDownload className="text-[8px] xs:text-[9px] sm:text-xs md:text-sm" />
                           </button>
                           <button
                             onClick={() => handleDeleteClick(file.id)}
                             className="text-red-600 hover:text-red-900"
                             title="Hapus"
                           >
-                            <FaTrash />
+                            <FaTrash className="text-[8px] xs:text-[9px] sm:text-xs md:text-sm" />
                           </button>
                         </div>
                       </td>
@@ -551,12 +575,14 @@ export default function Home() {
               </table>
             </div>
           ) : (
-            <div className="text-center py-4 text-gray-500">
-              <FaFileAlt className="mx-auto text-2xl mb-2 text-gray-400" />
-              <p>Belum ada file jadwal yang digenerate</p>
+            <div className="text-center py-3 sm:py-4 text-gray-500">
+              <FaFileAlt className="mx-auto text-lg sm:text-xl md:text-2xl mb-1 sm:mb-2 text-gray-400" />
+              <p className="text-xs sm:text-sm md:text-base">
+                Belum ada file jadwal yang digenerate
+              </p>
               <Link
                 href="/admin/generate_schedule"
-                className="mt-2 inline-block text-[#4F959D] hover:underline"
+                className="mt-1 sm:mt-2 inline-block text-xs sm:text-sm text-[#4F959D] hover:underline"
               >
                 Generate Jadwal Sekarang
               </Link>
@@ -564,10 +590,10 @@ export default function Home() {
           )}
 
           {activeTab === "recent" && generatedFiles.length > 5 && (
-            <div className="mt-3 text-center">
+            <div className="mt-2 sm:mt-3 text-center">
               <button
                 onClick={() => setActiveTab("all")}
-                className="text-[#4F959D] hover:underline text-sm"
+                className="text-[#4F959D] hover:underline text-xs sm:text-sm"
               >
                 Lihat Semua File ({generatedFiles.length})
               </button>
@@ -578,26 +604,28 @@ export default function Home() {
 
       {/* File Detail Modal */}
       {fileDetailModal && selectedFile && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-lg font-semibold text-[#2C3930]">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-md">
+            <div className="p-3 sm:p-4 md:p-6">
+              <div className="flex justify-between items-start mb-2 sm:mb-4">
+                <h3 className="text-sm sm:text-base md:text-lg font-semibold text-[#2C3930]">
                   Detail File
                 </h3>
                 <button
                   onClick={() => setFileDetailModal(false)}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-gray-500 hover:text-gray-700 text-lg sm:text-xl"
                 >
                   &times;
                 </button>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 <div className="flex items-center">
-                  <FaFileAlt className="text-[#4F959D] mr-3" size={20} />
-                  <p className="font-medium">{selectedFile.name}</p>
+                  <FaFileAlt className="text-[#4F959D] mr-2 sm:mr-3 text-sm sm:text-base md:text-lg" />
+                  <p className="font-medium text-xs sm:text-sm md:text-base">
+                    {selectedFile.name}
+                  </p>
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="grid grid-cols-2 gap-1 sm:gap-2 text-xs sm:text-sm">
                   <div>
                     <p className="text-gray-500">Tanggal</p>
                     <p>{selectedFile.date}</p>
@@ -609,7 +637,7 @@ export default function Home() {
                   <div>
                     <p className="text-gray-500">Status</p>
                     <span
-                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      className={`px-1 sm:px-2 py-0.5 inline-flex text-[10px] sm:text-xs leading-5 font-semibold rounded-full ${
                         selectedFile.status === "success"
                           ? "bg-green-100 text-green-800"
                           : selectedFile.status === "pending"
@@ -631,31 +659,35 @@ export default function Home() {
                 </div>
                 {selectedFile.description && (
                   <div>
-                    <p className="text-gray-500">Deskripsi</p>
-                    <p className="text-sm">{selectedFile.description}</p>
+                    <p className="text-gray-500 text-xs sm:text-sm">
+                      Deskripsi
+                    </p>
+                    <p className="text-[10px] sm:text-xs md:text-sm">
+                      {selectedFile.description}
+                    </p>
                   </div>
                 )}
               </div>
             </div>
-            <div className="bg-gray-100 px-6 py-3 rounded-b-lg flex justify-end space-x-2">
+            <div className="bg-gray-100 px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-b-lg flex justify-end space-x-1 sm:space-x-2">
               <button
                 onClick={() => handleDownloadFile(selectedFile.id)}
-                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+                className="bg-green-500 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg hover:bg-green-600 transition text-[10px] sm:text-xs md:text-sm"
               >
-                <FaDownload className="inline mr-2" /> Download
+                <FaDownload className="inline mr-1 sm:mr-2" /> Download
               </button>
               <button
                 onClick={() => {
                   setFileDetailModal(false);
                   handleDeleteClick(selectedFile.id);
                 }}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                className="bg-red-500 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg hover:bg-red-600 transition text-[10px] sm:text-xs md:text-sm"
               >
-                <FaTrash className="inline mr-2" /> Hapus
+                <FaTrash className="inline mr-1 sm:mr-2" /> Hapus
               </button>
               <button
                 onClick={() => setFileDetailModal(false)}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+                className="bg-gray-300 text-gray-700 px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg hover:bg-gray-400 transition text-[10px] sm:text-xs md:text-sm"
               >
                 Tutup
               </button>
@@ -666,30 +698,30 @@ export default function Home() {
 
       {/* Delete Confirmation Modal */}
       {deleteModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <div className="text-center mb-4">
-              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <FaExclamationTriangle className="h-6 w-6 text-red-600" />
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-3 sm:p-4 z-50">
+          <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-md">
+            <div className="text-center mb-2 sm:mb-4">
+              <div className="mx-auto flex items-center justify-center h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-full bg-red-100 mb-2 sm:mb-4">
+                <FaExclamationTriangle className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-red-600" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-sm sm:text-base md:text-lg font-medium text-gray-900 mb-1 sm:mb-2">
                 Konfirmasi Hapus
               </h3>
-              <p className="text-sm text-gray-500">
+              <p className="text-[10px] sm:text-xs md:text-sm text-gray-500">
                 Apakah Anda yakin ingin menghapus file ini? Tindakan ini tidak
                 dapat dibatalkan.
               </p>
             </div>
-            <div className="flex justify-center space-x-3 mt-4">
+            <div className="flex justify-center space-x-2 sm:space-x-3 mt-2 sm:mt-4">
               <button
                 onClick={handleCancelDelete}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+                className="px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors text-[10px] sm:text-xs md:text-sm"
               >
                 Batal
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                className="px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-[10px] sm:text-xs md:text-sm"
               >
                 Hapus
               </button>
