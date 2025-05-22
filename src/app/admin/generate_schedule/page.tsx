@@ -16,7 +16,7 @@ import { useRoomStore } from "../_store/ruangan";
 import { useMataKuliahStore } from "../_store/matakuliah";
 import { useJadwalStore } from "../_store/jadwal";
 import { useGeneratedFileStore } from "../_store/generatedFiles";
-import { exportJadwalToCsv } from "../../services/api";
+import { exportJadwalToCsv } from "../../services/schedule";
 
 const GenerateJadwal = () => {
   const dosenList = useDosenStore((state) => state.data);

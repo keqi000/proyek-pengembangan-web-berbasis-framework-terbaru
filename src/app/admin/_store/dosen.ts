@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import { fetchDosen } from "../../services/api";
+import { fetchDosen } from "../../services/lecturer";
 
 type DosenItem = {
   id: string;

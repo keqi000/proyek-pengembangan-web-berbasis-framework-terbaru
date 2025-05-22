@@ -17,7 +17,7 @@ import {
   createRuangan,
   updateRuangan,
   deleteRuangan,
-} from "../../services/api";
+} from "../../services/room";
 
 const KelolaRuangan = () => {
   const ruanganList = useRoomStore((state) => state.data);

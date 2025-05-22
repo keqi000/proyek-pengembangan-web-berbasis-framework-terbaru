@@ -24,10 +24,12 @@ import {
   downloadGeneratedFile,
   GeneratedFileDetailsResponseType,
   getGeneratedFileDetails,
-  NotificationItem,
-} from "../../services/api";
+} from "../../services/generatedFile";
+
+
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { NotificationItem } from "@/app/services/notification";
 
 type SummaryItem = {
   label: string;

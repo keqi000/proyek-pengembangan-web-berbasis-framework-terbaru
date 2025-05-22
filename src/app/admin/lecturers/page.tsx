@@ -17,7 +17,7 @@ import {
   createDosen,
   updateDosen,
   deleteDosen,
-} from "../../services/api";
+} from "../../services/lecturer";
 
 const KelolaDosen = () => {
   const dosenList = useDosenStore((state) => state.data);

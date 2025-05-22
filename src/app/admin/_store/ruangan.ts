@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import { fetchRuangan } from "../../services/api";
+import { fetchRuangan } from "../../services/room";
 
 type RuanganItem = {
   id: string;
