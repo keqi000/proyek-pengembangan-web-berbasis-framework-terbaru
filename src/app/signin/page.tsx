@@ -5,7 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function SignInPage() {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   return (
@@ -40,8 +40,8 @@ export default function SignInPage() {
                 <input
                   type="text"
                   className="w-full px-3 py-2 md:px-4 md:py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   placeholder="Enter your username"
                 />
               </div>
