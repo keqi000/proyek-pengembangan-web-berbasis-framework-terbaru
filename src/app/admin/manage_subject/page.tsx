@@ -47,15 +47,24 @@ const createMataKuliahAPI = async (data: {
   }
 };
 
+// Update the updateMataKuliahAPI function
 const updateMataKuliahAPI = async (
   id: string,
   data: { kode: string; nama: string; semester: string; sks: string }
 ) => {
   try {
+    // Log the request for debugging
+    console.log(`Updating course with ID: ${id}`, data);
+
+    // Make sure the API URL is correct
     const response = await axios.patch(`${API_URL}/course/${id}`, data);
     return response.data;
   } catch (error) {
+    // More detailed error logging
     console.error("Error updating course:", error);
+    if (axios.isAxiosError(error) && error.response) {
+      console.error("Server response:", error.response.data);
+    }
     throw error;
   }
 };
@@ -231,10 +240,13 @@ const KelolaMataKuliah = () => {
   };
 
   const handleEditClick = (mataKuliah: CourseTempInputData) => {
+    // Make sure the ID is included and valid
+    console.log("Editing course with ID:", mataKuliah.id);
     setSelectedMataKuliah(mataKuliah);
     setEditPopup(true);
   };
 
+  // Update the handleConfirmEdit function
   const handleConfirmEdit = async () => {
     if (selectedMataKuliah !== null && selectedMataKuliah.id) {
       if (
@@ -251,12 +263,13 @@ const KelolaMataKuliah = () => {
       setError(null);
 
       try {
-        // Update via API
+        // Convert semester and sks to the correct data types if needed
+        // For example, if the server expects numbers instead of strings:
         const updatedData = await updateMataKuliahAPI(selectedMataKuliah.id, {
           kode: selectedMataKuliah.kode,
           nama: selectedMataKuliah.nama,
-          semester: selectedMataKuliah.semester,
-          sks: selectedMataKuliah.sks,
+          semester: selectedMataKuliah.semester, // Consider parseInt(selectedMataKuliah.semester) if needed
+          sks: selectedMataKuliah.sks, // Consider parseInt(selectedMataKuliah.sks) if needed
         });
 
         // Update local state
@@ -560,40 +573,43 @@ const KelolaMataKuliah = () => {
       )}
 
       {/* Tabel Data Mata Kuliah */}
-      <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md">
-        <h2 className="text-[#4F959D] text-base sm:text-lg font-semibold mb-3 flex items-center">
-          <FaBook className="mr-2" /> Daftar Mata Kuliah
+      <div className="bg-white p-2 sm:p-3 md:p-6 rounded-lg shadow-md">
+        <h2 className="text-[#4F959D] text-base sm:text-lg font-semibold mb-2 sm:mb-3 flex items-center">
+          <FaBook className="mr-1 sm:mr-2 text-xs sm:text-sm md:text-base" />{" "}
+          Daftar Mata Kuliah
         </h2>
 
         {isLoading && mataKuliahList.length === 0 ? (
-          <div className="py-8 text-center">
-            <FaSpinner className="animate-spin mx-auto text-2xl text-[#4F959D] mb-2" />
-            <p className="text-gray-500">Memuat data mata kuliah...</p>
+          <div className="py-4 sm:py-6 md:py-8 text-center">
+            <FaSpinner className="animate-spin mx-auto text-lg sm:text-xl md:text-2xl text-[#4F959D] mb-1 sm:mb-2" />
+            <p className="text-gray-500 text-xs sm:text-sm md:text-base">
+              Memuat data mata kuliah...
+            </p>
           </div>
         ) : (
           <div className="overflow-x-auto w-full">
-            <table className="w-full border-collapse text-[8px] sm:text-sm">
+            <table className="w-full border-collapse text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm table-fixed">
               <thead>
                 <tr className="bg-[#F5F5F5]">
-                  <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-8">
+                  <th className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-[5%] sm:w-[6%] md:w-[8%]">
                     No
                   </th>
-                  <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                  <th className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-[10%] sm:w-[10%] md:w-[10%]">
                     Kode
                   </th>
-                  <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                  <th className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-[25%] sm:w-[25%] md:w-[25%]">
                     Nama MK
                   </th>
-                  <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                  <th className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-[5%] sm:w-[5%] md:w-[5%]">
                     Sem
                   </th>
-                  <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                  <th className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-[5%] sm:w-[5%] md:w-[5%]">
                     SKS
                   </th>
-                  <th className="px-2 py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                  <th className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-[35%] sm:w-[34%] md:w-[32%]">
                     Dosen Pengampu
                   </th>
-                  <th className="px-2 py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-24">
+                  <th className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-[15%] sm:w-[15%] md:w-[15%]">
                     Aksi
                   </th>
                 </tr>
@@ -603,55 +619,63 @@ const KelolaMataKuliah = () => {
                   filteredMataKuliah.map((mataKuliah, index) => (
                     <tr
                       key={mataKuliah.id}
-                      className="hover:bg-gray-50 border-b border-gray-200 transition-colors text-[8px] md:text-base"
+                      className="hover:bg-gray-50 border-b border-gray-200 transition-colors text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm"
                     >
-                      <td className="px-2 py-2">{index + 1}</td>
-                      <td className="px-2 py-2">{mataKuliah.kode}</td>
-                      <td className="px-2 py-2 font-medium">
-                        {mataKuliah.nama}
+                      <td className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2">
+                        {index + 1}
                       </td>
-                      <td className="px-2 py-2 text-center">
+                      <td className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2">
+                        <div className="truncate">{mataKuliah.kode}</div>
+                      </td>
+                      <td className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2 font-medium">
+                        <div className="truncate max-w-[60px] xs:max-w-[80px] sm:max-w-[120px] md:max-w-[180px] lg:max-w-full">
+                          {mataKuliah.nama}
+                        </div>
+                      </td>
+                      <td className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2 text-center">
                         {mataKuliah.semester}
                       </td>
-                      <td className="px-2 py-2 text-center">
+                      <td className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2 text-center">
                         {mataKuliah.sks}
                       </td>
-                      <td className="px-2 py-2 text-[8px] md:text-sm">
-                        {getDosenNamesForMataKuliah(mataKuliah.id || "") || (
-                          <span className="text-gray-400 italic">
-                            Belum ada dosen
-                          </span>
-                        )}
+                      <td className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2">
+                        <div className="truncate max-w-[80px] xs:max-w-[100px] sm:max-w-[150px] md:max-w-[200px] lg:max-w-full">
+                          {getDosenNamesForMataKuliah(mataKuliah.id || "") || (
+                            <span className="text-gray-400 italic">
+                              Belum ada dosen
+                            </span>
+                          )}
+                        </div>
                       </td>
-                      <td className="px-2 py-2">
-                        <div className="flex justify-center gap-1 md:gap-2">
+                      <td className="px-1 sm:px-1.5 md:px-2 py-1 sm:py-1.5 md:py-2">
+                        <div className="flex justify-center gap-0.5 xs:gap-1 sm:gap-1.5 md:gap-2">
                           <button
-                            className="text-blue-600 hover:text-blue-800 transition-colors p-1"
+                            className="text-blue-600 hover:text-blue-800 transition-colors p-0.5 sm:p-1"
                             onClick={() => handleEditClick(mataKuliah)}
                             title="Edit"
                             disabled={isLoading}
                           >
-                            <FaEdit className="h-3 w-3 md:h-4 md:w-4" />
+                            <FaEdit className="h-2 w-2 xs:h-2.5 xs:w-2.5 sm:h-3 sm:w-3 md:h-4 md:w-4" />
                           </button>
                           <button
-                            className="text-green-600 hover:text-green-800 transition-colors p-1"
+                            className="text-green-600 hover:text-green-800 transition-colors p-0.5 sm:p-1"
                             onClick={() =>
                               handleAssignDosen(mataKuliah.id || "")
                             }
                             title="Pilih Dosen"
                             disabled={!mataKuliah.id || isLoading}
                           >
-                            <FaUserTie className="h-3 w-3 md:h-4 md:w-4" />
+                            <FaUserTie className="h-2 w-2 xs:h-2.5 xs:w-2.5 sm:h-3 sm:w-3 md:h-4 md:w-4" />
                           </button>
                           <button
-                            className="text-red-600 hover:text-red-800 transition-colors p-1"
+                            className="text-red-600 hover:text-red-800 transition-colors p-0.5 sm:p-1"
                             onClick={() =>
                               handleDeleteClick(mataKuliah.id || "")
                             }
                             title="Hapus"
                             disabled={isLoading}
                           >
-                            <FaTrash className="h-3 w-3 md:h-4 md:w-4" />
+                            <FaTrash className="h-2 w-2 xs:h-2.5 xs:w-2.5 sm:h-3 sm:w-3 md:h-4 md:w-4" />
                           </button>
                         </div>
                       </td>
@@ -661,7 +685,7 @@ const KelolaMataKuliah = () => {
                   <tr>
                     <td
                       colSpan={7}
-                      className="px-2 py-4 text-center text-gray-500 bg-gray-50 text-xs sm:text-sm"
+                      className="px-1 sm:px-2 md:px-4 py-2 sm:py-3 md:py-4 text-center text-gray-500 bg-gray-50 text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm"
                     >
                       {searchTerm
                         ? "Tidak ada hasil yang sesuai dengan pencarian"

@@ -8,22 +8,6 @@ import { Bell, Calendar, AlertTriangle, Settings, Info } from "lucide-react";
 import Link from "next/link";
 import { useNotificationStore } from "./_store/notifications";
 
-// Define notification types with their respective icons and colors
-// const notificationTypes = {
-//   jadwal: { icon: Calendar, color: "text-blue-500", bgColor: "bg-blue-100" },
-//   peringatan: {
-//     icon: AlertTriangle,
-//     color: "text-yellow-500",
-//     bgColor: "bg-yellow-100",
-//   },
-//   sistem: {
-//     icon: Settings,
-//     color: "text-purple-500",
-//     bgColor: "bg-purple-100",
-//   },
-//   info: { icon: Info, color: "text-green-500", bgColor: "bg-green-100" },
-// };
-
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -120,11 +104,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div
         className={`flex flex-col flex-1 transition-all duration-300 ${
           isSidebarOpen ? "lg:ml-64" : "ml-0"
-        } pt-14 lg:pt-0 ${isSidebarOpen ? "lg:filter-none filter" : ""}`}
+        } ${isSidebarOpen ? "lg:filter-none filter" : ""}`}
       >
-        {/* Top Navbar - Hanya tampil di desktop */}
-        <nav className="bg-[#2C3930] text-white shadow-md h-16 hidden lg:flex lg:flex-col lg:justify-center items-center px-4 sticky top-0 z-10">
-          <div className="flex justify-between items-center w-full px-8">
+        {/* Top Navbar - Visible on all screen sizes now */}
+        <nav className="bg-[#2C3930] text-white shadow-md h-12 sm:h-14 md:h-16 flex flex-col justify-center items-center px-2 sm:px-3 md:px-4 sticky top-0 z-10">
+          <div className="flex justify-between items-center w-full px-2 sm:px-4 md:px-8">
             {/* Tombol Sidebar */}
             <button
               className="text-white focus:outline-none"
@@ -133,8 +117,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               ☰
             </button>
 
-            {/* Search Bar */}
-            <div className="flex flex-1 max-w-md mx-4">
+            {/* Search Bar - Only visible on medium screens and larger */}
+            <div className="hidden md:flex flex-1 max-w-md mx-4">
               <div className="relative w-full">
                 <input
                   type="text"
@@ -161,16 +145,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* User Info and Actions */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <div className="relative" ref={notificationRef}>
                 <button
                   className="relative p-1 text-white rounded-full hover:bg-[#3F4F44] transition-colors"
                   onClick={toggleNotifications}
                   aria-label="Notifikasi"
                 >
-                  <Bell size={20} />
+                  <Bell size={16} className="sm:w-5 sm:h-5 md:w-5 md:h-5" />
                   {unreadCount > 0 && (
-                    <span className="absolute top-0 right-0 h-4 w-4 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold">
+                    <span className="absolute top-0 right-0 h-3 w-3 sm:h-4 sm:w-4 bg-red-500 rounded-full flex items-center justify-center text-[8px] sm:text-xs font-bold">
                       {unreadCount > 9 ? "9+" : unreadCount}
                     </span>
                   )}
@@ -178,19 +162,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
                 {/* Notification dropdown */}
                 {isNotificationsOpen && (
-                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg overflow-hidden z-20">
+                  <div className="absolute right-0 mt-2 w-64 sm:w-72 md:w-80 bg-white rounded-md shadow-lg overflow-hidden z-20">
                     <div className="py-2 px-3 bg-[#2C3930] text-white font-medium flex justify-between items-center">
-                      <span>Notifikasi ({notifications.length})</span>
+                      <span className="text-xs sm:text-sm">
+                        Notifikasi ({notifications.length})
+                      </span>
                       {unreadCount > 0 && (
                         <button
-                          className="text-xs text-[#4F959D] hover:text-[#6AABB3]"
+                          className="text-[10px] sm:text-xs text-[#4F959D] hover:text-[#6AABB3]"
                           onClick={handleMarkAllAsRead}
                         >
                           Tandai semua sudah dibaca
                         </button>
                       )}
                     </div>
-                    <div className="max-h-96 overflow-y-auto">
+                    <div className="max-h-64 sm:max-h-80 md:max-h-96 overflow-y-auto">
                       {notifications.length > 0 ? (
                         notifications
                           .filter(
@@ -204,15 +190,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                           )
                           .slice(0, 3)
                           .map((notification) => {
-                            // const typeColor =
-                            //   notification.type === "jadwal"
-                            //     ? "text-blue-500"
-                            //     : notification.type === "peringatan"
-                            //     ? "text-yellow-500"
-                            //     : notification.type === "sistem"
-                            //     ? "text-purple-500"
-                            //     : "text-green-500";
-
                             const typeBgColor =
                               notification.type === "jadwal"
                                 ? "bg-blue-100"
@@ -225,7 +202,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                             return (
                               <div
                                 key={notification.id}
-                                className={`p-3 border-b hover:bg-gray-50 ${
+                                className={`p-2 sm:p-3 border-b hover:bg-gray-50 ${
                                   !notification.read ? "bg-blue-50" : ""
                                 }`}
                                 onClick={() =>
@@ -234,30 +211,30 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                               >
                                 <div className="flex items-start">
                                   <div
-                                    className={`p-2 rounded-full ${typeBgColor} mr-3`}
+                                    className={`p-1.5 sm:p-2 rounded-full ${typeBgColor} mr-2 sm:mr-3`}
                                   >
                                     {getNotificationIcon(notification.type)}
                                   </div>
                                   <div className="flex-1">
-                                    <p className="font-medium text-sm">
+                                    <p className="font-medium text-xs sm:text-sm text-black">
                                       {notification.title}
                                     </p>
-                                    <p className="text-xs text-gray-500 mt-1">
+                                    <p className="text-[10px] sm:text-xs text-gray-500 mt-1">
                                       {notification.message}
                                     </p>
-                                    <p className="text-xs text-gray-400 mt-1">
+                                    <p className="text-[10px] sm:text-xs text-gray-400 mt-1">
                                       {notification.time}
                                     </p>
                                   </div>
                                   {!notification.read && (
-                                    <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
+                                    <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-blue-500 rounded-full"></div>
                                   )}
                                 </div>
                               </div>
                             );
                           })
                       ) : (
-                        <div className="p-4 text-center text-gray-500">
+                        <div className="p-4 text-center text-gray-500 text-xs sm:text-sm">
                           Tidak ada notifikasi
                         </div>
                       )}
@@ -265,7 +242,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <div className="py-2 px-3 bg-gray-100 text-center">
                       <Link
                         href="/admin/notifications"
-                        className="text-sm text-[#4F959D] hover:text-[#6AABB3]"
+                        className="text-xs sm:text-sm text-[#4F959D] hover:text-[#6AABB3]"
                       >
                         Lihat Semua Notifikasi
                       </Link>
@@ -275,17 +252,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </div>
 
               <div className="flex items-center">
-                <div className="h-8 w-8 rounded-full bg-[#4F959D] flex items-center justify-center text-white font-medium mr-2">
+                <div className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 rounded-full bg-[#4F959D] flex items-center justify-center text-white font-medium mr-1 sm:mr-2">
                   {userName.charAt(0)}
                 </div>
-                <span className="text-sm font-medium">{userName}</span>
+                <span className="text-xs sm:text-sm font-medium hidden xs:inline-block">
+                  {userName}
+                </span>
               </div>
             </div>
           </div>
         </nav>
 
         {/* Main Content */}
-        <main className="flex-1 p-4">{children}</main>
+        <main className="flex-1 p-2 sm:p-3 md:p-4">{children}</main>
       </div>
     </div>
   );

@@ -202,6 +202,7 @@ const KelolaRuangan = () => {
       <button
         className="absolute top-1 right-1 text-red-500 hover:text-red-700"
         onClick={() => setError(null)}
+        suppressHydrationWarning
       >
         &times;
       </button>
@@ -235,11 +236,13 @@ const KelolaRuangan = () => {
                 className="pl-8 pr-2 py-1.5 md:pl-10 md:pr-4 md:py-2 border border-white rounded-lg focus:outline-none ring-1 ring-gray-400 focus:ring-1 focus:ring-[#4F959D] w-full md:w-64 text-gray-600 text-sm md:text-base"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                suppressHydrationWarning
               />
               <FaSearch className="absolute left-2.5 top-2.5 md:left-3 md:top-3 text-gray-400 text-xs md:text-base" />
             </div>
             <button
               onClick={() => setShowAddForm(!showAddForm)}
+              suppressHydrationWarning
               className="bg-[#4F959D] text-white px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm rounded-lg hover:bg-[#3C7A85] transition flex items-center justify-center"
               disabled={isLoading}
             >
@@ -269,6 +272,7 @@ const KelolaRuangan = () => {
                 onChange={(e) =>
                   setTempInput({ ...tempInput, nama: e.target.value })
                 }
+                suppressHydrationWarning
                 disabled={isLoading}
               />
             </div>
@@ -284,6 +288,7 @@ const KelolaRuangan = () => {
                 onChange={(e) =>
                   setTempInput({ ...tempInput, kapasitas: e.target.value })
                 }
+                suppressHydrationWarning
                 disabled={isLoading}
               />
             </div>
@@ -292,6 +297,7 @@ const KelolaRuangan = () => {
                 type="button"
                 className="bg-gray-300 text-gray-800 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-gray-400 transition"
                 onClick={() => setShowAddForm(false)}
+                suppressHydrationWarning
                 disabled={isLoading}
               >
                 Batal
@@ -300,6 +306,7 @@ const KelolaRuangan = () => {
                 type="button"
                 className="bg-[#4F959D] text-white px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-[#3C7A85] transition"
                 onClick={handleSubmit}
+                suppressHydrationWarning
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -350,7 +357,7 @@ const KelolaRuangan = () => {
                 {filteredRuangan.length > 0 ? (
                   filteredRuangan.map((ruangan, index) => (
                     <tr
-                      key={ruangan.id}
+                      key={`room-${ruangan.id}-${index}`}
                       className="hover:bg-gray-50 border-b border-gray-200 transition-colors"
                     >
                       <td className="px-2 py-2">{index + 1}</td>
@@ -363,6 +370,7 @@ const KelolaRuangan = () => {
                             onClick={() => handleEditClick(ruangan)}
                             title="Edit"
                             disabled={isLoading}
+                            suppressHydrationWarning
                           >
                             <FaEdit size={14} />
                           </button>
@@ -371,6 +379,7 @@ const KelolaRuangan = () => {
                             onClick={() => handleDeleteClick(ruangan.id)}
                             title="Hapus"
                             disabled={isLoading}
+                            suppressHydrationWarning
                           >
                             <FaTrash size={14} />
                           </button>
@@ -433,6 +442,7 @@ const KelolaRuangan = () => {
                       nama: e.target.value,
                     })
                   }
+                  suppressHydrationWarning
                   disabled={isLoading}
                 />
               </div>
@@ -450,6 +460,7 @@ const KelolaRuangan = () => {
                       kapasitas: e.target.value,
                     })
                   }
+                  suppressHydrationWarning
                   disabled={isLoading}
                 />
               </div>
@@ -458,6 +469,7 @@ const KelolaRuangan = () => {
                   type="button"
                   className="bg-gray-300 text-gray-800 px-3 py-1.5 text-xs sm:text-sm w-1/2 rounded-lg hover:bg-gray-400 transition"
                   onClick={handleCancelEdit}
+                  suppressHydrationWarning
                   disabled={isLoading}
                 >
                   Batal
@@ -466,6 +478,7 @@ const KelolaRuangan = () => {
                   type="button"
                   className="bg-[#4F959D] text-white px-3 py-1.5 text-xs sm:text-sm w-1/2 rounded-lg hover:bg-[#3C7A85] transition"
                   onClick={handleConfirmEdit}
+                  suppressHydrationWarning
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -504,6 +517,7 @@ const KelolaRuangan = () => {
                 onClick={handleCancelDelete}
                 className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
                 disabled={isLoading}
+                suppressHydrationWarning
               >
                 Batal
               </button>
@@ -511,6 +525,7 @@ const KelolaRuangan = () => {
                 onClick={handleConfirmDelete}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
                 disabled={isLoading}
+                suppressHydrationWarning
               >
                 {isLoading ? (
                   <span className="flex items-center">
