@@ -322,9 +322,19 @@ export const fetchGeneratedFiles = async () => {
   }
 };
 
+export type GeneratedFileDetailsResponseType = {
+  id: string;
+  name: string;
+  date: string;
+  size: number;
+  status: string;
+  description: string;
+  type: string;
+}
+
 export const getGeneratedFileDetails = async (id: string) => {
   try {
-    const response = await axios.get(`${API_URL}/generated-files/${id}`);
+    const response = await axios.get<GeneratedFileDetailsResponseType>(`${API_URL}/generated-files/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching file details:", error);
