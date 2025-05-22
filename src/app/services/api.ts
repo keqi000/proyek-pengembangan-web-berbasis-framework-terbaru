@@ -1,11 +1,9 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api";
-
 //MATA KULIAH
 export const fetchMataKuliah = async () => {
   try {
-    const response = await axios.get(`${API_URL}/course`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/course`);
     return response.data;
   } catch (error) {
     console.error("Error fetching courses:", error);
@@ -20,7 +18,7 @@ export const createMataKuliah = async (data: {
   sks: string;
 }) => {
   try {
-    const response = await axios.post(`${API_URL}/course`, data);
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/course`, data);
     return response.data;
   } catch (error) {
     console.error("Error creating course:", error);
@@ -33,7 +31,7 @@ export const updateMataKuliah = async (
   data: { kode: string; nama: string; semester: string; sks: string }
 ) => {
   try {
-    const response = await axios.patch(`${API_URL}/course/${id}`, data);
+    const response = await axios.patch(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/course/${id}`, data);
     return response.data;
   } catch (error) {
     console.error("Error updating course:", error);
@@ -43,7 +41,7 @@ export const updateMataKuliah = async (
 
 export const deleteMataKuliah = async (id: string) => {
   try {
-    const response = await axios.delete(`${API_URL}/course/${id}`);
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/course/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting course:", error);
@@ -51,10 +49,11 @@ export const deleteMataKuliah = async (id: string) => {
   }
 };
 
+
 //DOSEN
 export const fetchDosen = async () => {
   try {
-    const response = await axios.get(`${API_URL}/lecturer`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/lecturer`);
     return response.data;
   } catch (error) {
     console.error("Error fetching lecturers:", error);
@@ -64,7 +63,7 @@ export const fetchDosen = async () => {
 
 export const createDosen = async (data: { nama: string; nip: string }) => {
   try {
-    const response = await axios.post(`${API_URL}/lecturer`, data);
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/lecturer`, data);
     return response.data;
   } catch (error) {
     console.error("Error creating lecturer:", error);
@@ -77,7 +76,7 @@ export const updateDosen = async (
   data: { nama: string; nip: string }
 ) => {
   try {
-    const response = await axios.patch(`${API_URL}/lecturer/${id}`, data);
+    const response = await axios.patch(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/lecturer/${id}`, data);
     return response.data;
   } catch (error) {
     console.error("Error updating lecturer:", error);
@@ -87,7 +86,7 @@ export const updateDosen = async (
 
 export const deleteDosen = async (id: string) => {
   try {
-    const response = await axios.delete(`${API_URL}/lecturer/${id}`);
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/lecturer/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting lecturer:", error);
@@ -101,7 +100,7 @@ export const assignDosenToMataKuliah = async (
   mataKuliahId: string
 ) => {
   try {
-    const response = await axios.post(`${API_URL}/lecturer-course`, {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/lecturer-course`, {
       lecturer_id: dosenId,
       course_id: mataKuliahId,
     });
@@ -117,7 +116,7 @@ export const removeDosenFromMataKuliah = async (
   mataKuliahId: string
 ) => {
   try {
-    const response = await axios.delete(`${API_URL}/lecturer-course`, {
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/lecturer-course`, {
       data: {
         lecturer_id: dosenId,
         course_id: mataKuliahId,
@@ -133,7 +132,7 @@ export const removeDosenFromMataKuliah = async (
 export const getDosenForMataKuliah = async (mataKuliahId: string) => {
   try {
     const response = await axios.get(
-      `${API_URL}/course/${mataKuliahId}/lecturers`
+      `${process.env.NEXT_PUBLIC_APi_BASE_URL}/course/${mataKuliahId}/lecturers`
     );
     return response.data;
   } catch (error) {
@@ -144,7 +143,7 @@ export const getDosenForMataKuliah = async (mataKuliahId: string) => {
 
 export const getMataKuliahForDosen = async (dosenId: string) => {
   try {
-    const response = await axios.get(`${API_URL}/lecturer/${dosenId}/courses`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/lecturer/${dosenId}/courses`);
     return response.data;
   } catch (error) {
     console.error("Error fetching courses for lecturer:", error);
@@ -155,7 +154,7 @@ export const getMataKuliahForDosen = async (dosenId: string) => {
 // RUANGAN
 export const fetchRuangan = async () => {
   try {
-    const response = await axios.get(`${API_URL}/rooms`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/rooms`);
     return response.data;
   } catch (error) {
     console.error("Error fetching rooms:", error);
@@ -168,7 +167,7 @@ export const createRuangan = async (data: {
   kapasitas: string;
 }) => {
   try {
-    const response = await axios.post(`${API_URL}/rooms`, data);
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/rooms`, data);
     return response.data;
   } catch (error) {
     console.error("Error creating room:", error);
@@ -181,7 +180,7 @@ export const updateRuangan = async (
   data: { nama: string; kapasitas: string }
 ) => {
   try {
-    const response = await axios.patch(`${API_URL}/rooms/${id}`, data);
+    const response = await axios.patch(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/rooms/${id}`, data);
     return response.data;
   } catch (error) {
     console.error("Error updating room:", error);
@@ -191,7 +190,7 @@ export const updateRuangan = async (
 
 export const deleteRuangan = async (id: string) => {
   try {
-    const response = await axios.delete(`${API_URL}/rooms/${id}`);
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/rooms/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting room:", error);
@@ -202,7 +201,7 @@ export const deleteRuangan = async (id: string) => {
 // JADWAL
 export const fetchJadwal = async () => {
   try {
-    const response = await axios.get(`${API_URL}/schedules`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/schedules`);
     return response.data;
   } catch (error) {
     console.error("Error fetching schedules:", error);
@@ -213,7 +212,7 @@ export const fetchJadwal = async () => {
 export const generateJadwal = async (clearExisting = true) => {
   try {
     console.log("Generating jadwal with clearExisting:", clearExisting);
-    const response = await axios.post(`${API_URL}/schedules/generate`, {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/schedules/generate`, {
       clear_existing: clearExisting,
     });
 
@@ -236,7 +235,7 @@ export const generateJadwal = async (clearExisting = true) => {
 
 export const deleteJadwal = async (id: string) => {
   try {
-    const response = await axios.delete(`${API_URL}/schedules/${id}`);
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/schedules/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting schedule:", error);
@@ -246,7 +245,7 @@ export const deleteJadwal = async (id: string) => {
 
 export const deleteAllJadwal = async () => {
   try {
-    const response = await axios.delete(`${API_URL}/schedules`);
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/schedules`);
     return response.data;
   } catch (error) {
     console.error("Error deleting all schedules:", error);
@@ -256,7 +255,7 @@ export const deleteAllJadwal = async () => {
 
 export const filterJadwalByDay = async (day: string) => {
   try {
-    const response = await axios.get(`${API_URL}/schedules/day/${day}`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/schedules/day/${day}`);
     return response.data;
   } catch (error) {
     console.error("Error filtering schedules by day:", error);
@@ -266,7 +265,7 @@ export const filterJadwalByDay = async (day: string) => {
 
 export const searchJadwal = async (query: string) => {
   try {
-    const response = await axios.get(`${API_URL}/schedules/search`, {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/schedules/search`, {
       params: { query },
     });
     return response.data;
@@ -278,7 +277,7 @@ export const searchJadwal = async (query: string) => {
 
 export const exportJadwalToCsv = async () => {
   try {
-    const response = await axios.get(`${API_URL}/schedules/export`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/schedules/export`);
 
     // Jika response berisi data file yang digenerate
     if (response.data && response.data.generated_file) {
@@ -314,7 +313,7 @@ export type GeneratedFileResponse = {
 
 export const fetchGeneratedFiles = async () => {
   try {
-    const response = await axios.get(`${API_URL}/generated-files`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/generated-files`);
     return response.data;
   } catch (error) {
     console.error("Error fetching generated files:", error);
@@ -334,7 +333,7 @@ export type GeneratedFileDetailsResponseType = {
 
 export const getGeneratedFileDetails = async (id: string) => {
   try {
-    const response = await axios.get<GeneratedFileDetailsResponseType>(`${API_URL}/generated-files/${id}`);
+    const response = await axios.get<GeneratedFileDetailsResponseType>(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/generated-files/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching file details:", error);
@@ -344,7 +343,7 @@ export const getGeneratedFileDetails = async (id: string) => {
 
 export const downloadGeneratedFile = async (id: string) => {
   try {
-    window.open(`${API_URL}/generated-files/${id}/download`, "_blank");
+    window.open(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/generated-files/${id}/download`, "_blank");
     return true;
   } catch (error) {
     console.error("Error downloading file:", error);
@@ -354,7 +353,7 @@ export const downloadGeneratedFile = async (id: string) => {
 
 export const deleteGeneratedFile = async (id: string) => {
   try {
-    const response = await axios.delete(`${API_URL}/generated-files/${id}`);
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/generated-files/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting file:", error);
@@ -380,7 +379,7 @@ export type NotificationItem = {
 // Fungsi untuk mengambil semua notifikasi
 export const fetchNotifications = async (): Promise<NotificationItem[]> => {
   try {
-    const response = await axios.get(`${API_URL}/notifications`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/notifications`);
     return response.data;
   } catch (error) {
     console.error("Error fetching notifications:", error);
@@ -393,7 +392,7 @@ export const fetchUnreadNotifications = async (): Promise<
   NotificationItem[]
 > => {
   try {
-    const response = await axios.get(`${API_URL}/notifications/unread`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/notifications/unread`);
     return response.data;
   } catch (error) {
     console.error("Error fetching unread notifications:", error);
@@ -404,7 +403,7 @@ export const fetchUnreadNotifications = async (): Promise<
 // Fungsi untuk menandai notifikasi sebagai telah dibaca
 export const markNotificationAsRead = async (id: string) => {
   try {
-    const response = await axios.patch(`${API_URL}/notifications/${id}/read`);
+    const response = await axios.patch(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/notifications/${id}/read`);
     return response.data;
   } catch (error) {
     console.error("Error marking notification as read:", error);
@@ -415,7 +414,7 @@ export const markNotificationAsRead = async (id: string) => {
 // Fungsi untuk menandai semua notifikasi sebagai telah dibaca
 export const markAllNotificationsAsRead = async () => {
   try {
-    const response = await axios.patch(`${API_URL}/notifications/read-all`);
+    const response = await axios.patch(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/notifications/read-all`);
     return response.data;
   } catch (error) {
     console.error("Error marking all notifications as read:", error);
@@ -426,7 +425,7 @@ export const markAllNotificationsAsRead = async () => {
 // Fungsi untuk menghapus notifikasi
 export const deleteNotification = async (id: string) => {
   try {
-    const response = await axios.delete(`${API_URL}/notifications/${id}`);
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/notifications/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting notification:", error);
@@ -437,7 +436,7 @@ export const deleteNotification = async (id: string) => {
 // Fungsi untuk menghapus semua notifikasi
 export const deleteAllNotifications = async () => {
   try {
-    const response = await axios.delete(`${API_URL}/notifications`);
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/notifications`);
     return response.data;
   } catch (error) {
     console.error("Error deleting all notifications:", error);
@@ -457,7 +456,7 @@ export const createScheduleNotification = async () => {
     };
 
     const response = await axios.post(
-      `${API_URL}/notifications`,
+      `${process.env.NEXT_PUBLIC_APi_BASE_URL}/notifications`,
       notificationData
     );
     return response.data;
