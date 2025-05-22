@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Poppins, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Providers from "./provider";
 
 // Definisikan font
 const bebasNeue = Bebas_Neue({
@@ -40,7 +41,7 @@ export default function RootLayout({
       <body
         className={`${bebasNeue.variable} ${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -3,10 +3,13 @@
 import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
+import { useLoginMutation } from "../admin/_hook/auth";
 
 export default function SignInPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const loginMutation = useLoginMutation();
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 relative overflow-hidden">
@@ -58,8 +61,14 @@ export default function SignInPage() {
               </div>
 
               <button
-                type="submit"
+                type="button"
                 className="w-full bg-[#4F959D] text-white py-2 rounded-lg hover:bg-[#205781] transition"
+                onClick={() => loginMutation.mutate({
+                  username: username, password: password
+                }, {
+                  onSuccess: () => console.log("success"),
+                  onError: (error) => console.error(error)
+                })}
               >
                 Sign In
               </button>

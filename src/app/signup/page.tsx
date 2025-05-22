@@ -3,12 +3,16 @@
 import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
+import { useRegisterMutation } from "../admin/_hook/auth";
+import { redirect } from "next/navigation";
 
 export default function SignUpPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("mahasiswa");
   const [defaultPassword, setDefaultPassword] = useState("");
+
+  const registerMutation = useRegisterMutation()
 
   return (
     <>
@@ -96,8 +100,12 @@ export default function SignUpPage() {
                 )}
 
                 <button
-                    type="submit"
+                    type="button"
                     className="w-full bg-[#4F959D] text-white py-2 rounded-lg hover:bg-[#4F959D] transition"
+                    onClick={() => registerMutation.mutate({username: username, password: password, role: role}, {
+                        onSuccess: () => redirect('/signin'),
+                        onError: (error) => console.error(error)
+                    })}
                 >
                     Sign Up
                 </button>

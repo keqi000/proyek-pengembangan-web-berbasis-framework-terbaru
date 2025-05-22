@@ -16,7 +16,7 @@ import {
   FaSpinner,
 } from "react-icons/fa";
 import { CourseTempInputData } from "../_scheme/course";
-import { fetchDosen } from "../../services/api";
+import { fetchDosen } from "../../services/lecturer";
 import axios from "axios";
 
 // API Service untuk mata kuliah
