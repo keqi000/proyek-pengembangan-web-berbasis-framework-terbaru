@@ -10,7 +10,6 @@ import {
   FaDownload,
   FaEye,
   FaTrash,
-  FaSpinner,
   FaExclamationTriangle,
   FaBell,
   FaInfoCircle,
@@ -21,11 +20,11 @@ import { useRoomStore } from "../_store/ruangan";
 import { useMataKuliahStore } from "../_store/matakuliah";
 import { useGeneratedFileStore } from "../_store/generatedFiles";
 import { useNotificationStore } from "../_store/notifications";
-import { useJadwalStore } from "../_store/jadwal";
 import {
   downloadGeneratedFile,
-  deleteGeneratedFile,
+  GeneratedFileDetailsResponseType,
   getGeneratedFileDetails,
+  NotificationItem,
 } from "../../services/api";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -58,10 +57,10 @@ export default function Home() {
   } = useNotificationStore();
 
   const [activeTab, setActiveTab] = useState<"recent" | "all">("recent");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [fileDetailModal, setFileDetailModal] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [, setIsLoading] = useState(false);
+  const [, setError] = useState<string | null>(null);
+  const [fileDetailModal, setFileDetailModal] = useState<boolean>(false);
+  const [selectedFile, setSelectedFile] = useState<GeneratedFileDetailsResponseType | null>(null);
   const [deleteModal, setDeleteModal] = useState(false);
   const [fileToDelete, setFileToDelete] = useState<string | null>(null);
 
