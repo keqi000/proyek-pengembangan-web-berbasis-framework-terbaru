@@ -186,32 +186,6 @@ export default function Home() {
 
   return (
     <div className="bg-gray-100 p-2 sm:p-4 min-h-screen font-poppins">
-      {/* Loading indicator */}
-      {isLoading && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg flex items-center space-x-3">
-            <FaSpinner className="animate-spin text-[#4F959D] text-xl" />
-            <p className="text-gray-600">Memproses...</p>
-          </div>
-        </div>
-      )}
-
-      {/* Error notification */}
-      {error && (
-        <div className="fixed top-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md z-50">
-          <div className="flex items-center">
-            <FaExclamationTriangle className="mr-2" />
-            <p>{error}</p>
-          </div>
-          <button
-            className="absolute top-1 right-1 text-red-500 hover:text-red-700"
-            onClick={() => setError(null)}
-          >
-            &times;
-          </button>
-        </div>
-      )}
-
       {/* Header Section */}
       <div className="mb-4 sm:mb-8">
         <motion.div

@@ -545,6 +545,7 @@ const GenerateJadwal = () => {
         </div>
       </div>
 
+      {/* Delete Confirmation Modal */}
       {deleteModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 z-50">
           <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-sm animate-fadeIn">
