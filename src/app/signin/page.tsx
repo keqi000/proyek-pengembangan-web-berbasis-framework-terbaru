@@ -67,7 +67,7 @@ export default function SignInPage() {
 
             <p className="flex flex-col md:flex-row text-sm md:text-base text-center text-gray-600 mt-4">
               Don&lsquo;t have an account?
-              <Link href="../" className="px-2 md:px-1 text-[#4F959D] font-semibold">
+              <Link href="/signup" className="px-2 md:px-1 text-[#4F959D] font-semibold">
                 Sign Up
               </Link>
             </p>
