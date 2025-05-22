@@ -219,17 +219,17 @@ export const generateJadwal = async (clearExisting = true) => {
 
     console.log("Generate jadwal response:", response.data);
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error generating schedules:", error);
-    if (error.response) {
-      console.error("Error response status:", error.response.status);
-      console.error("Error response data:", error.response.data);
-      console.error("Error response headers:", error.response.headers);
-    } else if (error.request) {
-      console.error("Error request:", error.request);
-    } else {
-      console.error("Error message:", error.message);
-    }
+    // if (error.response) {
+    //   console.error("Error response status:", error.response.status);
+    //   console.error("Error response data:", error.response.data);
+    //   console.error("Error response headers:", error.response.headers);
+    // } else if (error.request) {
+    //   console.error("Error request:", error.request);
+    // } else {
+    //   console.error("Error message:", error.message);
+    // }
     throw error;
   }
 };
@@ -322,9 +322,19 @@ export const fetchGeneratedFiles = async () => {
   }
 };
 
+export type GeneratedFileDetailsResponseType = {
+  id: string;
+  name: string;
+  date: string;
+  size: number;
+  status: string;
+  description: string;
+  type: string;
+}
+
 export const getGeneratedFileDetails = async (id: string) => {
   try {
-    const response = await axios.get(`${API_URL}/generated-files/${id}`);
+    const response = await axios.get<GeneratedFileDetailsResponseType>(`${API_URL}/generated-files/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching file details:", error);
@@ -435,7 +445,7 @@ export const deleteAllNotifications = async () => {
   }
 };
 
-export const createScheduleNotification = async (scheduleData: any) => {
+export const createScheduleNotification = async () => {
   try {
     const notificationData = {
       title: "Jadwal Baru Telah Digenerate",

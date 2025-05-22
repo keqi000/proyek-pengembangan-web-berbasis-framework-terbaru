@@ -14,7 +14,6 @@ import {
 import { useDosenStore } from "../_store/dosen";
 import { useRoomStore } from "../_store/ruangan";
 import { useMataKuliahStore } from "../_store/matakuliah";
-import { useDosenMatakuliahStore } from "../_store/dosenMatakuliah";
 import { useJadwalStore } from "../_store/jadwal";
 import { useGeneratedFileStore } from "../_store/generatedFiles";
 import { exportJadwalToCsv } from "../../services/api";
@@ -23,7 +22,6 @@ const GenerateJadwal = () => {
   const dosenList = useDosenStore((state) => state.data);
   const ruanganList = useRoomStore((state) => state.data);
   const mataKuliahList = useMataKuliahStore((state) => state.data);
-  const { getDosenByMataKuliah } = useDosenMatakuliahStore();
 
   // Gunakan store jadwal
   const {

@@ -16,6 +16,7 @@ import {
 } from "react-icons/fa";
 import { useNotificationStore } from "../_store/notifications";
 import Link from "next/link";
+import { NotificationItem } from "@/app/services/api";
 
 const NotificationsPage = () => {
   const {
@@ -32,7 +33,7 @@ const NotificationsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<string | null>(null);
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
-  const [selectedNotification, setSelectedNotification] = useState<any | null>(
+  const [selectedNotification, setSelectedNotification] = useState<NotificationItem | null>(
     null
   );
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -76,7 +77,7 @@ const NotificationsPage = () => {
     }
   };
 
-  const handleViewNotification = (notification: any) => {
+  const handleViewNotification = (notification: NotificationItem) => {
     setSelectedNotification(notification);
     setShowDetailModal(true);
     if (!notification.read) {

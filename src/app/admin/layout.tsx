@@ -9,20 +9,20 @@ import Link from "next/link";
 import { useNotificationStore } from "./_store/notifications";
 
 // Define notification types with their respective icons and colors
-const notificationTypes = {
-  jadwal: { icon: Calendar, color: "text-blue-500", bgColor: "bg-blue-100" },
-  peringatan: {
-    icon: AlertTriangle,
-    color: "text-yellow-500",
-    bgColor: "bg-yellow-100",
-  },
-  sistem: {
-    icon: Settings,
-    color: "text-purple-500",
-    bgColor: "bg-purple-100",
-  },
-  info: { icon: Info, color: "text-green-500", bgColor: "bg-green-100" },
-};
+// const notificationTypes = {
+//   jadwal: { icon: Calendar, color: "text-blue-500", bgColor: "bg-blue-100" },
+//   peringatan: {
+//     icon: AlertTriangle,
+//     color: "text-yellow-500",
+//     bgColor: "bg-yellow-100",
+//   },
+//   sistem: {
+//     icon: Settings,
+//     color: "text-purple-500",
+//     bgColor: "bg-purple-100",
+//   },
+//   info: { icon: Info, color: "text-green-500", bgColor: "bg-green-100" },
+// };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -204,14 +204,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                           )
                           .slice(0, 3)
                           .map((notification) => {
-                            const typeColor =
-                              notification.type === "jadwal"
-                                ? "text-blue-500"
-                                : notification.type === "peringatan"
-                                ? "text-yellow-500"
-                                : notification.type === "sistem"
-                                ? "text-purple-500"
-                                : "text-green-500";
+                            // const typeColor =
+                            //   notification.type === "jadwal"
+                            //     ? "text-blue-500"
+                            //     : notification.type === "peringatan"
+                            //     ? "text-yellow-500"
+                            //     : notification.type === "sistem"
+                            //     ? "text-purple-500"
+                            //     : "text-green-500";
 
                             const typeBgColor =
                               notification.type === "jadwal"
