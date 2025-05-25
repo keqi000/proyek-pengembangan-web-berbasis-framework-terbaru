@@ -335,6 +335,9 @@ const JadwalKuliahPage = () => {
                                           className="text-gray-400"
                                         />
                                         <span>{jadwal.namaDosen}</span>
+                                        <span className="text-xs text-blue-600 bg-blue-100 px-1 rounded">
+                                          Pengampu
+                                        </span>
                                       </div>
                                       <div className="flex items-center gap-1">
                                         <MapPin

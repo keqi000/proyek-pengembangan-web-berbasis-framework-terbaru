@@ -25,6 +25,8 @@ export interface EnrollmentItem {
   semester: string;
   tahun_akademik: string;
   status: string;
+  lecturer_id?: string; // TAMBAHAN BARU
+  assigned_lecturer?: string; // TAMBAHAN BARU
   course: CourseItem;
   created_at: string;
   updated_at: string;
