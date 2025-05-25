@@ -319,31 +319,34 @@ const KelolaDosen = () => {
       )}
 
       {/* Tabel Data Dosen */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-[#4F959D] text-lg font-semibold mb-4 flex items-center">
-          <FaUserTie className="mr-2" /> Daftar Dosen
+      <div className="bg-white p-2 sm:p-4 md:p-6 rounded-lg shadow-md">
+        <h2 className="text-base sm:text-lg md:text-xl text-[#4F959D] font-semibold mb-2 sm:mb-3 md:mb-4 flex items-center">
+          <FaUserTie className="mr-1 sm:mr-2 text-xs sm:text-sm md:text-base" />{" "}
+          Daftar Dosen
         </h2>
 
         {isLoading && dosenList.length === 0 ? (
-          <div className="py-8 text-center">
-            <FaSpinner className="animate-spin mx-auto text-2xl text-[#4F959D] mb-2" />
-            <p className="text-gray-500">Memuat data dosen...</p>
+          <div className="py-4 sm:py-6 md:py-8 text-center">
+            <FaSpinner className="animate-spin mx-auto text-lg sm:text-xl md:text-2xl text-[#4F959D] mb-1 sm:mb-2" />
+            <p className="text-gray-500 text-xs sm:text-sm md:text-base">
+              Memuat data dosen...
+            </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-sm md:text-base">
+            <table className="w-full border-collapse text-xs sm:text-sm md:text-base table-fixed">
               <thead>
                 <tr className="bg-[#F5F5F5]">
-                  <th className="px-4 py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-16">
+                  <th className="px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-[10%] sm:w-[12%] md:w-[16%] text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm">
                     No
                   </th>
-                  <th className="px-4 py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                  <th className="px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-[45%] sm:w-[43%] md:w-[42%] text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm">
                     Nama Dosen
                   </th>
-                  <th className="px-4 py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D]">
+                  <th className="px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 text-left font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-[25%] sm:w-[25%] md:w-[22%] text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm">
                     NIP
                   </th>
-                  <th className="px-4 py-3 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-24">
+                  <th className="px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 text-center font-semibold text-[#2C3930] border-b-2 border-[#4F959D] w-[20%] sm:w-[20%] md:w-[20%] text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm">
                     Aksi
                   </th>
                 </tr>
@@ -355,18 +358,29 @@ const KelolaDosen = () => {
                       key={dosen.id}
                       className="hover:bg-gray-50 border-b border-gray-200 transition-colors"
                     >
-                      <td className="px-4 py-4">{index + 1}</td>
-                      <td className="px-4 py-4 font-medium">{dosen.nama}</td>
-                      <td className="px-4 py-4">{dosen.nip}</td>
-                      <td className="px-4 py-4">
-                        <div className="flex justify-center gap-4">
+                      <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm">
+                        {index + 1}
+                      </td>
+                      <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 font-medium text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm">
+                        <div className="truncate max-w-[80px] xs:max-w-[100px] sm:max-w-[150px] md:max-w-[200px] lg:max-w-full">
+                          {dosen.nama}
+                        </div>
+                      </td>
+                      <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm">
+                        {dosen.nip}
+                      </td>
+                      <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4">
+                        <div className="flex justify-center gap-1 sm:gap-2 md:gap-4">
                           <button
                             className="text-blue-600 hover:text-blue-800 transition-colors"
                             onClick={() => handleEditClick(dosen)}
                             title="Edit"
                             disabled={isLoading}
                           >
-                            <FaEdit size={18} />
+                            <FaEdit
+                              size={12}
+                              className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]"
+                            />
                           </button>
                           <button
                             className="text-red-600 hover:text-red-800 transition-colors"
@@ -374,7 +388,10 @@ const KelolaDosen = () => {
                             title="Hapus"
                             disabled={isLoading}
                           >
-                            <FaTrash size={18} />
+                            <FaTrash
+                              size={12}
+                              className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]"
+                            />
                           </button>
                         </div>
                       </td>
@@ -384,7 +401,7 @@ const KelolaDosen = () => {
                   <tr>
                     <td
                       colSpan={4}
-                      className="px-6 py-8 text-center text-gray-500 bg-gray-50"
+                      className="px-2 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8 text-center text-gray-500 bg-gray-50 text-xs sm:text-sm md:text-base"
                     >
                       {searchTerm
                         ? "Tidak ada hasil yang sesuai dengan pencarian"
