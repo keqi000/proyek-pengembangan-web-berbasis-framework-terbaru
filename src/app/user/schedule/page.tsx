@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   Calendar,
   Search,
@@ -9,103 +9,96 @@ import {
   User,
   BookOpen,
   Info,
+  Loader,
 } from "lucide-react";
+import {
+  getStudentSchedule,
+  ScheduleItem,
+} from "../../services/studentSchedule";
 
-type JadwalItem = {
-  id: string;
-  hari: string;
-  tanggal: string;
-  jamMulai: string;
-  jamSelesai: string;
-  mataKuliah: string;
-  namaDosen: string;
-  ruangan: string;
-  jenisKuliah: "Tatap Muka" | "Online" | "Hybrid";
-  keterangan?: string;
-};
-
-const JadwalKuliahPage: FC = () => {
-  const [jadwalData, setJadwalData] = useState<JadwalItem[]>([]);
+const JadwalKuliahPage = () => {
+  const [jadwalData, setJadwalData] = useState<ScheduleItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDay, setFilterDay] = useState<string | null>(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  // Mock data for demonstration
-  useEffect(() => {
-    // In a real application, this would come from an API or store
-    const mockJadwal: JadwalItem[] = [
-      {
-        id: "1",
-        hari: "Senin",
-        tanggal: "25 Maret 2025",
-        jamMulai: "08:00",
-        jamSelesai: "10:00",
-        mataKuliah: "Pemrograman Web",
-        namaDosen: "Dr. Budi Santoso, M.Kom.",
-        ruangan: "Lab Komputer 2",
-        jenisKuliah: "Tatap Muka",
-      },
-      {
-        id: "2",
-        hari: "Senin",
-        tanggal: "25 Maret 2025",
-        jamMulai: "13:00",
-        jamSelesai: "15:00",
-        mataKuliah: "Basis Data Lanjut",
-        namaDosen: "Dr. Siti Aminah, M.Sc.",
-        ruangan: "Ruang 301",
-        jenisKuliah: "Tatap Muka",
-      },
-      {
-        id: "3",
-        hari: "Selasa",
-        tanggal: "26 Maret 2025",
-        jamMulai: "09:00",
-        jamSelesai: "11:30",
-        mataKuliah: "Kecerdasan Buatan",
-        namaDosen: "Prof. Ahmad Wijaya, Ph.D.",
-        ruangan: "Online",
-        jenisKuliah: "Online",
-        keterangan: "Meeting via Zoom",
-      },
-      {
-        id: "4",
-        hari: "Rabu",
-        tanggal: "27 Maret 2025",
-        jamMulai: "10:00",
-        jamSelesai: "12:00",
-        mataKuliah: "Jaringan Komputer",
-        namaDosen: "Dr. Rini Puspita, M.T.",
-        ruangan: "Lab Jaringan",
-        jenisKuliah: "Hybrid",
-        keterangan: "Kelompok A offline, Kelompok B online",
-      },
-      {
-        id: "5",
-        hari: "Kamis",
-        tanggal: "28 Maret 2025",
-        jamMulai: "13:00",
-        jamSelesai: "15:00",
-        mataKuliah: "Pengembangan Aplikasi Mobile",
-        namaDosen: "Dr. Hadi Prasetyo, M.Kom.",
-        ruangan: "Lab Mobile",
-        jenisKuliah: "Tatap Muka",
-        keterangan: "Kuliah digantikan dengan tugas mandiri",
-      },
-      {
-        id: "6",
-        hari: "Jumat",
-        tanggal: "29 Maret 2025",
-        jamMulai: "08:00",
-        jamSelesai: "10:00",
-        mataKuliah: "Keamanan Sistem Informasi",
-        namaDosen: "Dr. Eko Nugroho, M.Sc.",
-        ruangan: "Ruang 201",
-        jenisKuliah: "Tatap Muka",
-      },
-    ];
+  // Use refs to prevent multiple API calls and track component state
+  const isMountedRef = useRef(true);
+  const isLoadingRef = useRef(false);
+  const hasInitializedRef = useRef(false);
 
-    setJadwalData(mockJadwal);
+  // Get user data from localStorage
+  const getUserData = useCallback(() => {
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("user");
+      return userData ? JSON.parse(userData) : null;
+    }
+    return null;
   }, []);
+
+  const user = getUserData();
+
+  // Reset state when component mounts
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  const loadScheduleData = useCallback(async (userId: string) => {
+    // Prevent multiple simultaneous calls
+    if (isLoadingRef.current || !isMountedRef.current) {
+      return;
+    }
+
+    isLoadingRef.current = true;
+    setLoading(true);
+    setError(null);
+
+    try {
+      console.log("Loading schedule for user:", userId);
+      const schedules = await getStudentSchedule(userId);
+
+      // Only update state if component is still mounted
+      if (isMountedRef.current) {
+        console.log("Fetched schedules:", schedules);
+        setJadwalData(schedules);
+        setDataLoaded(true);
+        hasInitializedRef.current = true;
+      }
+    } catch (err) {
+      console.error("Error loading schedule:", err);
+      if (isMountedRef.current) {
+        setError("Gagal memuat jadwal kuliah");
+        setDataLoaded(true);
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
+      isLoadingRef.current = false;
+    }
+  }, []);
+
+  // Load data only once when component mounts
+  useEffect(() => {
+    if (
+      user &&
+      user.role === "mahasiswa" &&
+      !hasInitializedRef.current &&
+      isMountedRef.current
+    ) {
+      console.log("Initial schedule load for user:", user.id);
+      loadScheduleData(user.id);
+    } else if (!user || user.role !== "mahasiswa") {
+      setLoading(false);
+      setDataLoaded(true);
+    }
+  }, [user, loadScheduleData]);
 
   const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
@@ -123,9 +116,9 @@ const JadwalKuliahPage: FC = () => {
   const getJenisKuliahColor = (jenis: string) => {
     switch (jenis) {
       case "Tatap Muka":
-        return "bg-green-100 text-green-800";
-      case "Online":
         return "bg-blue-100 text-blue-800";
+      case "Online":
+        return "bg-green-100 text-green-800";
       case "Hybrid":
         return "bg-purple-100 text-purple-800";
       default:
@@ -133,150 +126,296 @@ const JadwalKuliahPage: FC = () => {
     }
   };
 
-  const getJenisKuliahIcon = (jenis: string) => {
-    switch (jenis) {
-      case "Tatap Muka":
-        return <MapPin className="w-4 h-4 mr-1" />;
-      case "Online":
-        return <BookOpen className="w-4 h-4 mr-1" />;
-      case "Hybrid":
-        return <Info className="w-4 h-4 mr-1" />;
-      default:
-        return null;
-    }
+  const getJadwalByDay = (day: string) => {
+    return filteredJadwal.filter((jadwal) => jadwal.hari === day);
   };
 
-  return (
-    <div className="max-w-full py-8 px-4 md:px-8 bg-[#DCD7C9]">
-      {/* Header Section */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-black mb-2 font-bebas">
-          JADWAL <span className="text-[#A27B5C]">KULIAH</span>
-        </h1>
-        <p className="text-gray-700 font-poppins">
-          Informasi lengkap jadwal perkuliahan Anda, termasuk waktu, lokasi, dan
-          dosen pengampu.
-        </p>
+  // Show access denied if user is not a student
+  if (!user || user.role !== "mahasiswa") {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-xl font-bold text-red-600 mb-2">Akses Ditolak</h2>
+          <p className="text-gray-600">Halaman ini hanya untuk mahasiswa</p>
+        </div>
       </div>
+    );
+  }
 
-      {/* Filter and Search Section */}
-      <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-[#A27B5C] focus:border-[#A27B5C] sm:text-sm text-black"
-                placeholder="Cari mata kuliah, dosen, atau ruangan..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="flex-none">
-            <select
-              className="block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-black focus:outline-none focus:ring-[#A27B5C] focus:border-[#A27B5C] sm:text-sm text-black"
-              value={filterDay || ""}
-              onChange={(e) => setFilterDay(e.target.value || null)}
-            >
-              <option value="">Semua Hari</option>
-              {days.map((day) => (
-                <option key={day} value={day}>
-                  {day}
-                </option>
-              ))}
-            </select>
-          </div>
+  // Determine what to show based on loading and data state
+  const shouldShowLoading = loading && !dataLoaded;
+  const shouldShowContent = dataLoaded && !loading;
+  const shouldShowEmptyState = shouldShowContent && jadwalData.length === 0;
+
+  return (
+    <div className="bg-gray-100 p-2 sm:p-3 md:p-4 min-h-screen font-poppins">
+      {/* Header */}
+      <div className="mb-4 sm:mb-6">
+        <div className="bg-[#2C3930] text-white p-3 sm:p-4 md:p-6 rounded-lg shadow-lg">
+          <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-1 sm:mb-2 flex items-center gap-2">
+            <Calendar className="text-[#4F959D]" size={24} />
+            Jadwal Kuliah Saya
+          </h1>
+          <p className="text-xs sm:text-sm md:text-base text-gray-200">
+            Lihat jadwal kuliah berdasarkan mata kuliah yang Anda ambil
+          </p>
         </div>
       </div>
 
-      {/* Jadwal Content */}
-      <div className="space-y-6">
-        {days
-          .filter((day) => (filterDay ? day === filterDay : true))
-          .map((day) => {
-            const dayJadwal = filteredJadwal.filter((j) => j.hari === day);
-            if (dayJadwal.length === 0) return null;
+      {/* Error Message */}
+      {error && (
+        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+          <div className="flex items-center gap-2">
+            <Info size={16} />
+            {error}
+          </div>
+        </div>
+      )}
 
-            return (
-              <div
-                key={day}
-                className="bg-white rounded-lg shadow-md overflow-hidden font-poppins"
+      {/* Search and Filter - Only show when data is loaded */}
+      {shouldShowContent && (
+        <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            {/* Search */}
+            <div className="flex-1 relative">
+              <Search
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={16}
+              />
+              <input
+                type="text"
+                placeholder="Cari mata kuliah, dosen, atau ruangan..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4F959D] focus:border-transparent text-sm text-black"
+              />
+            </div>
+
+            {/* Day Filter */}
+            <div className="sm:w-48">
+              <select
+                value={filterDay || ""}
+                onChange={(e) => setFilterDay(e.target.value || null)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4F959D] focus:border-transparent text-sm text-black"
               >
-                <div className="bg-[#A27B5C] text-white p-4 flex items-center">
-                  <Calendar className="w-5 h-5 mr-2" />
-                  <h2 className="text-xl font-semibold font-bebas">{day}</h2>
+                <option value="">Semua Hari</option>
+                {days.map((day) => (
+                  <option key={day} value={day}>
+                    {day}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Loading State */}
+      {shouldShowLoading && (
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="text-center py-8">
+            <Loader
+              className="animate-spin mx-auto text-2xl text-[#4F959D] mb-2"
+              size={32}
+            />
+            <p className="text-gray-500">Memuat jadwal kuliah...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Schedule Content */}
+      {shouldShowContent && (
+        <>
+          {/* Summary - Only show when there's data */}
+          {jadwalData.length > 0 && (
+            <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md mb-4 sm:mb-6">
+              <h2 className="text-base sm:text-lg font-semibold text-[#2C3930] mb-3 flex items-center gap-2">
+                <Info className="text-[#4F959D]" size={20} />
+                Ringkasan Jadwal
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                <div className="text-center p-3 bg-blue-50 rounded-lg">
+                  <div className="text-lg sm:text-xl font-bold text-blue-600">
+                    {jadwalData.length}
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-600">
+                    Total Jadwal
+                  </div>
                 </div>
-                <div className="divide-y divide-gray-200">
-                  {dayJadwal.map((jadwal) => (
-                    <div key={jadwal.id} className="p-4 hover:bg-gray-50">
-                      <div className="flex flex-col md:flex-row md:items-center justify-between mb-2">
-                        <div className="flex items-center mb-2 md:mb-0">
-                          <Clock className="w-5 h-5 text-[#A27B5C] mr-2" />
-                          <span className="text-gray-700 font-medium">
-                            {jadwal.jamMulai} - {jadwal.jamSelesai}
-                          </span>
-                          <span className="mx-2 text-gray-400">|</span>
-                          <span className="text-gray-600">
-                            {jadwal.tanggal}
-                          </span>
-                        </div>
-                        <div
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getJenisKuliahColor(
-                            jadwal.jenisKuliah
-                          )}`}
-                        >
-                          {getJenisKuliahIcon(jadwal.jenisKuliah)}
-                          {jadwal.jenisKuliah}
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-semibold text-black mb-2">
-                        {jadwal.mataKuliah}
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-                        <div className="flex items-start">
-                          <User className="w-4 h-4 text-[#A27B5C] mt-0.5 mr-2 flex-shrink-0" />
-                          <span className="text-gray-700">
-                            {jadwal.namaDosen}
-                          </span>
-                        </div>
-                        <div className="flex items-start">
-                          <MapPin className="w-4 h-4 text-[#A27B5C] mt-0.5 mr-2 flex-shrink-0" />
-                          <span className="text-gray-700">
-                            {jadwal.ruangan}
-                          </span>
-                        </div>
-                      </div>
-                      {jadwal.keterangan && (
-                        <div className="mt-2 text-sm text-gray-600 bg-gray-50 p-2 rounded border-l-2 border-[#A27B5C]">
-                          <Info className="w-4 h-4 inline mr-1" />
-                          {jadwal.keterangan}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                <div className="text-center p-3 bg-green-50 rounded-lg">
+                  <div className="text-lg sm:text-xl font-bold text-green-600">
+                    {new Set(jadwalData.map((j) => j.mataKuliah)).size}
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-600">
+                    Mata Kuliah
+                  </div>
+                </div>
+                <div className="text-center p-3 bg-purple-50 rounded-lg">
+                  <div className="text-lg sm:text-xl font-bold text-purple-600">
+                    {new Set(jadwalData.map((j) => j.namaDosen)).size}
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-600">Dosen</div>
+                </div>
+                <div className="text-center p-3 bg-amber-50 rounded-lg">
+                  <div className="text-lg sm:text-xl font-bold text-amber-600">
+                    {new Set(jadwalData.map((j) => j.hari)).size}
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-600">
+                    Hari Aktif
+                  </div>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          )}
 
-        {filteredJadwal.length === 0 && (
-          <div className="bg-white p-8 rounded-lg shadow-md text-center">
-            <Calendar className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-medium text-gray-700 mb-2">
-              Tidak ada jadwal ditemukan
-            </h3>
-            <p className="text-gray-500">
-              {searchTerm
-                ? `Tidak ada jadwal yang cocok dengan pencarian "${searchTerm}"`
-                : "Tidak ada jadwal untuk ditampilkan"}
-            </p>
-          </div>
-        )}
-      </div>
+          {/* Schedule by Day */}
+          {filteredJadwal.length > 0 ? (
+            <div className="space-y-4 sm:space-y-6">
+              {days.map((day) => {
+                const daySchedules = getJadwalByDay(day);
+                if (
+                  daySchedules.length === 0 &&
+                  filterDay &&
+                  filterDay !== day
+                ) {
+                  return null;
+                }
+
+                return (
+                  <div
+                    key={day}
+                    className="bg-white rounded-lg shadow-md overflow-hidden"
+                  >
+                    <div className="bg-[#4F959D] text-white p-3 sm:p-4">
+                      <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
+                        <Calendar size={20} />
+                        {day}
+                        <span className="ml-auto text-xs sm:text-sm bg-white bg-opacity-20 px-2 py-1 rounded  text-black">
+                          {daySchedules.length} jadwal
+                        </span>
+                      </h3>
+                    </div>
+
+                    {daySchedules.length > 0 ? (
+                      <div className="p-3 sm:p-4">
+                        <div className="space-y-3 sm:space-y-4">
+                          {daySchedules
+                            .sort((a, b) => a.waktu.localeCompare(b.waktu))
+                            .map((jadwal, index) => (
+                              <div
+                                key={`${jadwal.id}-${index}`}
+                                className="border border-gray-200 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow"
+                              >
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                  <div className="flex-1">
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                                      <h4 className="font-semibold text-sm sm:text-base text-[#2C3930] flex items-center gap-2">
+                                        <BookOpen
+                                          size={16}
+                                          className="text-[#4F959D]"
+                                        />
+                                        {jadwal.mataKuliah}
+                                      </h4>
+                                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                        {jadwal.kode}
+                                      </span>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs sm:text-sm text-gray-600">
+                                      <div className="flex items-center gap-1">
+                                        <Clock
+                                          size={14}
+                                          className="text-gray-400"
+                                        />
+                                        <span>{jadwal.waktu}</span>
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <User
+                                          size={14}
+                                          className="text-gray-400"
+                                        />
+                                        <span>{jadwal.namaDosen}</span>
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <MapPin
+                                          size={14}
+                                          className="text-gray-400"
+                                        />
+                                        <span>{jadwal.ruangan}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div className="flex flex-col sm:items-end gap-2">
+                                    <span
+                                      className={`px-2 py-1 rounded-full text-xs font-medium ${getJenisKuliahColor(
+                                        "Tatap Muka"
+                                      )}`}
+                                    >
+                                      Tatap Muka
+                                    </span>
+                                    <span className="text-xs text-gray-500">
+                                      Semester {jadwal.semester}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-6 text-center text-gray-500">
+                        <Calendar
+                          className="mx-auto mb-2 text-gray-400"
+                          size={32}
+                        />
+                        <p className="text-sm">
+                          Tidak ada jadwal untuk hari {day}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : shouldShowEmptyState ? (
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="text-center py-8 text-gray-500">
+                <Calendar
+                  className="mx-auto text-4xl mb-3 text-gray-400"
+                  size={48}
+                />
+                <h3 className="text-lg font-medium mb-2">Tidak Ada Jadwal</h3>
+                <p className="text-sm mb-4">
+                  Anda belum memiliki jadwal kuliah
+                </p>
+                <p className="text-xs text-gray-400">
+                  Silakan daftar mata kuliah terlebih dahulu di halaman{" "}
+                  <a
+                    href="/user/course"
+                    className="text-[#4F959D] hover:underline"
+                  >
+                    Mata Kuliah
+                  </a>
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="text-center py-8 text-gray-500">
+                <Calendar
+                  className="mx-auto text-4xl mb-3 text-gray-400"
+                  size={48}
+                />
+                <h3 className="text-lg font-medium mb-2">Tidak Ada Hasil</h3>
+                <p className="text-sm">
+                  Tidak ada jadwal yang sesuai dengan pencarian atau filter
+                </p>
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };
