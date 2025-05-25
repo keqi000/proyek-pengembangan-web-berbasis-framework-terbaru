@@ -174,3 +174,49 @@ export const unenrollFromCourse = async (data: {
     throw error;
   }
 };
+
+export const getDashboardStats = async (userId: string) => {
+  try {
+    const [enrolledRes, availableRes] = await Promise.all([
+      getStudentCourses(userId),
+      getAvailableCourses(),
+    ]);
+
+    return {
+      enrolledCourses: enrolledRes.length,
+      totalCourses: availableRes.length,
+      completionRate:
+        availableRes.length > 0
+          ? Math.round((enrolledRes.length / availableRes.length) * 100)
+          : 0,
+    };
+  } catch (error) {
+    console.error("Error getting dashboard stats:", error);
+    return {
+      enrolledCourses: 0,
+      totalCourses: 0,
+      completionRate: 0,
+    };
+  }
+};
+
+// Get recent enrollments for activities
+export const getRecentEnrollments = async (
+  userId: string,
+  limit: number = 5
+) => {
+  try {
+    const enrollments = await getStudentCourses(userId);
+
+    // Sort by created_at and limit
+    return enrollments
+      .sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      )
+      .slice(0, limit);
+  } catch (error) {
+    console.error("Error getting recent enrollments:", error);
+    return [];
+  }
+};
