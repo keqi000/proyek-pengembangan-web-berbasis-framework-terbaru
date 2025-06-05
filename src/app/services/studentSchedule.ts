@@ -16,6 +16,7 @@ export interface ScheduleItem {
 }
 
 // Track ongoing requests to prevent duplicates
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ongoingRequests = new Map<string, Promise<any>>();
 
 // Get student's schedule based on enrolled courses
