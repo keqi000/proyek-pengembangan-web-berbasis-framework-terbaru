@@ -23,8 +23,9 @@ const Navbar: FC = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
 
-  const {data: userAPIData} = useUserInfo()
-  const userName = JSON.parse(localStorage.getItem("user") ?? "{}")?.username ?? userAPIData?.data.username ?? "??"
+
+  const query = useUserInfo()
+  const userName = query?.data?.data?.username || "??"
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);

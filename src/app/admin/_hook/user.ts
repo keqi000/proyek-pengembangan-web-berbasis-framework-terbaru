@@ -1,3 +1,5 @@
+"use client"
+
 import { fetchUserInfo } from "@/app/services/userInfo"
 import { useQuery } from "@tanstack/react-query"
 

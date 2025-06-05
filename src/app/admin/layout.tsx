@@ -13,9 +13,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   // const userName = "Yonatan Sihotang"; // Bisa diambil dari context/state global
-  const {data: userAPIData} = useUserInfo()
+  const query = useUserInfo()
   
-  const userName = JSON.parse(localStorage.getItem("user") ?? "{}")?.username ?? userAPIData?.data.username ?? "??"
+  const userName = query?.data?.data?.username || "??"
 
   const notificationRef = useRef<HTMLDivElement>(null);
   const mobileNotificationRef = useRef<HTMLDivElement>(null);
