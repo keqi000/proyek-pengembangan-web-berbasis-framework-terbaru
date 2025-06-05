@@ -17,6 +17,7 @@ import {
   CourseItem,
   EnrollmentItem,
 } from "../../services/studentEnrollment";
+import axios from "axios";
 
 export default function CoursePage() {
   const [enrolledCourses, setEnrolledCourses] = useState<EnrollmentItem[]>([]);
@@ -133,12 +134,14 @@ export default function CoursePage() {
           }
         }, 3000);
       }
-    } catch (err: any) {
+    } catch (err) {
       if (isMountedRef.current) {
-        if (err.response?.status === 409) {
-          setError("Anda sudah terdaftar di mata kuliah ini");
-        } else {
-          setError("Gagal mendaftar mata kuliah");
+        if (axios.isAxiosError(err)){
+          if (err.response?.status === 409) {
+            setError("Anda sudah terdaftar di mata kuliah ini");
+          } else {
+            setError("Gagal mendaftar mata kuliah");
+          }
         }
         console.error(err);
       }
@@ -348,7 +351,7 @@ export default function CoursePage() {
               Belum ada mata kuliah yang dikontrak
             </p>
             <p className="text-xs sm:text-sm mt-1">
-              Klik "Tambah Mata Kuliah" untuk mendaftar
+              Klik &quot;Tambah Mata Kuliah&quot; untuk mendaftar
             </p>
           </div>
         )}

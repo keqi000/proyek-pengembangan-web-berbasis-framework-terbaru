@@ -269,7 +269,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
-            {notifications.slice(0, 6).map((notification, index) => {
+            {notifications.slice(0, 6).map((notification) => {
               // Determine icon based on notification type
               let icon;
               let bgColor;

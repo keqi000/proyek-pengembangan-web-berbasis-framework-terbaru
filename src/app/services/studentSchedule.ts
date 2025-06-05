@@ -16,6 +16,7 @@ export interface ScheduleItem {
 }
 
 // Track ongoing requests to prevent duplicates
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ongoingRequests = new Map<string, Promise<any>>();
 
 // Get student's schedule based on enrolled courses
@@ -68,8 +69,8 @@ export const getAllSchedules = async (): Promise<ScheduleItem[]> => {
       `${process.env.NEXT_PUBLIC_APi_BASE_URL}/schedules`
     );
 
-    const schedules = response.data || [];
-    return schedules.map((schedule: any) => ({
+    const schedules: ScheduleItem[] = response.data || [];
+    return schedules.map((schedule) => ({
       id: schedule.id,
       hari: schedule.hari,
       waktu: schedule.waktu,
