@@ -18,7 +18,7 @@ type UserInfoResponse = {
 export const fetchUserInfo = async () => {
   try {
     const response = await axios.get<UserInfoResponse>(`${process.env.NEXT_PUBLIC_APi_BASE_URL}/me`);
-    return response.data;
+    return response?.data;
   } catch (error) {
     console.error("Error user info:", error);
     throw error;
