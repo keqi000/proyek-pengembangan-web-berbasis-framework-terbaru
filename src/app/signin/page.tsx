@@ -5,6 +5,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLoginMutation } from "../admin/_hook/auth";
+import axios, { AxiosError } from "axios";
+
 
 export default function SignInPage() {
   const [username, setUsername] = useState("");
@@ -68,19 +70,22 @@ export default function SignInPage() {
             setIsLoading(false);
           }
         },
-        onError: (error: any) => {
+        
+        onError: (error: Error | AxiosError) => {
           console.error("Login error:", error);
-
-          // Handle different types of errors
-          if (error?.response?.status === 401) {
-            setError("Username atau password salah!");
-          } else if (error?.response?.status === 422) {
-            setError("Data yang dimasukkan tidak valid!");
-          } else if (error?.response?.status >= 500) {
-            setError("Terjadi kesalahan server. Silakan coba lagi.");
-          } else {
-            setError("Terjadi kesalahan. Silakan coba lagi.");
+          
+          if (axios.isAxiosError(error)){
+            if (error?.response?.status === 401) {
+              setError("Username atau password salah!");
+            } else if (error?.response?.status === 422) {
+              setError("Data yang dimasukkan tidak valid!");
+            } else if ((error?.response?.status ?? 500) >= 500) {
+              setError("Terjadi kesalahan server. Silakan coba lagi.");
+            } else {
+              setError("Terjadi kesalahan. Silakan coba lagi.");
+            }
           }
+          // Handle different types of errors
 
           setIsLoading(false);
         },
