@@ -14,6 +14,7 @@ import {
   FaTimes,
   FaChevronDown,
 } from "react-icons/fa";
+import { useUserInfo } from "@/app/admin/_hook/user";
 
 const Navbar: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,6 +22,9 @@ const Navbar: FC = () => {
   const pathname = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
+
+  const {data: userAPIData} = useUserInfo()
+  const userName = JSON.parse(localStorage.getItem("user") ?? "{}")?.username ?? userAPIData?.data.username ?? "??"
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -124,7 +128,7 @@ const Navbar: FC = () => {
               className="py-2 flex items-center text-black hover:text-[#3F4F44]"
             >
               <FaUser className="mr-2" />
-              <span className="truncate">Yonatan</span>
+              <span className="truncate">{userName}</span>
               <FaChevronDown className="ml-2" />
             </button>
 
@@ -202,7 +206,7 @@ const Navbar: FC = () => {
               >
                 <div className="flex items-center">
                   <FaUser className="mr-2" />
-                  <span className="truncate">Yonatan</span>
+                  <span className="truncate">{userName}</span>
                 </div>
                 <FaChevronDown />
               </button>
