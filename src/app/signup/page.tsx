@@ -10,7 +10,6 @@ export default function SignUpPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<string>("mahasiswa");
-  const [defaultPassword, setDefaultPassword] = useState("");
 
   const registerMutation = useRegisterMutation()
   const route = useRouter()
@@ -81,24 +80,6 @@ export default function SignUpPage() {
                     <option value="mahasiswa">Mahasiswa</option>
                     </select>
                 </div>
-
-                {/* Default Password for Admin & Dosen */}
-                {(role === "admin" || role === "dosen") && (
-                    <div className="mb-4">
-                    <label className="block text-gray-700">
-                        {role === "admin"
-                        ? "Admin Default Password"
-                        : "Dosen Default Password"}
-                    </label>
-                    <input
-                        type="password"
-                        className="w-full px-3 py-2 md:px-4 md:py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F959D] placeholder-gray-400 text-black"
-                        value={defaultPassword}
-                        onChange={(e) => setDefaultPassword(e.target.value)}
-                        placeholder="Enter default password"
-                    />
-                    </div>
-                )}
 
                 <button
                     type="button"
