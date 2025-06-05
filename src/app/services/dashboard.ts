@@ -1,4 +1,4 @@
-import { getStudentCourses, getAvailableCourses } from "./studentEnrollment";
+import { getStudentCourses, getAvailableCourses, EnrollmentItem } from "./studentEnrollment";
 import { getStudentSchedule } from "./studentSchedule";
 
 export interface DashboardStats {
@@ -108,7 +108,7 @@ export const getRecentActivities = async (
         )
         .slice(0, 3);
 
-      recentEnrollments.forEach((enrollment: any) => {
+      recentEnrollments.forEach((enrollment: EnrollmentItem) => {
         activities.push({
           id: `enrollment-${enrollment.id}`,
           type: "enrollment",
