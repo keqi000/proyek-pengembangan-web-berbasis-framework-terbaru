@@ -24,6 +24,11 @@ import {
 } from "../../services/dashboard";
 import { getTodayScheduleSummary } from "../../services/dashboard";
 
+type UserInfoType = {
+  role: string;
+  name: string;
+}
+
 const HomePage: FC = () => {
   const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(
     null
@@ -33,7 +38,7 @@ const HomePage: FC = () => {
   );
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<UserInfoType | null>(null);
 
   // Get user data from localStorage
   const getUserData = useCallback(() => {
