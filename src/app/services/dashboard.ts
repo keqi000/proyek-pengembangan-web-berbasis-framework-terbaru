@@ -1,11 +1,5 @@
-import axios from "axios";
-
 import { getStudentCourses, getAvailableCourses } from "./studentEnrollment";
 import { getStudentSchedule } from "./studentSchedule";
-
-const api = axios.create({
-  timeout: 10000,
-});
 
 export interface DashboardStats {
   totalCourses: number;
