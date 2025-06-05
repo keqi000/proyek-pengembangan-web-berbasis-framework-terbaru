@@ -68,8 +68,8 @@ export const getAllSchedules = async (): Promise<ScheduleItem[]> => {
       `${process.env.NEXT_PUBLIC_APi_BASE_URL}/schedules`
     );
 
-    const schedules = response.data || [];
-    return schedules.map((schedule: any) => ({
+    const schedules: ScheduleItem[] = response.data || [];
+    return schedules.map((schedule) => ({
       id: schedule.id,
       hari: schedule.hari,
       waktu: schedule.waktu,
