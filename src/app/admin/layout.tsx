@@ -7,11 +7,16 @@ import NavigationBar from "./admin_component/Navbar";
 import { Bell, Calendar, AlertTriangle, Settings, Info } from "lucide-react";
 import Link from "next/link";
 import { useNotificationStore } from "./_store/notifications";
+import { useUserInfo } from "./_hook/user";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const userName = "Yonatan Sihotang"; // Bisa diambil dari context/state global
+  // const userName = "Yonatan Sihotang"; // Bisa diambil dari context/state global
+  const {data: userAPIData} = useUserInfo()
+  
+  const userName = JSON.parse(localStorage.getItem("user") ?? "{}")?.username ?? userAPIData?.data.username ?? "??"
+
   const notificationRef = useRef<HTMLDivElement>(null);
   const mobileNotificationRef = useRef<HTMLDivElement>(null);
 
@@ -95,7 +100,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <NavigationBar
         isSidebarOpen={isSidebarOpen}
         setSidebarOpen={setSidebarOpen}
-        userName={userName}
+        userName={userName || "??"}
         toggleNotifications={toggleNotifications}
         unreadCount={unreadCount}
       />
@@ -252,8 +257,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </div>
 
               <div className="flex items-center">
-                <div className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 rounded-full bg-[#4F959D] flex items-center justify-center text-white font-medium mr-1 sm:mr-2">
-                  {userName.charAt(0)}
+                <div className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 rounded-full bg-[#4F959D] flex items-center justify-center text-white font-medium mr-1 sm:mr-2 capitalize">
+                  {userName?.charAt(0) ?? "??"}
                 </div>
                 <span className="text-xs sm:text-sm font-medium hidden xs:inline-block">
                   {userName}
