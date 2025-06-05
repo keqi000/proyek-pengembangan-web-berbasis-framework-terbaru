@@ -1,5 +1,5 @@
 import { getStudentCourses, getAvailableCourses, EnrollmentItem } from "./studentEnrollment";
-import { getStudentSchedule } from "./studentSchedule";
+import { getStudentSchedule, ScheduleItem } from "./studentSchedule";
 
 export interface DashboardStats {
   totalCourses: number;
@@ -127,7 +127,7 @@ export const getRecentActivities = async (
 
     // Add schedule activities (if any new schedules)
     if (schedules && schedules.length > 0) {
-      const todaySchedules = schedules.filter((schedule: any) => {
+      const todaySchedules = schedules.filter((schedule: ScheduleItem) => {
         const today = new Date().toLocaleDateString("id-ID", {
           weekday: "long",
         });
@@ -213,7 +213,7 @@ export const getAnnouncements = async (
     if (userId) {
       try {
         const enrolledCourses = await getStudentCourses(userId);
-        const enrolledCourseNames = enrolledCourses.map((enrollment: any) =>
+        const enrolledCourseNames = enrolledCourses.map((enrollment: EnrollmentItem) =>
           enrollment.course.nama.toLowerCase()
         );
 
@@ -244,7 +244,7 @@ export const getTodayScheduleSummary = async (userId: string) => {
     const schedules = await getStudentSchedule(userId);
     const today = new Date().toLocaleDateString("id-ID", { weekday: "long" });
 
-    const todaySchedules = schedules.filter((schedule: any) => {
+    const todaySchedules = schedules.filter((schedule: ScheduleItem) => {
       return schedule.hari.toLowerCase() === today.toLowerCase();
     });
 
