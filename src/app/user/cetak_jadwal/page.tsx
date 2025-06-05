@@ -676,7 +676,7 @@ const CetakJadwalPage: FC = () => {
                   <FileText className="mx-auto mb-4 text-gray-400" size={48} />
                   <h3 className="text-lg font-medium mb-2">Preview Jadwal</h3>
                   <p className="text-sm mb-4">
-                    Pilih jadwal yang ingin dicetak dan klik "Tampilkan Preview"
+                    Pilih jadwal yang ingin dicetak dan klik &quot;Tampilkan Preview&quot;
                     untuk melihat hasil cetak.
                   </p>
                   {selectedJadwal.length > 0 && (
