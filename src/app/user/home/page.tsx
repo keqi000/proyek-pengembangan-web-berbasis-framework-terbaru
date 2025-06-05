@@ -23,10 +23,17 @@ import {
   Announcement,
 } from "../../services/dashboard";
 import { getTodayScheduleSummary } from "../../services/dashboard";
+import { ScheduleItem } from "@/app/services/studentSchedule";
 
 type UserInfoType = {
   role: string;
   name: string;
+}
+
+type TodayScheduleType = {
+  hasSchedule: boolean;
+  total: number;
+  schedules: ScheduleItem[]
 }
 
 const HomePage: FC = () => {
@@ -72,7 +79,7 @@ const HomePage: FC = () => {
     }
   }, []);
 
-  const [todaySchedule, setTodaySchedule] = useState<any>(null);
+  const [todaySchedule, setTodaySchedule] = useState<TodayScheduleType | null>(null);
 
   useEffect(() => {
     const userData = getUserData();
@@ -193,7 +200,7 @@ const HomePage: FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {todaySchedule.schedules
                     .slice(0, 2)
-                    .map((schedule: any, index: number) => (
+                    .map((schedule: ScheduleItem, index: number) => (
                       <div key={index} className="bg-gray-50 p-4 rounded-lg">
                         <div className="flex items-center justify-between mb-2">
                           <h5 className="font-medium text-gray-900">
