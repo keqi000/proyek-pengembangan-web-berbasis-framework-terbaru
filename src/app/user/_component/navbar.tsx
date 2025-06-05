@@ -23,7 +23,6 @@ const Navbar: FC = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
 
-
   const query = useUserInfo()
   const userName = query?.data?.data?.username || "??"
 

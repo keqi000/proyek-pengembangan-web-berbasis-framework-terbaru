@@ -20,11 +20,12 @@ import { fetchDosen } from "../../services/lecturer";
 import axios from "axios";
 
 // API Service untuk mata kuliah
-const API_URL = "http://localhost:8000/api";
 
 const fetchMataKuliahFromAPI = async () => {
   try {
-    const response = await axios.get(`${API_URL}/course`);
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_APi_BASE_URL}/course`
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching courses:", error);
@@ -39,7 +40,10 @@ const createMataKuliahAPI = async (data: {
   sks: string;
 }) => {
   try {
-    const response = await axios.post(`${API_URL}/course`, data);
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_APi_BASE_URL}/course`,
+      data
+    );
     return response.data;
   } catch (error) {
     console.error("Error creating course:", error);
@@ -57,7 +61,10 @@ const updateMataKuliahAPI = async (
     console.log(`Updating course with ID: ${id}`, data);
 
     // Make sure the API URL is correct
-    const response = await axios.patch(`${API_URL}/course/${id}`, data);
+    const response = await axios.patch(
+      `${process.env.NEXT_PUBLIC_APi_BASE_URL}/course/${id}`,
+      data
+    );
     return response.data;
   } catch (error) {
     // More detailed error logging
@@ -71,7 +78,9 @@ const updateMataKuliahAPI = async (
 
 const deleteMataKuliahAPI = async (id: string) => {
   try {
-    const response = await axios.delete(`${API_URL}/course/${id}`);
+    const response = await axios.delete(
+      `${process.env.NEXT_PUBLIC_APi_BASE_URL}/course/${id}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error deleting course:", error);
