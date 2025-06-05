@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import {
   getStudentSchedule,
-  ScheduleItem,
+  // ScheduleItem,
 } from "../../services/studentSchedule";
 
 type JadwalItem = {
