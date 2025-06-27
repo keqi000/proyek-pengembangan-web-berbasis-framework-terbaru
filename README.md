@@ -27,3 +27,6 @@ npm run build
 # Menjalankan aplikasi yang telah dibuild
 npm run start
 ```
+
+Link repo kode backend:
+https://github.com/sihotang-yonathan1/Sistem-Manajemen-Penjadwalan-backend
